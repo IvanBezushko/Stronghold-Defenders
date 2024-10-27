@@ -62,7 +62,7 @@ func _displaay_path():
 			tile=tile_corner.instantiate()
 			tile_rotation=Vector3(0,270,0)
 		
-		
+		  
 		
 		add_child(tile)
 		tile.global_position=Vector3(element.x,0,element.y)
