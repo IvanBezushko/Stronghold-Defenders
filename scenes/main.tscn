@@ -1,0 +1,22 @@
+[gd_scene load_steps=7 format=3 uid="uid://gq06xqgl7e5u"]
+
+[ext_resource type="Script" path="res://scenes/main.gd" id="1_4thhw"]
+[ext_resource type="PackedScene" uid="uid://ivgcbbmf1bif" path="res://assets/tile.glb" id="2_17oe1"]
+[ext_resource type="PackedScene" uid="uid://bb6j5sj6eef26" path="res://assets/tile-spawn-round.glb" id="2_82wxq"]
+[ext_resource type="PackedScene" uid="uid://bx08iucyaev8q" path="res://assets/tile-straight.glb" id="2_fhhcv"]
+[ext_resource type="PackedScene" uid="uid://c2acc04kfohh2" path="res://assets/tile-spawn-end-round.glb" id="3_d3p4q"]
+[ext_resource type="PackedScene" uid="uid://ldd0cnoj4p5g" path="res://assets/tile-corner-round.glb" id="3_emxg4"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_4thhw")
+tile_start = ExtResource("2_82wxq")
+tile_end = ExtResource("3_d3p4q")
+tile_straight = ExtResource("2_fhhcv")
+tile_corner = ExtResource("3_emxg4")
+tile_empty = ExtResource("2_17oe1")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.367508, 0.930021, 0, -0.930021, 0.367508, 8, 6.37995, 7.586)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.436975, 0.899474, 0, -0.899474, 0.436975, 0, 8.97736, 14.6923)
