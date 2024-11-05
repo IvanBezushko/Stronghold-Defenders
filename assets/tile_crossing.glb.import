@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cfmwnsfmblns3"
-path="res://.godot/imported/tile.glb-c4f9bf3f45600b611c692fa7f2ed292f.scn"
+uid="uid://brj1k4f7ddhcv"
+path="res://.godot/imported/tile_crossing.glb-48f50b79828a4ded8ad03d18152aa957.scn"
 
 [deps]
 
-source_file="res://assets/tile.glb"
-dest_files=["res://.godot/imported/tile.glb-c4f9bf3f45600b611c692fa7f2ed292f.scn"]
+source_file="res://assets/tile_crossing.glb"
+dest_files=["res://.godot/imported/tile_crossing.glb-48f50b79828a4ded8ad03d18152aa957.scn"]
 
 [params]
 

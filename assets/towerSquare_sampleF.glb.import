@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cfmwnsfmblns3"
-path="res://.godot/imported/tile.glb-c4f9bf3f45600b611c692fa7f2ed292f.scn"
+uid="uid://cpt8dmgdtdl3"
+path="res://.godot/imported/towerSquare_sampleF.glb-ad5db24a112e853fa6580f65d493a668.scn"
 
 [deps]
 
-source_file="res://assets/tile.glb"
-dest_files=["res://.godot/imported/tile.glb-c4f9bf3f45600b611c692fa7f2ed292f.scn"]
+source_file="res://assets/towerSquare_sampleF.glb"
+dest_files=["res://.godot/imported/towerSquare_sampleF.glb-ad5db24a112e853fa6580f65d493a668.scn"]
 
 [params]
 

@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cfmwnsfmblns3"
-path="res://.godot/imported/tile.glb-c4f9bf3f45600b611c692fa7f2ed292f.scn"
+uid="uid://c3dw4dr1ch4r6"
+path="res://.godot/imported/enemy_ufoYellow.glb-d2b3fbcc2f1e699f80de585565ba5c40.scn"
 
 [deps]
 
-source_file="res://assets/tile.glb"
-dest_files=["res://.godot/imported/tile.glb-c4f9bf3f45600b611c692fa7f2ed292f.scn"]
+source_file="res://assets/enemy_ufoYellow.glb"
+dest_files=["res://.godot/imported/enemy_ufoYellow.glb-d2b3fbcc2f1e699f80de585565ba5c40.scn"]
 
 [params]
 
