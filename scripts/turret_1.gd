@@ -2,6 +2,7 @@ extends Node3D
 
 var enemies_in_range: Array[Node3D]
 var current_enemy: Node3D = null
+var current_enemy_class:Enemy=null
 var current_enemy_targetted: bool = false
 var acquire_slerp_progress: float = 0
 
@@ -33,10 +34,24 @@ func rotate_towards_target(rtarget, delta):
 		$Cannon.basis = target_basis
 		$StateChart.send_event("to_attacking_state")
 
+func _find_enemy_parent(n:Node):
+	if n is Enemy:
+		return n
+	elif n.get_parent()!=null:
+		return _find_enemy_parent(n.get_parent())
+	else:
+		return null
+	
+
 func _on_patrolling_state_state_processing(_delta):
 	if enemies_in_range.size() > 0:
 		current_enemy = enemies_in_range[0]
+		current_enemy_class=_find_enemy_parent(current_enemy)
+		current_enemy_class.enemy_finished.connect(_remove_current_enemy)
 		$StateChart.send_event("to_acquiring_state")
+
+func _remove_current_enemy():
+	enemies_in_range.erase(current_enemy)
 
 func _on_acquiring_state_state_entered():
 	current_enemy_targetted = false
