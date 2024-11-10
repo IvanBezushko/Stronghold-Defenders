@@ -40,7 +40,7 @@ func _displaay_path():
 		if tile_score==2:
 			tile=tile_start.instantiate()
 			tile_rotation=Vector3(0,90,0)
-		if tile_score==8:
+		elif tile_score==8:
 			tile=tile_end.instantiate()
 			tile_rotation=Vector3(0,270,0)
 		elif tile_score==10:

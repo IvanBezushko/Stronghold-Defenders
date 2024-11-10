@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://demjkhdd30p0v"]
+
+[ext_resource type="PackedScene" uid="uid://c0i2ix5nouwf0" path="res://assets/weapon-cannon.glb" id="1_rg2hj"]
+[ext_resource type="PackedScene" uid="uid://bt7birbwdlqql" path="res://assets/tower-round-build-a.glb" id="2_po7db"]
+
+[node name="Turret1" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+
+[node name="cannon" parent="." instance=ExtResource("1_rg2hj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="cannon"]
+
+[node name="tower" parent="." instance=ExtResource("2_po7db")]

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dr5rvo0odv126"]
+
+[ext_resource type="PackedScene" uid="uid://kfapvo0krven" path="res://assets/tile_cornerRound.glb" id="1_bs56f"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fv7xw"]
+size = Vector3(1, 0.2, 1)
+
+[node name="Area3D" type="Area3D" groups=["path"]]
+
+[node name="tile_cornerRound" parent="." instance=ExtResource("1_bs56f")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+shape = SubResource("BoxShape3D_fv7xw")

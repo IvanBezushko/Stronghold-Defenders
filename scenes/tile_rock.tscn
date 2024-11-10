@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6a8i8k7058rq"]
+
+[ext_resource type="PackedScene" uid="uid://7m32o5h2v6eb" path="res://assets/tile_rock.glb" id="1_y50hs"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hdbap"]
+size = Vector3(1, 0.7, 1)
+
+[node name="Area3D" type="Area3D" groups=["grid_rock"]]
+
+[node name="tile_rock" parent="." instance=ExtResource("1_y50hs")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+shape = SubResource("BoxShape3D_hdbap")
