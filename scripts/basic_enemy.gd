@@ -9,20 +9,20 @@ var path_3d:Path3D
 var path_follow_3d:PathFollow3D
 
 func _ready():
-	print("Ready")
+	#print("Ready")
 	$Path3D.curve = path_route_to_curve_3d()
 	$Path3D/PathFollow3D.progress = 0
 	
 
 func _on_spawning_state_entered():
-	print("Spawning")
+	#print("Spawning")
 	attackable = false
 	$AnimationPlayer.play("spawn")
 	await $AnimationPlayer.animation_finished
 	$EnemyStateChart.send_event("to_travelling_state")
 
 func _on_travelling_state_entered():
-	print("Travelling")
+	#print("Travelling")
 	attackable = true
 
 func _on_travelling_state_processing(delta):

@@ -17,12 +17,12 @@ var RAYCAST_LENGTH:float = 100
 func _ready():
 	_complete_grid()
 	
-	#for i in range(10):
-		#await get_tree().create_timer(2.275).timeout
+	for i in range(10):
+		await get_tree().create_timer(2.275).timeout
 		#print("Instantiating enemy")
-		#var enemy2:Node3D = enemy.instantiate()
-		#add_child(enemy2)
-		#enemy2.add_to_group("enemies")
+		var enemy2:Node3D = enemy.instantiate()
+		add_child(enemy2)
+		enemy2.add_to_group("enemies")
 	
 func _physics_process(_delta):
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
