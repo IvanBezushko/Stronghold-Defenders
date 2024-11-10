@@ -31,7 +31,7 @@ func _physics_process(_delta):
 		var rayResult:Dictionary = space_state.intersect_ray(query)
 		if rayResult.size() > 0:
 			var co:CollisionObject3D = rayResult.get("collider")
-			if co.get_groups()[0] == "grid_empty":
+			if "grid_empty" in str(co.get_groups()):
 				_draggable.visible = true
 				_is_valid_location = true
 				_last_valid_location = Vector3(co.global_position.x, 0.2, co.global_position.z)

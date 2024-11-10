@@ -34,7 +34,7 @@ func _physics_process(_delta):
 		query.collide_with_areas = true
 		var rayResult:Dictionary = space_state.intersect_ray(query)
 		if rayResult.size() > 0:
-#			print(rayResult)
+			#print(rayResult)
 			var co:CollisionObject3D = rayResult.get("collider")
 			#print(co.get_groups())
 

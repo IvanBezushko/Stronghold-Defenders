@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://cx3v6xatr7lhq"]
+
+[ext_resource type="PackedScene" uid="uid://bcpa3ytho1jjr" path="res://assets/enemy_ufoPurple.glb" id="1_vv3a6"]
+
+[node name="enemy_ufoPurple" groups=["enemy"] instance=ExtResource("1_vv3a6")]
