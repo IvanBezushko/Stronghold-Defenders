@@ -248,6 +248,7 @@ shadow_mesh = SubResource("ArrayMesh_1lvj5")
 height = 0.75
 
 [node name="Enemy01" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("1_x18ab")
 enemy_settings = ExtResource("2_ariuf")
 
