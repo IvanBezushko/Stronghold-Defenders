@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://1r4lye6jj68v"]
+
+[ext_resource type="Script" path="res://menu/lose.gd" id="1_ogh1u"]
+
+[node name="Lose" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ogh1u")

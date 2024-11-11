@@ -15,6 +15,15 @@ func _init():
 	):
 			generate_path(path_config.add_loops)
 
+func reset():
+	_path_route.clear()
+	_loop_count = 0
+	generate_path(path_config.add_loops)
+	while (_path_route.size() < path_config.min_path_size or _path_route.size() > path_config.max_path_size
+			or _loop_count < path_config.min_loops or _loop_count > path_config.max_loops):
+				generate_path(path_config.add_loops)
+
+
 func generate_path(add_loops:bool = false):
 	_path_route.clear()
 	randomize()

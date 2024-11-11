@@ -1,0 +1,115 @@
+[gd_scene load_steps=9 format=3 uid="uid://0byoh4kut8u0"]
+
+[ext_resource type="Script" path="res://menu/pause.gd" id="1_vqscf"]
+[ext_resource type="Texture2D" uid="uid://t85dwdskjvut" path="res://background/mainphoto1152x648_2.png" id="2_sw70h"]
+[ext_resource type="Theme" uid="uid://dmmwhlddkynf6" path="res://menu/label.tres" id="3_3g4tq"]
+[ext_resource type="FontFile" uid="uid://dl7hlrhi5ntxs" path="res://fonts/segoeprb.ttf" id="3_6yd2a"]
+[ext_resource type="Script" path="res://menu/v_slider.gd" id="3_hh6q4"]
+[ext_resource type="Theme" uid="uid://cmam3q2g5nam8" path="res://menu/but.tres" id="4_ix16j"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t6kxg"]
+
+[sub_resource type="Theme" id="Theme_xfol4"]
+Label/colors/font_color = Color(1, 1, 1, 1)
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 0)
+Label/constants/line_spacing = 3
+Label/constants/outline_size = 0
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+Label/constants/shadow_outline_size = 1
+Label/font_sizes/font_size = 45
+Label/fonts/font = ExtResource("3_6yd2a")
+Label/styles/normal = SubResource("StyleBoxEmpty_t6kxg")
+
+[node name="Pause" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vqscf")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("2_sw70h")
+
+[node name="VSlider" type="VSlider" parent="TextureRect"]
+layout_mode = 0
+offset_left = 1059.0
+offset_top = 438.0
+offset_right = 1121.0
+offset_bottom = 626.0
+max_value = 1.0
+step = 0.01
+value = 0.5
+script = ExtResource("3_hh6q4")
+bus_name = "Music"
+
+[node name="Label2" type="Label" parent="TextureRect"]
+layout_mode = 0
+offset_left = 851.0
+offset_top = 534.0
+offset_right = 1035.0
+offset_bottom = 614.0
+theme = SubResource("Theme_xfol4")
+text = "Volume"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -412.5
+offset_top = -253.0
+offset_right = 412.5
+offset_bottom = -127.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_3g4tq")
+text = "Stronghold Defendeers"
+
+[node name="Resume_bt" type="Button" parent="."]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -94.0
+offset_top = -110.0
+offset_right = 94.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_ix16j")
+text = "Resume"
+
+[node name="Exit_bt" type="Button" parent="."]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -94.0
+offset_top = -2.0
+offset_right = 94.0
+offset_bottom = 86.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_ix16j")
+text = "Exit
+"
+
+[connection signal="value_changed" from="TextureRect/VSlider" to="." method="_on_v_slider_value_changed"]
+[connection signal="pressed" from="Resume_bt" to="." method="_on_resume_bt_pressed"]
+[connection signal="pressed" from="Exit_bt" to="." method="_on_exit_bt_pressed"]

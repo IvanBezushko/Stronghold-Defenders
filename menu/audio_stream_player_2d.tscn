@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://yy74vhvhrjyt"]
+
+[ext_resource type="AudioStream" uid="uid://bnscqdhlkr6ir" path="res://music/598349_-Final-Battle-.wav" id="1_y2k7o"]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D"]
+process_mode = 3
+stream = ExtResource("1_y2k7o")
+autoplay = true
+bus = &"Music"

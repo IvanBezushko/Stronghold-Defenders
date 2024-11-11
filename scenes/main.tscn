@@ -1,19 +1,17 @@
-[gd_scene load_steps=16 format=3 uid="uid://72lu3y2bauhu"]
+[gd_scene load_steps=14 format=3 uid="uid://72lu3y2bauhu"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_v46vx"]
-[ext_resource type="PackedScene" uid="uid://basheias548gy" path="res://scenes/tile_end.tscn" id="2_oygd5"]
-[ext_resource type="PackedScene" uid="uid://0t2toql8an7a" path="res://scenes/tile_straight.tscn" id="3_g8sel"]
-[ext_resource type="PackedScene" uid="uid://dr5rvo0odv126" path="res://scenes/tile_corner.tscn" id="4_bj13s"]
-[ext_resource type="PackedScene" uid="uid://chalbqyb12itj" path="res://scenes/tile_crossroads.tscn" id="5_dkgpe"]
+[ext_resource type="PackedScene" uid="uid://c6gxxdpkt0iev" path="res://assets/tile_endRoundSpawn.glb" id="2_mcfgm"]
+[ext_resource type="PackedScene" uid="uid://bdrnn6npdar2e" path="res://assets/tile_straight.glb" id="2_yhbse"]
+[ext_resource type="PackedScene" uid="uid://kfapvo0krven" path="res://assets/tile_cornerRound.glb" id="3_smncr"]
+[ext_resource type="PackedScene" uid="uid://brj1k4f7ddhcv" path="res://assets/tile_crossing.glb" id="5_q7okj"]
 [ext_resource type="PackedScene" uid="uid://bcpa3ytho1jjr" path="res://assets/enemy_ufoPurple.glb" id="6_5cncu"]
-[ext_resource type="PackedScene" uid="uid://bgxrmd6yguaah" path="res://scenes/tile_crystal.tscn" id="7_8twgt"]
-[ext_resource type="PackedScene" uid="uid://c6a8i8k7058rq" path="res://scenes/tile_rock.tscn" id="8_2w5eb"]
-[ext_resource type="PackedScene" uid="uid://b8jneut5lykj5" path="res://scenes/tile_tree.tscn" id="9_1og6f"]
-[ext_resource type="PackedScene" uid="uid://dv78q8jboyll4" path="res://scenes/tile_empty.tscn" id="10_62ous"]
+[ext_resource type="PackedScene" uid="uid://cfmwnsfmblns3" path="res://assets/tile.glb" id="6_126yl"]
+[ext_resource type="PackedScene" uid="uid://wvtlhwxwqkkn" path="res://assets/tile_crystal.glb" id="7_3vpw8"]
+[ext_resource type="PackedScene" uid="uid://7m32o5h2v6eb" path="res://assets/tile_rock.glb" id="8_v4qn1"]
+[ext_resource type="PackedScene" uid="uid://chcs51hvpbwnl" path="res://assets/tile_tree.glb" id="9_wbi5n"]
 [ext_resource type="PackedScene" uid="uid://bdh0cqv4kt8t8" path="res://scenes/enemy_01.tscn" id="11_qo57y"]
-[ext_resource type="PackedScene" uid="uid://bvwuudxo2j1hc" path="res://scenes/activity_button.tscn" id="12_sdtmw"]
-[ext_resource type="Texture2D" uid="uid://wkc3q5xlp881" path="res://images/cannon01a.png" id="13_dxp3r"]
-[ext_resource type="PackedScene" uid="uid://demjkhdd30p0v" path="res://scenes/turret_1.tscn" id="14_53uhd"]
+[ext_resource type="PackedScene" uid="uid://0byoh4kut8u0" path="res://menu/pause.tscn" id="12_x87x6"]
 
 [sub_resource type="Environment" id="Environment_wmip2"]
 background_mode = 1
@@ -26,13 +24,13 @@ glow_strength = 1.5
 
 [node name="main" type="Node3D"]
 script = ExtResource("1_v46vx")
-tile_start = ExtResource("2_oygd5")
-tile_end = ExtResource("2_oygd5")
-tile_straight = ExtResource("3_g8sel")
-tile_corner = ExtResource("4_bj13s")
-tile_crossroads = ExtResource("5_dkgpe")
+tile_start = ExtResource("2_mcfgm")
+tile_end = ExtResource("2_mcfgm")
+tile_straight = ExtResource("2_yhbse")
+tile_corner = ExtResource("3_smncr")
+tile_crossroads = ExtResource("5_q7okj")
 tile_enemy = ExtResource("6_5cncu")
-tile_empty = Array[PackedScene]([ExtResource("7_8twgt"), ExtResource("8_2w5eb"), ExtResource("9_1og6f"), ExtResource("10_62ous"), ExtResource("10_62ous"), ExtResource("10_62ous"), ExtResource("10_62ous")])
+tile_empty = Array[PackedScene]([ExtResource("7_3vpw8"), ExtResource("8_v4qn1"), ExtResource("9_wbi5n"), ExtResource("6_126yl"), ExtResource("6_126yl"), ExtResource("6_126yl"), ExtResource("6_126yl")])
 enemy = ExtResource("11_qo57y")
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -47,17 +45,6 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_wmip2")
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="ActivityButton" parent="Control" instance=ExtResource("12_sdtmw")]
-layout_mode = 1
-offset_top = -104.0
-offset_bottom = -8.0
-activity_button_icon = ExtResource("13_dxp3r")
-activity_draggable = ExtResource("14_53uhd")
+[node name="Pause" parent="CanvasLayer" instance=ExtResource("12_x87x6")]

@@ -1,0 +1,107 @@
+[gd_scene load_steps=9 format=3 uid="uid://v3bnajto4w38"]
+
+[ext_resource type="Script" path="res://menu/settings.gd" id="1_8e65j"]
+[ext_resource type="Texture2D" uid="uid://t85dwdskjvut" path="res://background/mainphoto1152x648_2.png" id="2_vx8w0"]
+[ext_resource type="Theme" uid="uid://dmmwhlddkynf6" path="res://menu/label.tres" id="3_3bfcp"]
+[ext_resource type="FontFile" uid="uid://dl7hlrhi5ntxs" path="res://fonts/segoeprb.ttf" id="3_4fq62"]
+[ext_resource type="Theme" uid="uid://cmam3q2g5nam8" path="res://menu/but.tres" id="4_4n3nq"]
+[ext_resource type="Script" path="res://menu/v_slider.gd" id="5_w0mpd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_shcrf"]
+
+[sub_resource type="Theme" id="Theme_fmlu0"]
+Label/colors/font_color = Color(1, 1, 1, 1)
+Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 0)
+Label/constants/line_spacing = 3
+Label/constants/outline_size = 0
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 1
+Label/constants/shadow_outline_size = 1
+Label/font_sizes/font_size = 45
+Label/fonts/font = ExtResource("3_4fq62")
+Label/styles/normal = SubResource("StyleBoxEmpty_shcrf")
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8e65j")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("2_vx8w0")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -145.0
+offset_top = -245.0
+offset_right = 145.0
+offset_bottom = -119.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_3bfcp")
+text = "Settings"
+
+[node name="Exit_bt" type="Button" parent="."]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -112.0
+offset_top = -73.0
+offset_right = 111.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_4n3nq")
+text = "Exit"
+
+[node name="VSlider" type="VSlider" parent="."]
+process_mode = 3
+layout_mode = 0
+offset_left = 1059.0
+offset_top = 438.0
+offset_right = 1121.0
+offset_bottom = 626.0
+max_value = 1.0
+step = 0.01
+value = 0.5
+script = ExtResource("5_w0mpd")
+bus_name = "Music"
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 851.0
+offset_top = 534.0
+offset_right = 1035.0
+offset_bottom = 614.0
+theme = SubResource("Theme_fmlu0")
+text = "Volume"
+
+[node name="Quit_bt" type="Button" parent="."]
+process_mode = 3
+layout_mode = 0
+offset_left = 464.0
+offset_top = 354.0
+offset_right = 687.0
+offset_bottom = 442.0
+theme = ExtResource("4_4n3nq")
+text = "Quit"
+
+[connection signal="pressed" from="Exit_bt" to="." method="_on_exit_bt_pressed"]
+[connection signal="value_changed" from="VSlider" to="." method="_on_v_slider_value_changed"]
+[connection signal="pressed" from="Quit_bt" to="." method="_on_quit_bt_pressed"]
