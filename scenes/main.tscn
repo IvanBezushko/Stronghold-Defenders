@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://72lu3y2bauhu"]
+[gd_scene load_steps=17 format=3 uid="uid://72lu3y2bauhu"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_v46vx"]
 [ext_resource type="PackedScene" uid="uid://basheias548gy" path="res://scenes/tile_end.tscn" id="2_oygd5"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://b8jneut5lykj5" path="res://scenes/tile_tree.tscn" id="9_1og6f"]
 [ext_resource type="PackedScene" uid="uid://dv78q8jboyll4" path="res://scenes/tile_empty.tscn" id="10_62ous"]
 [ext_resource type="PackedScene" uid="uid://bdh0cqv4kt8t8" path="res://scenes/enemy_01.tscn" id="11_qo57y"]
+[ext_resource type="PackedScene" uid="uid://0byoh4kut8u0" path="res://menu/pause.tscn" id="12_4aerd"]
 [ext_resource type="PackedScene" uid="uid://bvwuudxo2j1hc" path="res://scenes/activity_button.tscn" id="12_sdtmw"]
 [ext_resource type="Texture2D" uid="uid://wkc3q5xlp881" path="res://images/cannon01a.png" id="13_dxp3r"]
 [ext_resource type="PackedScene" uid="uid://demjkhdd30p0v" path="res://scenes/turret_1.tscn" id="14_53uhd"]
@@ -46,6 +47,10 @@ shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_wmip2")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Pause" parent="CanvasLayer" instance=ExtResource("12_4aerd")]
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3

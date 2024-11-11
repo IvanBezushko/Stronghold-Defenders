@@ -15,6 +15,7 @@ var RAYCAST_LENGTH:float = 100
 
 ## Assumes the path generator has finished, and adds the remaining tiles to fill in the grid.
 func _ready():
+	PathGenInstance.reset()
 	_complete_grid()
 	
 	for i in range(10):
