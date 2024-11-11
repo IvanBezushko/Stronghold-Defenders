@@ -1,6 +1,7 @@
-[gd_scene load_steps=17 format=3 uid="uid://72lu3y2bauhu"]
+[gd_scene load_steps=25 format=3 uid="uid://72lu3y2bauhu"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_v46vx"]
+[ext_resource type="PackedScene" uid="uid://vlsi147u6buw" path="res://scenes/tile_start.tscn" id="2_nmu5y"]
 [ext_resource type="PackedScene" uid="uid://basheias548gy" path="res://scenes/tile_end.tscn" id="2_oygd5"]
 [ext_resource type="PackedScene" uid="uid://0t2toql8an7a" path="res://scenes/tile_straight.tscn" id="3_g8sel"]
 [ext_resource type="PackedScene" uid="uid://dr5rvo0odv126" path="res://scenes/tile_corner.tscn" id="4_bj13s"]
@@ -13,8 +14,14 @@
 [ext_resource type="PackedScene" uid="uid://bdh0cqv4kt8t8" path="res://scenes/enemy_01.tscn" id="11_qo57y"]
 [ext_resource type="PackedScene" uid="uid://0byoh4kut8u0" path="res://menu/pause.tscn" id="12_4aerd"]
 [ext_resource type="PackedScene" uid="uid://bvwuudxo2j1hc" path="res://scenes/activity_button.tscn" id="12_sdtmw"]
-[ext_resource type="Texture2D" uid="uid://wkc3q5xlp881" path="res://images/cannon01a.png" id="13_dxp3r"]
+[ext_resource type="Texture2D" uid="uid://1g1cups1blj1" path="res://images/wieza_icon3.png" id="14_5ssvr"]
 [ext_resource type="PackedScene" uid="uid://demjkhdd30p0v" path="res://scenes/turret_1.tscn" id="14_53uhd"]
+[ext_resource type="PackedScene" uid="uid://d2acbm8ekgqrv" path="res://scenes/activity_button_2.tscn" id="16_c0vmb"]
+[ext_resource type="Texture2D" uid="uid://cot8jv2hjk1ck" path="res://images/wieza_icon2.png" id="17_wves3"]
+[ext_resource type="PackedScene" uid="uid://b6abc2wbnlo4w" path="res://scenes/turret_2.tscn" id="18_dphgl"]
+[ext_resource type="PackedScene" uid="uid://y7w5g8r2synv" path="res://scenes/activity_button_3.tscn" id="19_orlpo"]
+[ext_resource type="Texture2D" uid="uid://bcgj7wtmhkjl8" path="res://images/wieza_icon1.png" id="20_71pv6"]
+[ext_resource type="PackedScene" uid="uid://y7okr71cbfc2" path="res://scenes/turret_3.tscn" id="21_kxdtm"]
 
 [sub_resource type="Environment" id="Environment_wmip2"]
 background_mode = 1
@@ -25,10 +32,12 @@ glow_normalized = true
 glow_intensity = 1.13
 glow_strength = 1.5
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_eni0m"]
+
 [node name="main" type="Node3D"]
 script = ExtResource("1_v46vx")
 tile_start = ExtResource("2_oygd5")
-tile_end = ExtResource("2_oygd5")
+tile_end = ExtResource("2_nmu5y")
 tile_straight = ExtResource("3_g8sel")
 tile_corner = ExtResource("4_bj13s")
 tile_crossroads = ExtResource("5_dkgpe")
@@ -51,6 +60,7 @@ environment = SubResource("Environment_wmip2")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Pause" parent="CanvasLayer" instance=ExtResource("12_4aerd")]
+visible = false
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -62,7 +72,48 @@ grow_vertical = 2
 
 [node name="ActivityButton" parent="Control" instance=ExtResource("12_sdtmw")]
 layout_mode = 1
+offset_left = -165.0
 offset_top = -104.0
+offset_right = -69.0
 offset_bottom = -8.0
-activity_button_icon = ExtResource("13_dxp3r")
+activity_button_icon = ExtResource("14_5ssvr")
 activity_draggable = ExtResource("14_53uhd")
+
+[node name="ActivityButton2" parent="Control" instance=ExtResource("16_c0vmb")]
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -104.0
+offset_right = 48.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+activity_button_icon = ExtResource("17_wves3")
+activity_draggable = ExtResource("18_dphgl")
+
+[node name="ActivityButton3" parent="Control" instance=ExtResource("19_orlpo")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 65.0
+offset_top = -104.0
+offset_right = 161.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_eni0m")
+activity_button_icon = ExtResource("20_71pv6")
+activity_draggable = ExtResource("21_kxdtm")
+
+[connection signal="button_down" from="Control/ActivityButton2" to="Control/ActivityButton2" method="_on_button_down"]
+[connection signal="button_up" from="Control/ActivityButton2" to="Control/ActivityButton2" method="_on_button_up"]
+[connection signal="button_down" from="Control/ActivityButton3" to="Control/ActivityButton3" method="_on_button_down"]
+[connection signal="button_up" from="Control/ActivityButton3" to="Control/ActivityButton3" method="_on_button_up"]

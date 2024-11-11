@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2acbm8ekgqrv"]
+
+[ext_resource type="Script" path="res://scripts/activity_button_2.gd" id="1_jh31r"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fbcc3"]
+
+[node name="ActivityButton2" type="Button"]
+offset_right = 8.0
+offset_bottom = 8.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_fbcc3")
+script = ExtResource("1_jh31r")

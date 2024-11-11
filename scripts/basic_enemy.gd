@@ -71,7 +71,7 @@ func path_route_to_curve_3d() -> Curve3D:
 
 
 func _on_area_3d_area_entered(area):
-	if area is Projectile:
+	if area is Projectile or area is Projectile_2:
 		enemy_health -= area.damage
 	
 	if enemy_health <= 0:
