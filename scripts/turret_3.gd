@@ -118,7 +118,7 @@ func _on_attacking_state_state_physics_processing(_delta):
 
 func _maybe_fire():
 	if Time.get_ticks_msec() > (last_fire_time + fire_rate_ms) and current_enemy != null:
-		var projectile = projectile_type.instantiate()
+		var projectile:Projectile_3 = projectile_type.instantiate()
 		projectile.starting_position = $Turret/projectile_spawn.global_position
 		projectile.target = current_enemy
 		add_child(projectile)

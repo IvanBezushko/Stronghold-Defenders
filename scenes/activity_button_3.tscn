@@ -1,9 +1,12 @@
 [gd_scene load_steps=2 format=3 uid="uid://y7w5g8r2synv"]
 
-[ext_resource type="Script" path="res://activity_button.gd" id="1_wkh06"]
+[ext_resource type="Script" path="res://scripts/activity_button_3.gd" id="1_e6aa1"]
 
 [node name="ActivityButton3" type="Button"]
 custom_minimum_size = Vector2(96, 96)
 offset_right = 8.0
 offset_bottom = 8.0
-script = ExtResource("1_wkh06")
+script = ExtResource("1_e6aa1")
+
+[connection signal="button_down" from="." to="." method="_on_button_down"]
+[connection signal="button_up" from="." to="." method="_on_button_up"]

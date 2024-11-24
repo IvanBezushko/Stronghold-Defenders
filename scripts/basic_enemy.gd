@@ -4,6 +4,7 @@ class_name Enemy
 @export var enemy_settings: EnemySettings
 
 var enemy_health: int
+var enemy_damage:int
 var enemy_speed: float  # Dodana zmienna
 
 signal enemy_finished
@@ -23,7 +24,8 @@ func _ready():
 		enemy_settings = load("res://resources/basic_enemy_settings.res")  # Użyj 'load' zamiast 'preload'
 	
 	if enemy_settings != null:
-		enemy_health = enemy_settings.health
+		enemy_health = enemy_settings.health	
+		enemy_damage=enemy_settings.damage
 		enemy_speed = enemy_settings.speed  
 		enemy_health = 100  # Ustaw domyślną wartość zdrowia
 		enemy_speed = 1.0   # Ustaw domyślną wartość prędkości
@@ -94,10 +96,13 @@ func _on_remove_enemy_state_entered():
 
 func _on_damaging_state_entered():
 	attackable = false
-	print("doing some damage!")
+	#print("doing some damage!")
+	var main = get_tree().get_root().get_node("main")  
+	main.decrease_castle_health(enemy_damage)
 	$EnemyStateChart.send_event("to_despawning_state")
 
 func _on_dying_state_entered():
+	get_parent_node_3d().cash+=enemy_settings.destroy_value
 	enemy_finished.emit()
 	$ExplosionAudio.play()
 
@@ -118,7 +123,7 @@ func path_route_to_curve_3d() -> Curve3D:
 	return c3d
 
 func _on_area_3d_area_entered(area):
-	if area is Projectile or area is Projectile_2:
+	if area is Projectile or area is Projectile_2 or area is Projectile_3:
 		enemy_health -= area.damage
 	
 	if enemy_health <= 0:

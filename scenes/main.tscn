@@ -13,14 +13,14 @@
 [ext_resource type="PackedScene" uid="uid://dv78q8jboyll4" path="res://scenes/tile_empty.tscn" id="10_62ous"]
 [ext_resource type="PackedScene" uid="uid://0byoh4kut8u0" path="res://menu/pause.tscn" id="12_4aerd"]
 [ext_resource type="PackedScene" uid="uid://bvwuudxo2j1hc" path="res://scenes/activity_button.tscn" id="12_sdtmw"]
-[ext_resource type="Texture2D" uid="uid://1g1cups1blj1" path="res://images/wieza_icon3.png" id="14_5ssvr"]
-[ext_resource type="PackedScene" uid="uid://demjkhdd30p0v" path="res://scenes/turret_1.tscn" id="14_53uhd"]
+[ext_resource type="Texture2D" uid="uid://1g1cups1blj1" path="res://images/wieza_icon3.png" id="14_u8sv5"]
+[ext_resource type="PackedScene" uid="uid://demjkhdd30p0v" path="res://scenes/turret_1.tscn" id="15_qv0eq"]
 [ext_resource type="PackedScene" uid="uid://d2acbm8ekgqrv" path="res://scenes/activity_button_2.tscn" id="16_c0vmb"]
 [ext_resource type="Texture2D" uid="uid://cot8jv2hjk1ck" path="res://images/wieza_icon2.png" id="17_wves3"]
 [ext_resource type="PackedScene" uid="uid://b6abc2wbnlo4w" path="res://scenes/turret_2.tscn" id="18_dphgl"]
 [ext_resource type="PackedScene" uid="uid://y7w5g8r2synv" path="res://scenes/activity_button_3.tscn" id="19_orlpo"]
-[ext_resource type="Texture2D" uid="uid://bcgj7wtmhkjl8" path="res://images/wieza_icon1.png" id="20_71pv6"]
-[ext_resource type="PackedScene" uid="uid://y7okr71cbfc2" path="res://scenes/turret_3.tscn" id="21_kxdtm"]
+[ext_resource type="Texture2D" uid="uid://bcgj7wtmhkjl8" path="res://images/wieza_icon1.png" id="21_w7114"]
+[ext_resource type="PackedScene" uid="uid://y7okr71cbfc2" path="res://scenes/turret_3.tscn" id="22_wmkvp"]
 
 [sub_resource type="Environment" id="Environment_wmip2"]
 background_mode = 1
@@ -74,8 +74,8 @@ offset_left = -165.0
 offset_top = -104.0
 offset_right = -69.0
 offset_bottom = -8.0
-activity_button_icon = ExtResource("14_5ssvr")
-activity_draggable = ExtResource("14_53uhd")
+activity_button_icon = ExtResource("14_u8sv5")
+activity_draggable = ExtResource("15_qv0eq")
 
 [node name="ActivityButton2" parent="Control" instance=ExtResource("16_c0vmb")]
 custom_minimum_size = Vector2(96, 96)
@@ -108,10 +108,15 @@ offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/focus = SubResource("StyleBoxEmpty_eni0m")
-activity_button_icon = ExtResource("20_71pv6")
-activity_draggable = ExtResource("21_kxdtm")
+activity_button_icon = ExtResource("21_w7114")
+activity_draggable = ExtResource("22_wmkvp")
 
-[connection signal="button_down" from="Control/ActivityButton2" to="Control/ActivityButton2" method="_on_button_down"]
-[connection signal="button_up" from="Control/ActivityButton2" to="Control/ActivityButton2" method="_on_button_up"]
-[connection signal="button_down" from="Control/ActivityButton3" to="Control/ActivityButton3" method="_on_button_down"]
-[connection signal="button_up" from="Control/ActivityButton3" to="Control/ActivityButton3" method="_on_button_up"]
+[node name="CashLabel" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 32
+text = "Cash $0"
+horizontal_alignment = 1

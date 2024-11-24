@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bdh0cqv4kt8t8"]
+[gd_scene load_steps=14 format=3 uid="uid://bdh0cqv4kt8t8"]
 
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="2_5wlrk"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_ah54x"]
@@ -7,8 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bp6k4u3d4g6ru" path="res://assets/enemy-ufo-a.glb" id="7_3xa8e"]
 [ext_resource type="AudioStream" uid="uid://dljm4j7f3von3" path="res://audio/explosion.mp3" id="7_bn61e"]
 [ext_resource type="Script" path="res://scripts/speed_health_enemy.gd" id="8_dlkh6"]
-[ext_resource type="Resource" uid="uid://b6pb1lrpq3m4j" path="res://resources/speed_enemy_settings.res" id="8_kd32h"]
-[ext_resource type="Resource" uid="uid://b6pb1lrpq3m4j" path="res://resources/speed_health_enemy_settings.res" id="9_88tnj"]
+[ext_resource type="Resource" uid="uid://b6pb1lrpq3m4j" path="res://resources/speed_health_enemy_settings.res" id="8_kd32h"]
 
 [sub_resource type="Animation" id="Animation_qxxns"]
 length = 0.001
@@ -130,7 +129,7 @@ height = 0.75
 [node name="Enemy04" type="Node3D" groups=["enemy"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("8_dlkh6")
-enemy_settings = ExtResource("9_88tnj")
+enemy_settings = ExtResource("8_kd32h")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

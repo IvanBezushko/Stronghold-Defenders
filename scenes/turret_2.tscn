@@ -10,7 +10,7 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="8_u3dw2"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_u7cdx"]
-radius = 3.0
+radius = 4.0
 
 [node name="Turret2" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)

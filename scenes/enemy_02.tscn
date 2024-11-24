@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://cj12kdup3ilwr"]
 
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="2_5wlrk"]
-[ext_resource type="Resource" uid="uid://b6pb1lrpq3m4j" path="res://resources/speed_enemy_settings.res" id="2_vu7b5"]
+[ext_resource type="Resource" uid="uid://b6pb1lrpq3m4j" path="res://resources/speed_health_enemy_settings.res" id="2_vu7b5"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_ah54x"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_oaeau"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_2ibju"]

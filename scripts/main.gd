@@ -8,6 +8,12 @@ extends Node3D
 @export var tile_enemy: PackedScene
 @export var tile_empty: Array[PackedScene]
 
+@export var enemy:PackedScene
+@export var cash:int=100
+
+#@export var castle_settings:CastleConfig = preload("res://resources/castle_settings.tres")
+var castle_health:int=20
+
 @export var enemy_type_1: PackedScene = preload("res://scenes/enemy_01.tscn")
 @export var enemy_type_2: PackedScene = preload("res://scenes/enemy_02.tscn")
 @export var enemy_type_3: PackedScene = preload("res://scenes/enemy_03.tscn")
@@ -90,6 +96,9 @@ func _ready():
 
 	print("All waves are complete!")
 
+func _process(delta):
+	$Control/CashLabel.text="Cash = $%d" % cash
+
 func _physics_process(_delta):
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		var space_state = get_world_3d().direct_space_state
@@ -150,3 +159,14 @@ func _complete_grid():
 		add_child(tile)
 		tile.global_position = Vector3(PathGenInstance.get_path_tile(i).x, 0, PathGenInstance.get_path_tile(i).y)
 		tile.global_rotation_degrees = tile_rotation
+
+func decrease_castle_health(amount:int):
+	castle_health-=amount
+	#print("zycie zamku",castle_health)
+	if(castle_health<=0):
+		get_tree().paused = false
+		get_tree().current_scene.queue_free()
+		var game_scene = load("res://menu/lose.tscn").instantiate()
+		get_tree().current_scene.queue_free() 
+		get_tree().root.add_child(game_scene) 
+		get_tree().current_scene = game_scene 

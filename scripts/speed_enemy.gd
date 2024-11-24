@@ -4,6 +4,7 @@ class_name Speed_Enemy
 @export var enemy_settings: EnemySettings
 
 var enemy_health: int
+var enemy_damage:int
 var enemy_speed: float
 
 var enemy_model: Node = null  # Dodana zmienna
@@ -28,6 +29,7 @@ func _ready():
 		
 		enemy_settings = enemy_settings.duplicate()
 		enemy_health = 100  # Ustaw domyślną wartość zdrowia
+		enemy_damage=enemy_settings.damage
 		enemy_speed = 2.0 
 		print("Enemy health set to: ", enemy_health)
 		print("Enemy speed set to: ", enemy_speed)
@@ -105,13 +107,16 @@ func _on_remove_enemy_state_entered():
 	queue_free()
 
 func _on_damaging_state_entered():
-	print("State: Damaging entered")
+	#print("State: Damaging entered")
 	attackable = false
-	print("Enemy is damaging something!")
+	#print("Enemy is damaging something!")
+	var main = get_tree().get_root().get_node("main")  
+	main.decrease_castle_health(enemy_damage)
 	$EnemyStateChart.send_event("to_despawning_state")
 
 func _on_dying_state_entered():
 	print("State: Dying entered")
+	get_parent_node_3d().cash+=enemy_settings.destroy_value
 	enemy_finished.emit()
 	$ExplosionAudio.play()
 

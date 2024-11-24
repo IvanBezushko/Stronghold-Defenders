@@ -3,7 +3,7 @@ extends Button
 @export var activity_button_icon:Texture2D
 @export var activity_draggable:PackedScene
 @onready var main = $"../.."
-@export var activity_cost:int=60
+@export var activity_cost:int=80
 
 var _is_dragging:bool = false
 var _draggable:Node

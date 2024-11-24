@@ -4,6 +4,7 @@ class_name Boss_Enemy
 @export var enemy_settings: EnemySettings  # EnemySettings to zasób dziedziczący po Resource
 
 var enemy_health: int
+var enemy_damage:int
 var enemy_speed: float  # Dodana zmienna dla prędkości
 
 signal enemy_finished
@@ -29,6 +30,7 @@ func _ready():
 		
 		enemy_settings = enemy_settings.duplicate()
 		enemy_health = 1500  # Ustaw domyślną wartość zdrowia
+		enemy_damage=enemy_settings.damage
 		enemy_speed = 0.6 
 		print("Enemy health set to: ", enemy_health)
 		print("Enemy speed set to: ", enemy_speed)
@@ -101,13 +103,16 @@ func _on_remove_enemy_state_entered():
 	queue_free()
 
 func _on_damaging_state_entered():
-	print("Stan: Damaging wejście")
+	#print("Stan: Damaging wejście")
 	attackable = false
-	print("Boss wykonuje obrażenia!")
+	#print("Boss wykonuje obrażenia!")
+	var main = get_tree().get_root().get_node("main")  
+	main.decrease_castle_health(enemy_damage)
 	$EnemyStateChart.send_event("to_despawning_state")
 
 func _on_dying_state_entered():
 	print("Stan: Dying wejście")
+	get_parent_node_3d().cash+=enemy_settings.destroy_value
 	enemy_finished.emit()
 	$ExplosionAudio.play()
 	
