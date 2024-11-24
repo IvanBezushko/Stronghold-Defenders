@@ -60,6 +60,7 @@ func _on_damaging_state_entered():
 	$EnemyStateChart.send_event("to_despawning_state")
 
 func _on_dying_state_entered():
+	get_parent_node_3d().cash+=enemy_settings.destroy_value
 	enemy_finished.emit()
 	$ExplosionAudio.play()
 	$Path3D/PathFollow3D/enemy_ufoRed2.visible = false

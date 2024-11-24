@@ -10,6 +10,7 @@ extends Node3D
 #@export var tile_castle:PackedScene
 
 @export var enemy:PackedScene
+@export var cash:int=100
 
 #@export var castle_settings:CastleConfig = preload("res://resources/castle_settings.tres")
 var castle_health:int=20
@@ -30,7 +31,11 @@ func _ready():
 		var enemy2:Node3D = enemy.instantiate()
 		add_child(enemy2)
 		enemy2.add_to_group("enemies")
-	
+
+func _process(delta):
+	$Control/CashLabel.text="Cash = $%d" % cash
+
+
 func _physics_process(_delta):
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		var space_state = get_world_3d().direct_space_state
