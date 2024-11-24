@@ -15,6 +15,7 @@ radius = 3.0
 [node name="Turret1" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 script = ExtResource("1_3ha72")
+fire_rate_ms = 1200
 projectile_type = ExtResource("2_eunxw")
 
 [node name="Cannon" parent="." instance=ExtResource("1_rg2hj")]

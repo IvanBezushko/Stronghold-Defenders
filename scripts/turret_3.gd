@@ -73,7 +73,7 @@ func _on_attacking_state_state_physics_processing(_delta):
 # Funkcja kontrolująca strzelanie
 func _maybe_fire():
 	if Time.get_ticks_msec() > (last_fire_time + fire_rate_ms):
-		var projectile: Projectile = projectile_type.instantiate()
+		var projectile: Projectile_3 = projectile_type.instantiate()
 		projectile.starting_position = $Turret/projectile_spawn.global_position
 		projectile.target = current_enemy
 		add_child(projectile)
