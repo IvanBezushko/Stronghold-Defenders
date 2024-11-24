@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="CastleConfig" load_steps=2 format=3 uid="uid://dwm40qy1ytrba"]
+
+[ext_resource type="Script" path="res://scripts/castle_config.gd" id="1_s5skc"]
+
+[resource]
+script = ExtResource("1_s5skc")
+health = 20

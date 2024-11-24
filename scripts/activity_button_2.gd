@@ -40,12 +40,12 @@ func _physics_process(_delta):
 			_draggable.visible = false
 
 func _on_button_down():
-	print("Button Down")
+	#print("Button Down")
 	_is_dragging = true
 
 
 func _on_button_up():
-	print("Button Up")
+	#print("Button Up")
 	_is_dragging = false
 	_draggable.visible = false
 	

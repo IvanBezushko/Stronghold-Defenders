@@ -4,6 +4,7 @@ class_name Enemy
 @export var enemy_settings:EnemySettings
 
 var enemy_health:int
+var enemy_damage:int
 
 signal enemy_finished
 
@@ -16,9 +17,11 @@ var path_follow_3d:PathFollow3D
 func _ready():
 	#print("Ready")
 	enemy_health=enemy_settings.health
+	enemy_damage=enemy_settings.damage
+	#print("enemy damage",enemy_damage)
 	$Path3D.curve = path_route_to_curve_3d()
 	$Path3D/PathFollow3D.progress = 0
-	
+
 
 func _on_spawning_state_entered():
 	#print("Spawning")
@@ -51,7 +54,9 @@ func _on_remove_enemy_state_entered():
 
 func _on_damaging_state_entered():
 	attackable = false
-	print("doing some damage!")
+	#print("doing some damage!")
+	var main = get_tree().get_root().get_node("main")  
+	main.decrease_castle_health(enemy_damage)
 	$EnemyStateChart.send_event("to_despawning_state")
 
 func _on_dying_state_entered():

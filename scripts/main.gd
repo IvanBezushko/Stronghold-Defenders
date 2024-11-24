@@ -11,6 +11,9 @@ extends Node3D
 
 @export var enemy:PackedScene
 
+#@export var castle_settings:CastleConfig = preload("res://resources/castle_settings.tres")
+var castle_health:int=20
+
 @onready var cam = $Camera3D
 var RAYCAST_LENGTH:float = 100
 
@@ -18,6 +21,8 @@ var RAYCAST_LENGTH:float = 100
 func _ready():
 	PathGenInstance.reset()
 	_complete_grid()
+	
+	#print("zycie zamku",castle_health)
 	
 	for i in range(10):
 		await get_tree().create_timer(2.275).timeout
@@ -87,3 +92,15 @@ func _complete_grid():
 		add_child(tile)
 		tile.global_position = Vector3(PathGenInstance.get_path_tile(i).x, 0, PathGenInstance.get_path_tile(i).y)
 		tile.global_rotation_degrees = tile_rotation
+
+
+func decrease_castle_health(amount:int):
+	castle_health-=amount
+	#print("zycie zamku",castle_health)
+	if(castle_health<=0):
+		get_tree().paused = false
+		get_tree().current_scene.queue_free()
+		var game_scene = load("res://menu/lose.tscn").instantiate()
+		get_tree().current_scene.queue_free() 
+		get_tree().root.add_child(game_scene) 
+		get_tree().current_scene = game_scene 
