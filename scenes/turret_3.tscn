@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://ch7j3esux7v5s" path="res://assets/towerSquare_sampleD.glb" id="1_khmrv"]
 [ext_resource type="Script" path="res://scripts/turret_3.gd" id="1_tgj2c"]
 [ext_resource type="PackedScene" uid="uid://blhthgdhihji3" path="res://assets/weapon-turret.glb" id="2_a345x"]
-[ext_resource type="PackedScene" uid="uid://dkonb0680heqc" path="res://scenes/small_cannonballs.tscn" id="2_p2w66"]
+[ext_resource type="PackedScene" uid="uid://dyfxaoc8ilypq" path="res://scenes/cannonball.tscn" id="2_twvx1"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="4_76kkf"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_4ra3t"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_kq88m"]
@@ -13,9 +13,8 @@
 radius = 3.0
 
 [node name="Turret3" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 script = ExtResource("1_tgj2c")
-projectile_type = ExtResource("2_p2w66")
+projectile_type = ExtResource("2_twvx1")
 
 [node name="Turret" parent="." instance=ExtResource("2_a345x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bvwuudxo2j1hc"]
 
-[ext_resource type="Script" path="res://scripts/activity_button.gd" id="1_003xx"]
+[ext_resource type="Script" path="res://activity_button.gd" id="1_003xx"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3rtmp"]
 
