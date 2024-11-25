@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_v46vx"]
 [ext_resource type="PackedScene" uid="uid://vlsi147u6buw" path="res://scenes/tile_start.tscn" id="2_nmu5y"]
 [ext_resource type="PackedScene" uid="uid://basheias548gy" path="res://scenes/tile_end.tscn" id="2_oygd5"]
-[ext_resource type="PackedScene" uid="uid://bjimupbbumjuo" path="res://scenes/area2.tscn" id="4_0ra5b"]
 [ext_resource type="PackedScene" uid="uid://dr5rvo0odv126" path="res://scenes/tile_corner.tscn" id="4_bj13s"]
+[ext_resource type="PackedScene" uid="uid://0t2toql8an7a" path="res://scenes/tile_straight.tscn" id="4_h5toj"]
 [ext_resource type="PackedScene" uid="uid://chalbqyb12itj" path="res://scenes/tile_crossroads.tscn" id="5_dkgpe"]
 [ext_resource type="PackedScene" uid="uid://bcpa3ytho1jjr" path="res://assets/enemy_ufoPurple.glb" id="6_5cncu"]
 [ext_resource type="PackedScene" uid="uid://bgxrmd6yguaah" path="res://scenes/tile_crystal.tscn" id="7_8twgt"]
@@ -37,7 +37,7 @@ glow_strength = 1.5
 script = ExtResource("1_v46vx")
 tile_start = ExtResource("2_oygd5")
 tile_end = ExtResource("2_nmu5y")
-tile_straight = ExtResource("4_0ra5b")
+tile_straight = ExtResource("4_h5toj")
 tile_corner = ExtResource("4_bj13s")
 tile_crossroads = ExtResource("5_dkgpe")
 tile_enemy = ExtResource("6_5cncu")

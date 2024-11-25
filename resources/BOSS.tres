@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemySettings" load_steps=2 format=3 uid="uid://hbiiukhei3cx"]
+
+[ext_resource type="Script" path="res://scripts/enemy_settings.gd" id="1_a1pt6"]
+
+[resource]
+script = ExtResource("1_a1pt6")
+speed = 0.2
+health = 3000.0
+damage = 50.0
+destroy_value = 500

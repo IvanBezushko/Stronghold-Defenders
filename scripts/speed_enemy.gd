@@ -3,8 +3,8 @@ class_name Speed_Enemy
 
 @export var enemy_settings: EnemySettings
 
-var enemy_health: int
-var enemy_damage:int
+var enemy_health: int 
+var enemy_damage:int 
 var enemy_speed: float
 
 var enemy_model: Node = null  # Dodana zmienna
@@ -22,15 +22,14 @@ func _ready():
 	
 	if enemy_settings == null:
 		print("ERROR: enemy_settings is null! Ustawiam domyślne wartości.")
-		enemy_settings = preload("res://resources/speed_enemy_settings.res")  # Użyj unikalnego zasobu
+		enemy_settings = load("res://resources/speed_enemy.tres")  # Użyj unikalnego zasobu
 	
 	if enemy_settings != null:
 		# Duplikuj zasób, aby modyfikacje były lokalne
-		
-		enemy_settings = enemy_settings.duplicate()
-		enemy_health = 100  # Ustaw domyślną wartość zdrowia
-		enemy_damage=enemy_settings.damage
-		enemy_speed = 2.0 
+		enemy_settings = enemy_settings.duplicate(true)  # Głęboka kopia
+		enemy_health = enemy_settings.health
+		enemy_damage = enemy_settings.damage
+		enemy_speed = enemy_settings.speed
 		print("Enemy health set to: ", enemy_health)
 		print("Enemy speed set to: ", enemy_speed)
 	else:
@@ -144,7 +143,7 @@ func path_route_to_curve_3d() -> Curve3D:
 
 func _on_area_3d_area_entered(area):
 	print("Collision detected with area: ", area)
-	if area is Projectile or area is Projectile_2:
+	if area is Projectile or area is Projectile_2 or area is Projectile_3:
 		print("Hit by projectile, damage: ", area.damage)
 		enemy_health -= area.damage
 		print("Remaining health: ", enemy_health)

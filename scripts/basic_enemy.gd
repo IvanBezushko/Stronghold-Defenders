@@ -3,9 +3,9 @@ class_name Enemy
 
 @export var enemy_settings: EnemySettings
 
-var enemy_health: int
-var enemy_damage:int
-var enemy_speed: float  # Dodana zmienna
+var enemy_health: int = 100
+var enemy_damage:int = 5
+var enemy_speed: float = 1.0  # Dodana zmienna
 
 signal enemy_finished
 
@@ -21,12 +21,11 @@ func _ready():
 	# Inicjalizacja enemy_settings
 	if enemy_settings == null:
 		print("ERROR: enemy_settings is null! Loading default settings.")
-		enemy_settings = load("res://resources/basic_enemy_settings.res")  # Użyj 'load' zamiast 'preload'
+		enemy_settings = load("res://resources/basic_enemy.tres")  # Użyj 'load' zamiast 'preload'
 	
 	if enemy_settings != null:
-		enemy_health = enemy_settings.health	
-		enemy_damage=enemy_settings.damage
-		enemy_speed = enemy_settings.speed  
+		
+		
 		enemy_health = 100  # Ustaw domyślną wartość zdrowia
 		enemy_speed = 1.0   # Ustaw domyślną wartość prędkości
 		print("Enemy health set to: ", enemy_health)

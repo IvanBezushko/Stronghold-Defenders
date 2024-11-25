@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://cj12kdup3ilwr"]
 
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="2_5wlrk"]
-[ext_resource type="Resource" uid="uid://b6pb1lrpq3m4j" path="res://resources/speed_enemy_settings.res" id="2_mueb5"]
+[ext_resource type="Resource" uid="uid://cwjw07fek3i1n" path="res://resources/speed_enemy.tres" id="2_i00uu"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_ah54x"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_oaeau"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_2ibju"]
@@ -129,7 +129,7 @@ height = 0.75
 [node name="Enemy02" type="Node3D" groups=["enemy"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("8_ooxso")
-enemy_settings = ExtResource("2_mueb5")
+enemy_settings = ExtResource("2_i00uu")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -198,7 +198,7 @@ transform = Transform3D(0.013839, 0, -0.999882, 0, 0.999989, 0, 0.999876, 0, 0.0
 
 [node name="enemy_speed" parent="Path3D/PathFollow3D" instance=ExtResource("7_230vi")]
 script = ExtResource("8_ooxso")
-enemy_settings = ExtResource("2_mueb5")
+enemy_settings = ExtResource("2_i00uu")
 
 [node name="Area3D" type="Area3D" parent="Path3D/PathFollow3D"]
 collision_layer = 2

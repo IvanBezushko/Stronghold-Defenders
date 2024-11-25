@@ -3,8 +3,8 @@ class_name Boss_Enemy
 
 @export var enemy_settings: EnemySettings  # EnemySettings to zasób dziedziczący po Resource
 
-var enemy_health: int
-var enemy_damage:int
+var enemy_health: int 
+var enemy_damage:int 
 var enemy_speed: float  # Dodana zmienna dla prędkości
 
 signal enemy_finished
@@ -23,15 +23,15 @@ func _ready():
 	# Inicjalizacja enemy_settings
 	if enemy_settings == null:
 		print("ERROR: enemy_settings jest null! Ładowanie domyślnych ustawień.")
-		enemy_settings = load("res://resources/boss_settings.res")
+		enemy_settings = load("res://resources/BOSS.tres")
 	
 	if enemy_settings != null:
 		# Duplikuj zasób, aby modyfikacje były lokalne
 		
-		enemy_settings = enemy_settings.duplicate()
-		enemy_health = 1500  # Ustaw domyślną wartość zdrowia
-		enemy_damage=enemy_settings.damage
-		enemy_speed = 0.6 
+		enemy_settings = enemy_settings.duplicate(true)  # Głęboka kopia
+		enemy_health = enemy_settings.health
+		enemy_damage = enemy_settings.damage
+		enemy_speed = enemy_settings.speed
 		print("Enemy health set to: ", enemy_health)
 		print("Enemy speed set to: ", enemy_speed)
 	else:
@@ -140,7 +140,7 @@ func path_route_to_curve_3d() -> Curve3D:
 
 func _on_area_3d_area_entered(area):
 	print("Wykryto kolizję z obszarem: ", area.name)
-	if area is Projectile or area is Projectile_2:
+	if area is Projectile or area is Projectile_2 or area is Projectile_3:
 		print("Został trafiony przez pocisk, obrażenia: ", area.damage)
 		enemy_health -= area.damage
 		print("Pozostało zdrowia: ", enemy_health)

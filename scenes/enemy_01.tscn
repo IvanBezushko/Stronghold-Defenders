@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/basic_enemy.gd" id="1_x18ab"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="2_5wlrk"]
-[ext_resource type="Resource" uid="uid://b6pb1lrpq3m4j" path="res://resources/basic_enemy_settings.res" id="2_xowum"]
+[ext_resource type="Resource" uid="uid://dro827ablccy" path="res://resources/basic_enemy.tres" id="2_8cvll"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="3_ah54x"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="4_oaeau"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_2ibju"]
@@ -251,7 +251,7 @@ height = 0.75
 [node name="Enemy01" type="Node3D" groups=["enemy"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("1_x18ab")
-enemy_settings = ExtResource("2_xowum")
+enemy_settings = ExtResource("2_8cvll")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -323,7 +323,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 mesh = SubResource("ArrayMesh_y2yv6")
 skeleton = NodePath("")
 script = ExtResource("1_x18ab")
-enemy_settings = ExtResource("2_xowum")
+enemy_settings = ExtResource("2_8cvll")
 
 [node name="Area3D" type="Area3D" parent="Path3D/PathFollow3D"]
 collision_layer = 2

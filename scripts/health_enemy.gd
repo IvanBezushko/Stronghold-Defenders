@@ -3,8 +3,8 @@ class_name Health_Enemy
 
 @export var enemy_settings: EnemySettings
 
-var enemy_health: int = 500
-var enemy_speed: float = 1.0
+var enemy_health: int 
+var enemy_speed: float 
 
 var path3d: Path3D = null
 var path_follow_3d: PathFollow3D = null
@@ -25,8 +25,9 @@ func _ready():
 
 	if enemy_settings != null:
 		# Duplikuj zasób, aby uniknąć globalnych zmian
-		enemy_settings = enemy_settings.duplicate()
+		enemy_settings = enemy_settings.duplicate(true)  # Głęboka kopia
 		enemy_health = enemy_settings.health
+		
 		enemy_speed = enemy_settings.speed
 		print("Enemy health set to: ", enemy_health)
 		print("Enemy speed set to: ", enemy_speed)
@@ -147,7 +148,7 @@ func path_route_to_curve_3d() -> Curve3D:
 
 func _on_area_3d_area_entered(area):
 	print("Collision detected with area: ", area)
-	if area is Projectile or area is Projectile_2:
+	if area is Projectile or area is Projectile_2 or area is Projectile_3:
 		print("Hit by projectile, damage: ", area.damage)
 		enemy_health -= area.damage
 		print("Remaining health: ", enemy_health)
