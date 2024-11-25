@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="5_2ibju"]
 [ext_resource type="PackedScene" uid="uid://bmxds27dfvibc" path="res://assets/enemy-ufo-b.glb" id="7_230vi"]
 [ext_resource type="AudioStream" uid="uid://dljm4j7f3von3" path="res://audio/explosion.mp3" id="7_bn61e"]
-[ext_resource type="Resource" uid="uid://b6pb1lrpq3m4j" path="res://resources/speed_health_enemy_settings.res" id="8_lhx5e"]
+[ext_resource type="Resource" uid="uid://b6pb1lrpq3m4j" path="res://resources/speed_enemy_settings.res" id="8_lhx5e"]
 [ext_resource type="Script" path="res://scripts/speed_enemy.gd" id="8_ooxso"]
 
 [sub_resource type="Animation" id="Animation_qxxns"]
