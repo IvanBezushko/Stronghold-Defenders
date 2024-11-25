@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3o8i8v8jb6cn"]
+
+[ext_resource type="PackedScene" uid="uid://di0qwe26dklwc" path="res://assets/tile-hill.glb" id="1_rf1lb"]
+
+[node name="Area3D" type="Area3D" groups=["grid_las"]]
+
+[node name="tile-hill2" parent="." instance=ExtResource("1_rf1lb")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]

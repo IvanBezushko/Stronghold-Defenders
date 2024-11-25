@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://bjimupbbumjuo"]
+
+[ext_resource type="PackedScene" uid="uid://cbvheuvcmwqxa" path="res://assets/tile-dirt.glb" id="1_ruyio"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gs5h3"]
+
+[node name="Area3D" type="Area3D" groups=["new_map", "new_map1"]]
+
+[node name="tile-dirt2" parent="." instance=ExtResource("1_ruyio")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_gs5h3")
