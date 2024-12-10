@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://72lu3y2bauhu"]
+[gd_scene load_steps=26 format=3 uid="uid://72lu3y2bauhu"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_v46vx"]
 [ext_resource type="PackedScene" uid="uid://vlsi147u6buw" path="res://scenes/tile_start.tscn" id="2_nmu5y"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://b8jneut5lykj5" path="res://scenes/tile_tree.tscn" id="9_1og6f"]
 [ext_resource type="PackedScene" uid="uid://dv78q8jboyll4" path="res://scenes/tile_empty.tscn" id="10_62ous"]
 [ext_resource type="PackedScene" uid="uid://0byoh4kut8u0" path="res://menu/pause.tscn" id="12_4aerd"]
+[ext_resource type="PackedScene" uid="uid://ssbyc8gyhxna" path="res://assets/selection-a.glb" id="12_68adc"]
 [ext_resource type="PackedScene" uid="uid://bvwuudxo2j1hc" path="res://scenes/activity_button.tscn" id="12_sdtmw"]
 [ext_resource type="Texture2D" uid="uid://1g1cups1blj1" path="res://images/wieza_icon3.png" id="14_u8sv5"]
 [ext_resource type="PackedScene" uid="uid://demjkhdd30p0v" path="res://scenes/turret_1.tscn" id="15_qv0eq"]
@@ -21,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://y7w5g8r2synv" path="res://scenes/activity_button_3.tscn" id="19_orlpo"]
 [ext_resource type="Texture2D" uid="uid://bcgj7wtmhkjl8" path="res://images/wieza_icon1.png" id="21_w7114"]
 [ext_resource type="PackedScene" uid="uid://y7okr71cbfc2" path="res://scenes/turret_3.tscn" id="22_wmkvp"]
+[ext_resource type="Script" path="res://scripts/tower_upgrade_panel.gd" id="22_wtke4"]
 
 [sub_resource type="Environment" id="Environment_wmip2"]
 background_mode = 1
@@ -42,6 +44,7 @@ tile_corner = ExtResource("4_bj13s")
 tile_crossroads = ExtResource("5_dkgpe")
 tile_enemy = ExtResource("6_5cncu")
 tile_empty = Array[PackedScene]([ExtResource("7_8twgt"), ExtResource("8_2w5eb"), ExtResource("9_1og6f"), ExtResource("10_62ous"), ExtResource("10_62ous"), ExtResource("10_62ous"), ExtResource("10_62ous")])
+selection_frame = ExtResource("12_68adc")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.422618, 0.906308, 0, -0.906308, 0.422618, 7.5, 9, 9.5)
@@ -77,6 +80,21 @@ offset_bottom = -8.0
 activity_button_icon = ExtResource("14_u8sv5")
 activity_draggable = ExtResource("15_qv0eq")
 
+[node name="Label" type="Label" parent="Control/ActivityButton"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -23.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "$"
+horizontal_alignment = 1
+
 [node name="ActivityButton2" parent="Control" instance=ExtResource("16_c0vmb")]
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 1
@@ -93,6 +111,21 @@ grow_horizontal = 2
 grow_vertical = 0
 activity_button_icon = ExtResource("17_wves3")
 activity_draggable = ExtResource("18_dphgl")
+
+[node name="Label" type="Label" parent="Control/ActivityButton2"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -23.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "$"
+horizontal_alignment = 1
 
 [node name="ActivityButton3" parent="Control" instance=ExtResource("19_orlpo")]
 layout_mode = 1
@@ -111,6 +144,21 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_eni0m")
 activity_button_icon = ExtResource("21_w7114")
 activity_draggable = ExtResource("22_wmkvp")
 
+[node name="Label" type="Label" parent="Control/ActivityButton3"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -23.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "$"
+horizontal_alignment = 1
+
 [node name="CashLabel" type="Label" parent="Control"]
 layout_mode = 1
 anchors_preset = 10
@@ -120,3 +168,57 @@ grow_horizontal = 2
 theme_override_font_sizes/font_size = 32
 text = "Cash $0"
 horizontal_alignment = 1
+
+[node name="UIContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.837
+anchor_right = 0.346
+anchor_bottom = 0.985
+offset_left = -0.039999
+offset_top = -53.376
+offset_right = 0.40799
+offset_bottom = 0.719971
+
+[node name="TowerUpgradePanel" type="Panel" parent="Control/UIContainer"]
+custom_minimum_size = Vector2(300, 150)
+layout_mode = 2
+script = ExtResource("22_wtke4")
+
+[node name="Label" type="Label" parent="Control/UIContainer/TowerUpgradePanel"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 56.0
+offset_right = 139.0
+offset_bottom = 146.0
+theme_override_font_sizes/font_size = 14
+text = "before"
+
+[node name="Label2" type="Label" parent="Control/UIContainer/TowerUpgradePanel"]
+layout_mode = 0
+offset_left = 160.0
+offset_top = 56.0
+offset_right = 267.0
+offset_bottom = 146.0
+theme_override_font_sizes/font_size = 14
+text = "after"
+
+[node name="UpgradeButton" type="Button" parent="Control/UIContainer/TowerUpgradePanel"]
+layout_mode = 0
+offset_left = 302.0
+offset_top = 48.5
+offset_right = 352.0
+offset_bottom = 98.5
+text = "$"
+
+[node name="LabelName" type="Label" parent="Control/UIContainer/TowerUpgradePanel"]
+layout_mode = 0
+offset_left = 11.0
+offset_top = 6.0
+offset_right = 160.0
+offset_bottom = 46.0
+theme_override_font_sizes/font_size = 30
+text = "name"
+
+[connection signal="pressed" from="Control/UIContainer/TowerUpgradePanel/UpgradeButton" to="Control/UIContainer/TowerUpgradePanel" method="_on_Upgrade_pressed"]

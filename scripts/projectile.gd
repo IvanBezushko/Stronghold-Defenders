@@ -2,9 +2,22 @@ extends Area3D
 class_name Projectile
 var starting_position:Vector3
 var target:Node3D
-@export var speed:float = 2 # metres per second
-@export var damage:int = 20
+@export var speed:float  # metres per second
+@export var damage:int 
 var lerp_pos:float = 0
+
+func set_tower_level(tower_level: int):
+	match tower_level:
+		1:
+			speed = 2
+			damage = 20
+		2:
+			speed = 2.5
+			damage = 25
+		3:
+			speed = 3
+			damage = 30
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	global_position = starting_position

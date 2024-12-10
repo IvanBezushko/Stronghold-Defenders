@@ -1,76 +1,75 @@
-[gd_scene load_steps=12 format=3 uid="uid://demjkhdd30p0v"]
+[gd_scene load_steps=12 format=3 uid="uid://dlow5hyqjbwsk"]
 
-[ext_resource type="Script" path="res://scripts/turret_1.gd" id="1_3ha72"]
-[ext_resource type="PackedScene" uid="uid://c0i2ix5nouwf0" path="res://assets/weapon-cannon.glb" id="1_rg2hj"]
-[ext_resource type="PackedScene" uid="uid://dyfxaoc8ilypq" path="res://scenes/cannonball.tscn" id="2_eunxw"]
-[ext_resource type="PackedScene" uid="uid://bt7birbwdlqql" path="res://assets/tower-round-build-a.glb" id="2_po7db"]
-[ext_resource type="PackedScene" uid="uid://ssbyc8gyhxna" path="res://assets/selection-a.glb" id="3_pncxf"]
-[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="4_tx7ew"]
-[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="5_fwg63"]
-[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="6_0gj3f"]
-[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="7_wikvf"]
+[ext_resource type="Script" path="res://scripts/turret_3_lvl3.gd" id="1_qxwii"]
+[ext_resource type="PackedScene" uid="uid://dkonb0680heqc" path="res://scenes/small_cannonballs.tscn" id="2_jxaie"]
+[ext_resource type="PackedScene" uid="uid://blhthgdhihji3" path="res://assets/weapon-turret.glb" id="3_p072h"]
+[ext_resource type="PackedScene" uid="uid://ssbyc8gyhxna" path="res://assets/selection-a.glb" id="3_q6hdb"]
+[ext_resource type="PackedScene" uid="uid://cpt8dmgdtdl3" path="res://assets/towerSquare_sampleF.glb" id="5_1gyxq"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="5_tjl4a"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="6_s5n8c"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="7_kip65"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="8_v4q4x"]
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_hyw00"]
-radius = 3.0
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_sbj7w"]
+radius = 2.0
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_usvln"]
-height = 1.3
+[sub_resource type="BoxShape3D" id="BoxShape3D_xm3id"]
+size = Vector3(1, 1.3, 1)
 
-[node name="Turret1" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
-script = ExtResource("1_3ha72")
-projectile_type = ExtResource("2_eunxw")
-selection_frame = ExtResource("3_pncxf")
+[node name="Turret3" type="Node3D"]
+script = ExtResource("1_qxwii")
+projectile_type = ExtResource("2_jxaie")
+selection_frame = ExtResource("3_q6hdb")
 
-[node name="Cannon" parent="." instance=ExtResource("1_rg2hj")]
+[node name="Turret" parent="." instance=ExtResource("3_p072h")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 
-[node name="projectile_spawn" type="Node3D" parent="Cannon"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0.25)
+[node name="projectile_spawn" type="Node3D" parent="Turret"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0.275)
 
-[node name="tower" parent="." instance=ExtResource("2_po7db")]
+[node name="tower" parent="." instance=ExtResource("5_1gyxq")]
 
 [node name="PatrolZone" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PatrolZone"]
-shape = SubResource("CylinderShape3D_hyw00")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_sbj7w")
 
 [node name="StateChart" type="Node" parent="."]
-script = ExtResource("4_tx7ew")
+script = ExtResource("5_tjl4a")
 
 [node name="CompoundState" type="Node" parent="StateChart"]
-script = ExtResource("5_fwg63")
+script = ExtResource("6_s5n8c")
 initial_state = NodePath("PatrollingState")
 
 [node name="PatrollingState" type="Node" parent="StateChart/CompoundState"]
-script = ExtResource("6_0gj3f")
+script = ExtResource("7_kip65")
 
 [node name="AcquiringState" type="Node" parent="StateChart/CompoundState/PatrollingState"]
-script = ExtResource("7_wikvf")
+script = ExtResource("8_v4q4x")
 to = NodePath("../../AcquiringState")
 event = &"to_acquiring_state"
 
 [node name="AcquiringState" type="Node" parent="StateChart/CompoundState"]
-script = ExtResource("6_0gj3f")
+script = ExtResource("7_kip65")
 
 [node name="AttackingState" type="Node" parent="StateChart/CompoundState/AcquiringState"]
-script = ExtResource("7_wikvf")
+script = ExtResource("8_v4q4x")
 to = NodePath("../../AttackingState")
 event = &"to_attacking_state"
 
 [node name="PatrollingState" type="Node" parent="StateChart/CompoundState/AcquiringState"]
-script = ExtResource("7_wikvf")
+script = ExtResource("8_v4q4x")
 to = NodePath("../../PatrollingState")
 event = &"to_patrolling_state"
 
 [node name="AttackingState" type="Node" parent="StateChart/CompoundState"]
-script = ExtResource("6_0gj3f")
+script = ExtResource("7_kip65")
 
 [node name="PatrollingState" type="Node" parent="StateChart/CompoundState/AttackingState"]
-script = ExtResource("7_wikvf")
+script = ExtResource("8_v4q4x")
 to = NodePath("../../PatrollingState")
 event = &"to_patrolling_state"
 
@@ -80,7 +79,7 @@ collision_mask = 16
 
 [node name="ClickCollisionShape3D" type="CollisionShape3D" parent="ClickToUpgrade"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
-shape = SubResource("CylinderShape3D_usvln")
+shape = SubResource("BoxShape3D_xm3id")
 
 [connection signal="area_entered" from="PatrolZone" to="." method="_on_patrol_zone_area_entered"]
 [connection signal="area_exited" from="PatrolZone" to="." method="_on_patrol_zone_area_exited"]

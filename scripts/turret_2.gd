@@ -5,10 +5,60 @@ var current_enemy: Node3D = null
 var current_enemy_class = null
 var current_enemy_targetted: bool = false
 var acquire_slerp_progress: float = 0
+var selection_instance: Node3D = null
+var turretname: String = "Ballista Turret lvl 1"
+var level: int =1
+var type: int =2
 
 var last_fire_time: int
 @export var fire_rate_ms: int = 1000
 @export var projectile_type: PackedScene
+#@export var upgrade_to_scene: PackedScene = null
+@onready var main = get_node("/root/main")
+@export var upgrade_cost: int = 100
+@export var selection_frame: PackedScene
+@onready var collision_shape = $PatrolZone/CollisionShape3D
+var radius: float
+
+
+func _ready():
+	set_process_input(true)
+	radius=(collision_shape.shape as CylinderShape3D).radius
+
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if is_mouse_over():  # Sprawdzamy, czy kliknięto na wieżę
+				_on_tower_clicked()
+
+func is_mouse_over() -> bool:
+	var space_state = get_world_3d().direct_space_state
+	var ray_origin = get_viewport().get_camera_3d().project_ray_origin(get_viewport().get_mouse_position())
+	var ray_end = ray_origin + get_viewport().get_camera_3d().project_ray_normal(get_viewport().get_mouse_position()) * 100
+	var query = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
+	query.collide_with_areas = true
+	query.collision_mask = 1 << 3
+
+	var result = space_state.intersect_ray(query)
+	if result.size() > 0:
+		var collider = result["collider"]
+		var current_node = collider
+		while current_node != null:
+			if current_node == self:
+				return true
+			current_node = current_node.get_parent()
+	return false
+
+func _on_tower_clicked():
+	#print("Tower clicked!")
+	main.show_upgrade_panel(self)
+
+func upgrade_to_scene() -> PackedScene:
+	var new_scene: PackedScene = null
+	new_scene = preload("res://scenes/turret_2_lvl2.tscn")
+
+	return new_scene
+
 
 func _on_patrol_zone_area_entered(area):
 	if not enemies_in_range.has(area):
@@ -76,12 +126,13 @@ func _disconnect_current_enemy_signals():
 			current_enemy_class.enemy_finished.disconnect(self._remove_current_enemy)
 
 func _remove_current_enemy():
-	if enemies_in_range.has(current_enemy):
-		enemies_in_range.erase(current_enemy)
-	print("Enemy finished or destroyed: ", current_enemy)
-	_disconnect_current_enemy_signals()
+	if current_enemy != null:
+		_disconnect_current_enemy_signals()  # Odłącz sygnały
+		if enemies_in_range.has(current_enemy):
+			enemies_in_range.erase(current_enemy)  # Usuń z listy
 	current_enemy = null
 	current_enemy_class = null
+	acquire_slerp_progress = 0
 	$StateChart.send_event("to_patrolling_state")
 
 func _on_acquiring_state_state_entered():
@@ -110,10 +161,14 @@ func _on_attacking_state_state_physics_processing(_delta):
 		$StateChart.send_event("to_patrolling_state")
 
 func _maybe_fire():
-	if Time.get_ticks_msec() > (last_fire_time + fire_rate_ms) and current_enemy != null:
+	if current_enemy == null or not enemies_in_range.has(current_enemy):
+		_remove_current_enemy()
+		return
+	if Time.get_ticks_msec() > (last_fire_time + fire_rate_ms):
 		var projectile: Projectile_2 = projectile_type.instantiate()
 		projectile.starting_position = $Ballista/projectile_spawn.global_position
 		projectile.target = current_enemy
+		projectile.set_tower_level(level)
 		add_child(projectile)
 		last_fire_time = Time.get_ticks_msec()
 

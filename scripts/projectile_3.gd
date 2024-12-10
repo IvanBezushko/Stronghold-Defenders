@@ -3,10 +3,22 @@ class_name Projectile_3
 
 @export var starting_position: Vector3
 @export var target: Node3D
-@export var speed: float = 2.0 # metry na sekundę
-@export var damage: int = 30
+@export var speed: float 
+@export var damage: int 
 
 var lerp_pos: float = 0.0
+
+func set_tower_level(tower_level: int):
+	match tower_level:
+		1:
+			speed = 2
+			damage = 25
+		2:
+			speed = 2
+			damage = 30
+		3:
+			speed = 2.5
+			damage = 35
 
 func _ready():
 	global_position = starting_position

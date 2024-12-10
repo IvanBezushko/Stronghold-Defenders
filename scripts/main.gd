@@ -9,7 +9,7 @@ extends Node3D
 @export var tile_empty: Array[PackedScene]
 
 @export var enemy:PackedScene
-@export var cash:int=100
+@export var cash:int=1000
 
 #@export var castle_settings:CastleConfig = preload("res://resources/castle_settings.tres")
 var castle_health:int=20
@@ -22,15 +22,20 @@ var castle_health:int=20
 
 @onready var cam = $Camera3D
 var RAYCAST_LENGTH: float = 100
+var selected_tower: Node3D = null
+@onready var upgrade_panel = $Control/UIContainer/TowerUpgradePanel
+var selection_instance: Node3D = null
+@export var selection_frame: PackedScene
 
 func _ready():
 	PathGenInstance.reset()
 	_complete_grid()
-	print("Enemy Type 1: ", enemy_type_1)
-	print("Enemy Type 2: ", enemy_type_2)
-	print("Enemy Type 3: ", enemy_type_3)
-	print("Enemy Type 4: ", enemy_type_4)
-	print("Boss Type: ", boss_type)
+	upgrade_panel.visible = false
+	#print("Enemy Type 1: ", enemy_type_1)
+	#print("Enemy Type 2: ", enemy_type_2)
+	#print("Enemy Type 3: ", enemy_type_3)
+	#print("Enemy Type 4: ", enemy_type_4)
+	#print("Boss Type: ", boss_type)
 
 	var time_between_enemies = 2.5  # Odstęp między przeciwnikami w sekundach
 	var time_between_waves = 10.0     # Przerwa między falami w sekundach
@@ -75,7 +80,7 @@ func _ready():
 			else:
 				add_child(enemy_instance)
 				enemy_instance.add_to_group("enemies")
-				print("Enemy instantiated: ", enemy_instance.name)
+				#print("Enemy instantiated: ", enemy_instance.name)
 
 		# Jeśli fala zawiera BOSS-a
 		if wave.has("boss"):
@@ -87,7 +92,7 @@ func _ready():
 			else:
 				add_child(boss_instance)
 				boss_instance.add_to_group("enemies")
-				print("BOSS instantiated: ", boss_instance.name)
+				#print("BOSS instantiated: ", boss_instance.name)
 
 		# Przerwa między falami (nie dotyczy ostatniej fali)
 		if wave_index < len(waves) - 1:
@@ -96,8 +101,121 @@ func _ready():
 
 	print("All waves are complete!")
 
-func _process(delta):
-	$Control/CashLabel.text="Cash = $%d" % cash
+func _process(_delta):
+	$Control/CashLabel.text="Cash $%d" % cash
+
+func _input(event):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		# Sprawdź, czy kliknięto panel ulepszeń
+		if upgrade_panel.visible and upgrade_panel.get_global_rect().has_point(event.position):
+			#print("Clicked inside upgrade panel")
+			return  # Kliknięto w panel, nic nie rób
+
+		if selected_tower != null:
+			var space_state = get_world_3d().direct_space_state
+			var ray_origin = get_viewport().get_camera_3d().project_ray_origin(get_viewport().get_mouse_position())
+			var ray_end = ray_origin + get_viewport().get_camera_3d().project_ray_normal(get_viewport().get_mouse_position()) * 100
+			var query = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
+			query.collide_with_areas = true
+
+			var result = space_state.intersect_ray(query)
+			if result.size() > 0:
+				var clicked_node = result["collider"]
+
+				# Sprawdź, czy kliknięto wybraną wieżę
+				while clicked_node != null:
+					if clicked_node == selected_tower:
+						return  # Kliknięto obecną wieżę, nic nie rób
+					clicked_node = clicked_node.get_parent()
+
+			# Jeśli kliknięto poza wieżą i panelem, usuń zaznaczenie
+			#print("Clicked outside tower and panel")
+			selected_tower = null
+			upgrade_panel.visible = false
+			remove_selection_frame()
+
+
+func show_upgrade_panel(tower: Node3D):
+	# Usuń ramkę z poprzednio wybranej wieży
+	if selected_tower != null and selected_tower != tower:
+		remove_selection_frame()
+
+	# Ustaw obecną wieżę jako wybraną
+	selected_tower = tower
+	
+	# Dodaj ramkę do wieży
+	if selection_instance == null:
+		selection_instance = selection_frame.instantiate()
+		add_child(selection_instance)
+		selection_instance.global_position = tower.global_position
+		selection_instance.scale = Vector3(1.3, 1.3, 1.3)  # Powiększenie ramki
+	else:
+		selection_instance.queue_free()
+		selection_instance = null
+	
+	# Wyświetl panel ulepszeń
+	upgrade_panel.visible = true
+	upgrade_panel.call("initialize_ui", tower)
+
+func remove_selection_frame():
+	if selection_instance != null:
+		selection_instance.queue_free()
+		selection_instance = null
+
+func upgrade_tower():
+	if selected_tower == null:
+		print("No tower selected for upgrade!")
+		return
+
+	var new_tower_scene = selected_tower.call("upgrade_to_scene")
+	if new_tower_scene == null:
+		print("No upgrade scene defined for selected tower!")
+		return
+
+	var old_transform = selected_tower.global_transform
+	var parent = selected_tower.get_parent()
+
+	var new_tower = new_tower_scene.instantiate()
+	parent.add_child(new_tower)
+	new_tower.global_transform = old_transform
+	######new_tower.visible=false
+
+	#print("Przed tworzeniem nowej wieży: parent = ", parent)
+	#print("Po tworzeniu nowej wieży: new_tower.parent = ", new_tower.get_parent())
+	#print("Stara wieża przed przesunięciem: global_position = ", selected_tower.global_position)
+	
+	
+	
+#	if selected_tower.has_node("PatrolZone/CollisionShape3D"):
+#		selected_tower.get_node("PatrolZone/CollisionShape3D").queue_free()
+#	if selected_tower.has_node("ClickToUpgrade/ClickCollisionShape3D"):
+#		selected_tower.get_node("ClickToUpgrade/ClickCollisionShape3D").queue_free()
+#	if selected_tower.has_node("StateChart"):
+#		selected_tower.get_node("StateChart").queue_free()
+	selected_tower.global_translate(Vector3i(100,0,0))
+	selected_tower.visible=false
+	
+	
+	
+	#print("Stara wieża po przesunięciu: global_position = ", selected_tower.global_position)
+	#print("Stara wieża przed usunięciem: is_inside_tree() = ", selected_tower.is_inside_tree())
+
+	selected_tower.connect("tree_exited", self._on_old_tower_removed.bind(new_tower))
+	selected_tower.queue_free()
+	selected_tower = null
+
+	#print("Stara wieża po queue_free(): is_inside_tree() = ", selected_tower.is_inside_tree())
+	print("Tower upgraded successfully!")
+
+
+func _on_old_tower_removed(new_tower):
+	print("W _on_old_tower_removed()")
+	print("new_tower = ", new_tower)
+	if new_tower.has_method("_ready"):
+		new_tower._ready()
+	selected_tower = new_tower
+	show_upgrade_panel(new_tower)
+
 
 func _physics_process(_delta):
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
@@ -110,7 +228,7 @@ func _physics_process(_delta):
 		var rayResult: Dictionary = space_state.intersect_ray(query)
 		if rayResult.size() > 0:
 			#print(rayResult)
-			var co: CollisionObject3D = rayResult.get("collider")
+			var _co: CollisionObject3D = rayResult.get("collider")
 			#print(co.get_groups())
 
 func _complete_grid():

@@ -1,4 +1,5 @@
 extends Node3D
+class_name TurretBase
 
 var enemies_in_range: Array[Node3D] = []
 var current_enemy: Node3D = null
@@ -6,26 +7,18 @@ var current_enemy_class = null  # Usunięto deklarację typu
 var current_enemy_targetted: bool = false
 var acquire_slerp_progress: float = 0
 var selection_instance: Node3D = null
-var turretname: String = "Cannon Turret lvl 1"
-var level: int =1
-var type: int =1
 
 # NOWE ZMIENNE
-var last_fire_time: int
+@export var last_fire_time: int
 @export var fire_rate_ms: int = 1000
-@export var projectile_type: PackedScene
-#@export var upgrade_to_scene: PackedScene = null
 @onready var main = get_node("/root/main")
 @export var upgrade_cost: int = 100
 @export var selection_frame: PackedScene
-@onready var collision_shape = $PatrolZone/CollisionShape3D
-var radius: float
-
+@export var projectile_type: PackedScene=null
 
 func _ready():
 	# Ustaw, aby wieża mogła odbierać wejście myszką
 	set_process_input(true)
-	radius=(collision_shape.shape as CylinderShape3D).radius
 
 # Funkcja obsługująca wejścia
 func _input(event):
@@ -58,22 +51,6 @@ func is_mouse_over() -> bool:
 func _on_tower_clicked():
 	#print("Tower clicked!")
 	main.show_upgrade_panel(self)
-
-func upgrade_to_scene() -> PackedScene:
-	# Sprawdź, jaki poziom ma aktualna wieża i zwróć odpowiednią scenę
-	var new_scene: PackedScene = null
-	new_scene = preload("res://scenes/turret_1_lvl2.tscn")
-	# Przykładowe mechanizmy: 
-	# (Możesz dostosować w zależności od specyfiki swojej gry i dostępnych scen)
-	#if current_level == 1:
-		#new_scene = preload("res://scenes/Tower_Level_2.tscn")  # Scena nowej wersji wieży
-	#elif current_level == 2:
-		#new_scene = preload("res://scenes/Tower_Level_3.tscn")
-	# Dodatkowe poziomy ulepszeń, jeżeli są dostępne
-	# ...
-
-	return new_scene
-
 
 func _on_patrol_zone_area_entered(area):
 	if current_enemy == null:
@@ -135,13 +112,11 @@ func _disconnect_current_enemy_signals():
 			current_enemy_class.enemy_finished.disconnect(_remove_current_enemy)
 
 func _remove_current_enemy():
-	if current_enemy != null:
-		_disconnect_current_enemy_signals()  # Odłącz sygnały
-		if enemies_in_range.has(current_enemy):
-			enemies_in_range.erase(current_enemy)  # Usuń z listy
+	if enemies_in_range.has(current_enemy):
+		enemies_in_range.erase(current_enemy)
+	_disconnect_current_enemy_signals()
 	current_enemy = null
 	current_enemy_class = null
-	acquire_slerp_progress = 0
 	$StateChart.send_event("to_patrolling_state")
 
 func _on_acquiring_state_state_entered():
@@ -154,25 +129,7 @@ func _on_acquiring_state_state_physics_processing(delta):
 	else:
 		_remove_current_enemy()
 
-func _on_attacking_state_state_physics_processing(_delta):
-	if current_enemy != null and enemies_in_range.has(current_enemy):
-		rotate_towards_target(current_enemy, _delta)  # Kontynuowanie obrotu wieży
-		_maybe_fire()
-	else:
-		_remove_current_enemy()
 
-# Funkcja kontrolująca strzelanie
-func _maybe_fire():
-	if current_enemy == null or not enemies_in_range.has(current_enemy):
-		_remove_current_enemy()
-		return
-	if Time.get_ticks_msec() > (last_fire_time + fire_rate_ms):
-		var projectile: Projectile = projectile_type.instantiate()
-		projectile.starting_position = $Cannon/projectile_spawn.global_position
-		projectile.target = current_enemy
-		projectile.set_tower_level(level)
-		add_child(projectile)
-		last_fire_time = Time.get_ticks_msec()
 
 func _on_attacking_state_state_entered():
 	last_fire_time = 0

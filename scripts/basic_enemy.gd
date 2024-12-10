@@ -28,8 +28,8 @@ func _ready():
 		
 		enemy_health = 100  # Ustaw domyślną wartość zdrowia
 		enemy_speed = 1.0   # Ustaw domyślną wartość prędkości
-		print("Enemy health set to: ", enemy_health)
-		print("Enemy speed set to: ", enemy_speed)
+		#print("Enemy health set to: ", enemy_health)
+		#print("Enemy speed set to: ", enemy_speed)
 	else:
 		print("ERROR: enemy_settings is still null after attempting to load!")
 		enemy_health = 100  # Ustaw domyślną wartość zdrowia
@@ -38,27 +38,27 @@ func _ready():
 	# Sprawdzenie i przypisanie węzła Path3D
 	if has_node("Path3D"):
 		path3d = get_node("Path3D")
-		print("Path3D exists")
+		#print("Path3D exists")
 		path3d.curve = path_route_to_curve_3d()
 	else:
-		print("ERROR: Path3D not found!")
+		#print("ERROR: Path3D not found!")
 		path3d = null
 	
 	# Sprawdzenie i przypisanie węzła PathFollow3D
 	if path3d != null and path3d.has_node("PathFollow3D"):
 		path_follow_3d = path3d.get_node("PathFollow3D")
-		print("PathFollow3D exists")
+		#print("PathFollow3D exists")
 		path_follow_3d.progress = 0
 
 		# Znajdź model przeciwnika
 		if path_follow_3d.get_child_count() > 0:
 			enemy_model = path_follow_3d.get_child(0)
-			print("Enemy model found: ", enemy_model)
+			#print("Enemy model found: ", enemy_model)
 		else:
-			print("ERROR: PathFollow3D has no children!")
+			#print("ERROR: PathFollow3D has no children!")
 			enemy_model = null
 	else:
-		print("ERROR: PathFollow3D not found!")
+		#print("ERROR: PathFollow3D not found!")
 		path_follow_3d = null
 		enemy_model = null
 

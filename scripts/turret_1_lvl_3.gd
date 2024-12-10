@@ -6,8 +6,8 @@ var current_enemy_class = null  # Usunięto deklarację typu
 var current_enemy_targetted: bool = false
 var acquire_slerp_progress: float = 0
 var selection_instance: Node3D = null
-var turretname: String = "Cannon Turret lvl 1"
-var level: int =1
+var turretname: String = "Cannon Turret lvl 3"
+var level: int =3
 var type: int =1
 
 # NOWE ZMIENNE
@@ -21,11 +21,11 @@ var last_fire_time: int
 @onready var collision_shape = $PatrolZone/CollisionShape3D
 var radius: float
 
-
 func _ready():
 	# Ustaw, aby wieża mogła odbierać wejście myszką
 	set_process_input(true)
 	radius=(collision_shape.shape as CylinderShape3D).radius
+
 
 # Funkcja obsługująca wejścia
 func _input(event):
@@ -62,7 +62,7 @@ func _on_tower_clicked():
 func upgrade_to_scene() -> PackedScene:
 	# Sprawdź, jaki poziom ma aktualna wieża i zwróć odpowiednią scenę
 	var new_scene: PackedScene = null
-	new_scene = preload("res://scenes/turret_1_lvl2.tscn")
+	new_scene = preload("res://scenes/turret_1_lvl3.tscn")
 	# Przykładowe mechanizmy: 
 	# (Możesz dostosować w zależności od specyfiki swojej gry i dostępnych scen)
 	#if current_level == 1:

@@ -16,6 +16,7 @@ var occupied_positions: Array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$Label.text="$"+str(activity_cost)
 	icon = activity_button_icon
 	_draggable = activity_draggable.instantiate()
 	_draggable.set_patrolling(false)
@@ -23,7 +24,7 @@ func _ready():
 	_draggable.visible = false
 	_cam = get_viewport().get_camera_3d()
 
-func _process(delta):
+func _process(_delta):
 	disabled=activity_cost>main.cash
 
 func _physics_process(_delta):
