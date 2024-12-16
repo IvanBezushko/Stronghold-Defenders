@@ -90,12 +90,12 @@ func _on_travelling_state_processing(delta):
 
 		if path_follow_3d:
 			path_follow_3d.progress = distance_travelled_on_screen
-			print("Travelling: Progress on path: ", path_follow_3d.progress)
+			#print("Travelling: Progress on path: ", path_follow_3d.progress)
 		else:
 			print("ERROR: path_follow_3d is null!")
 
 		if distance_travelled > path_size - 1:
-			print("Travelling: Reached end of path")
+			#print("Travelling: Reached end of path")
 			$EnemyStateChart.send_event("to_damaging_state")
 	else:
 		print("ERROR: enemy_settings is null during travelling state!")
@@ -108,23 +108,23 @@ func _on_despawning_state_entered():
 	$EnemyStateChart.send_event("to_remove_enemy_state")
 
 func _on_remove_enemy_state_entered():
-	print("State: Remove entered")
+	#print("State: Remove entered")
 	queue_free()
 
 func _on_damaging_state_entered():
-	print("State: Damaging entered")
+	#print("State: Damaging entered")
 	attackable = false
-	print("Enemy is damaging something!")
+	#print("Enemy is damaging something!")
 	$EnemyStateChart.send_event("to_despawning_state")
 
 func _on_dying_state_entered():
-	print("State: Dying entered")
+	#print("State: Dying entered")
 	enemy_finished.emit()
 	$ExplosionAudio.play()
 
 	# Ukryj model przeciwnika
 	if enemy_model:
-		print("Hiding enemy_model")
+		#print("Hiding enemy_model")
 		enemy_model.visible = false
 	else:
 		print("ERROR: 'enemy_model' not found!")
@@ -133,7 +133,7 @@ func _on_dying_state_entered():
 	$EnemyStateChart.send_event("to_remove_enemy_state")
 
 func path_route_to_curve_3d() -> Curve3D:
-	print("Generating Curve3D from path")
+	#print("Generating Curve3D from path")
 	var c3d: Curve3D = Curve3D.new()
 
 	var path_route = PathGenInstance.get_path_route()
@@ -143,15 +143,15 @@ func path_route_to_curve_3d() -> Curve3D:
 
 	for element in path_route:
 		c3d.add_point(Vector3(element.x, 0.25, element.y))
-	print("Curve3D generated with points: ", c3d.get_point_count())
+	#print("Curve3D generated with points: ", c3d.get_point_count())
 	return c3d
 
 func _on_area_3d_area_entered(area):
-	print("Collision detected with area: ", area)
+	#print("Collision detected with area: ", area)
 	if area is Projectile or area is Projectile_2 or area is Projectile_3:
-		print("Hit by projectile, damage: ", area.damage)
+		#print("Hit by projectile, damage: ", area.damage)
 		enemy_health -= area.damage
-		print("Remaining health: ", enemy_health)
+		#print("Remaining health: ", enemy_health)
 
 		if enemy_health <= 0:
 			print("Enemy health is 0 or less, dying")

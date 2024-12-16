@@ -18,10 +18,8 @@ var occupied_positions: Array = []
 func _ready():
 	$Label.text="$"+str(activity_cost)
 	icon = activity_button_icon
-	_draggable = activity_draggable.instantiate()
-	_draggable.set_patrolling(false)
-	add_child(_draggable)
-	_draggable.visible = false
+	
+	
 	_cam = get_viewport().get_camera_3d()
 
 func _process(_delta):
@@ -53,7 +51,10 @@ func _physics_process(_delta):
 func _on_button_down():
 	#print("Button Down")
 	_is_dragging = true
-
+	_draggable = activity_draggable.instantiate()
+	_draggable.set_patrolling(false)
+	add_child(_draggable)
+	_draggable.visible = false
 
 func _on_button_up():
 	#print("Button Up")

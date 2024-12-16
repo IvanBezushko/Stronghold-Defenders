@@ -3,19 +3,21 @@ class_name Boss_Enemy
 
 @export var enemy_settings: EnemySettings  # EnemySettings to zasób dziedziczący po Resource
 
-var enemy_health: int 
-var enemy_damage:int 
+var enemy_health: int
+var enemy_damage: int
 var enemy_speed: float  # Dodana zmienna dla prędkości
 
-signal enemy_finished
+signal enemy_finished  # Definicja sygnału
 
 var attackable: bool = false
 var distance_travelled: float = 0
 
-var enemy_model: Node = null  # Dodana zmienna dla modelu przeciwnika
+var enemy_model: Node = null  # Model przeciwnika
 
 var path3d: Path3D = null
 var path_follow_3d: PathFollow3D = null
+
+@export var win_scene_path: String = "res://menu/win.tscn"  # Ścieżka do sceny wygranej
 
 func _ready():
 	print("Boss_Enemy: _ready() called")
@@ -26,8 +28,6 @@ func _ready():
 		enemy_settings = load("res://resources/BOSS.tres")
 	
 	if enemy_settings != null:
-		# Duplikuj zasób, aby modyfikacje były lokalne
-		
 		enemy_settings = enemy_settings.duplicate(true)  # Głęboka kopia
 		enemy_health = enemy_settings.health
 		enemy_damage = enemy_settings.damage
@@ -36,13 +36,13 @@ func _ready():
 		print("Enemy speed set to: ", enemy_speed)
 	else:
 		print("ERROR: enemy_settings nadal jest null po próbie ustawienia!")
-		enemy_health = 1500  # Ustaw domyślną wartość zdrowia
+		enemy_health = 100  # Domyślne zdrowie
 		enemy_speed = 0.6 
 	
 	# Sprawdzenie i przypisanie węzła Path3D
 	if has_node("Path3D"):
 		path3d = get_node("Path3D")
-		print("Path3D istnieje")
+		#print("Path3D istnieje")
 		path3d.curve = path_route_to_curve_3d()
 	else:
 		print("ERROR: Path3D nie został znaleziony!")
@@ -51,13 +51,13 @@ func _ready():
 	# Sprawdzenie i przypisanie węzła PathFollow3D
 	if path3d != null and path3d.has_node("PathFollow3D"):
 		path_follow_3d = path3d.get_node("PathFollow3D")
-		print("PathFollow3D istnieje")
+		#print("PathFollow3D istnieje")
 		path_follow_3d.progress = 0
 
 		# Znajdź model przeciwnika
 		if path_follow_3d.get_child_count() > 0:
 			enemy_model = path_follow_3d.get_child(0)
-			print("Model przeciwnika znaleziony: ", enemy_model.name)
+			#print("Model przeciwnika znaleziony: ", enemy_model.name)
 		else:
 			print("ERROR: PathFollow3D nie ma dzieci!")
 			enemy_model = null
@@ -67,33 +67,41 @@ func _ready():
 		enemy_model = null
 
 func _on_spawning_state_entered():
-	print("Stan: Spawning wejście")
+	#print("Stan: Spawning wejście")
 	attackable = false
 	$AnimationPlayer.play("spawn")
 	await $AnimationPlayer.animation_finished
 	$EnemyStateChart.send_event("to_travelling_state")
 
 func _on_travelling_state_entered():
-	print("Stan: Travelling wejście")
+	#print("Stan: Travelling wejście")
 	attackable = true
 
 func _on_travelling_state_processing(delta):
-	distance_travelled += (delta * enemy_speed)  # Użyj enemy_speed
+	distance_travelled += (delta * enemy_speed)  # Poruszanie bossa
 	var path_size = PathGenInstance.get_path_route().size()
 	var distance_travelled_on_screen: float = clamp(distance_travelled, 0, path_size - 1)
 	
 	if path_follow_3d != null:
 		path_follow_3d.progress = distance_travelled_on_screen
-		print("Travelling: Postęp na ścieżce: ", path_follow_3d.progress)
+		#print("Travelling: Postęp na ścieżce: ", path_follow_3d.progress)
 	else:
 		print("ERROR: path_follow_3d jest null!")
 	
 	if distance_travelled > path_size - 1:
 		$EnemyStateChart.send_event("to_damaging_state")
 
+func _on_damaging_state_entered():
+	#print("Stan: Damaging wejście")
+	attackable = false
+	var main = get_tree().get_root().get_node("main")  
+	main.decrease_castle_health(enemy_damage)
+	$EnemyStateChart.send_event("to_despawning_state")
+
 func _on_despawning_state_entered():
-	print("Stan: Despawning wejście")
+	#print("Stan: Despawning wejście")
 	enemy_finished.emit()
+	#print("Emitting 'enemy_finished' signal")
 	$AnimationPlayer.play("despawn")
 	await $AnimationPlayer.animation_finished
 	$EnemyStateChart.send_event("to_remove_enemy_state")
@@ -102,18 +110,11 @@ func _on_remove_enemy_state_entered():
 	print("Stan: Remove wejście")
 	queue_free()
 
-func _on_damaging_state_entered():
-	#print("Stan: Damaging wejście")
-	attackable = false
-	#print("Boss wykonuje obrażenia!")
-	var main = get_tree().get_root().get_node("main")  
-	main.decrease_castle_health(enemy_damage)
-	$EnemyStateChart.send_event("to_despawning_state")
-
 func _on_dying_state_entered():
-	print("Stan: Dying wejście")
-	get_parent_node_3d().cash+=enemy_settings.destroy_value
-	enemy_finished.emit()
+	#print("Stan: Dying wejście")
+	get_parent().cash += enemy_settings.destroy_value
+	print("Emitting 'enemy_finished' signal")
+	enemy_finished.emit()  # Emitowanie sygnału przed zmianą sceny
 	$ExplosionAudio.play()
 	
 	if enemy_model != null:
@@ -122,7 +123,23 @@ func _on_dying_state_entered():
 		print("ERROR: enemy_model jest null!")
 	
 	await $ExplosionAudio.finished
+
+	# Usuń zmianę sceny tutaj, aby `main.gd` mogło obsłużyć sygnał
+	# if win_scene_path != "":
+	#     var win_scene = load(win_scene_path)
+	#     if win_scene:
+	#         get_tree().change_scene_to_file(win_scene_path)
+	#         print("Załadowano scenę wygranej:", win_scene_path)
+	#     else:
+	#         print("ERROR: Nie udało się załadować sceny wygranej:", win_scene_path)
+	# else:
+	#     print("ERROR: win_scene_path nie został ustawiony.")
+	
 	$EnemyStateChart.send_event("to_remove_enemy_state")
+
+func _on_dying_state_exit():
+	# Funkcja może zostać użyta, jeśli potrzebujesz dodatkowej logiki po wyjściu z stanu
+	pass
 
 func path_route_to_curve_3d() -> Curve3D:
 	print("Generowanie Curve3D z trasy")

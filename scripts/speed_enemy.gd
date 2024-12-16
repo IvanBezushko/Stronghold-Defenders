@@ -30,8 +30,8 @@ func _ready():
 		enemy_health = enemy_settings.health
 		enemy_damage = enemy_settings.damage
 		enemy_speed = enemy_settings.speed
-		print("Enemy health set to: ", enemy_health)
-		print("Enemy speed set to: ", enemy_speed)
+		#print("Enemy health set to: ", enemy_health)
+		#print("Enemy speed set to: ", enemy_speed)
 	else:
 		print("ERROR: enemy_settings nadal jest null po próbie ustawienia!")
 		enemy_health = 100  # Ustaw domyślną wartość zdrowia
@@ -39,7 +39,7 @@ func _ready():
 	# Sprawdzenie i przypisanie węzła Path3D
 	if has_node("Path3D"):
 		path3d = get_node("Path3D")
-		print("Path3D exists")
+		#print("Path3D exists")
 		path3d.curve = path_route_to_curve_3d()
 	else:
 		print("ERROR: Path3D not found!")
@@ -54,7 +54,7 @@ func _ready():
 		# Znajdź model przeciwnika
 		if path_follow_3d.get_child_count() > 0:
 			enemy_model = path_follow_3d.get_child(0)
-			print("Enemy model found: ", enemy_model)
+			#print("Enemy model found: ", enemy_model)
 		else:
 			print("ERROR: PathFollow3D has no children!")
 			enemy_model = null
@@ -64,14 +64,14 @@ func _ready():
 		enemy_model = null
 
 func _on_spawning_state_entered():
-	print("State: Spawning entered")
+	#print("State: Spawning entered")
 	attackable = false
 	$AnimationPlayer.play("spawn")
 	await $AnimationPlayer.animation_finished
 	$EnemyStateChart.send_event("to_travelling_state")
 
 func _on_travelling_state_entered():
-	print("State: Travelling entered")
+	#print("State: Travelling entered")
 	attackable = true
 
 func _on_travelling_state_processing(delta):
@@ -95,14 +95,14 @@ func _on_travelling_state_processing(delta):
 		print("ERROR: enemy_settings is null during travelling state!")
 
 func _on_despawning_state_entered():
-	print("State: Despawning entered")
+	#print("State: Despawning entered")
 	enemy_finished.emit()
 	$AnimationPlayer.play("despawn")
 	await $AnimationPlayer.animation_finished
 	$EnemyStateChart.send_event("to_remove_enemy_state")
 
 func _on_remove_enemy_state_entered():
-	print("State: Remove entered")
+	#print("State: Remove entered")
 	queue_free()
 
 func _on_damaging_state_entered():
@@ -114,7 +114,7 @@ func _on_damaging_state_entered():
 	$EnemyStateChart.send_event("to_despawning_state")
 
 func _on_dying_state_entered():
-	print("State: Dying entered")
+	#print("State: Dying entered")
 	get_parent_node_3d().cash+=enemy_settings.destroy_value
 	enemy_finished.emit()
 	$ExplosionAudio.play()
@@ -128,7 +128,7 @@ func _on_dying_state_entered():
 	$EnemyStateChart.send_event("to_remove_enemy_state")
 
 func path_route_to_curve_3d() -> Curve3D:
-	print("Generating Curve3D from path")
+	#print("Generating Curve3D from path")
 	var c3d: Curve3D = Curve3D.new()
 	
 	var path_route = PathGenInstance.get_path_route()
@@ -142,7 +142,7 @@ func path_route_to_curve_3d() -> Curve3D:
 	return c3d
 
 func _on_area_3d_area_entered(area):
-	print("Collision detected with area: ", area)
+	#print("Collision detected with area: ", area)
 	if area is Projectile or area is Projectile_2 or area is Projectile_3:
 		print("Hit by projectile, damage: ", area.damage)
 		enemy_health -= area.damage

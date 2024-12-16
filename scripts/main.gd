@@ -8,11 +8,9 @@ extends Node3D
 @export var tile_enemy: PackedScene
 @export var tile_empty: Array[PackedScene]
 
-@export var enemy:PackedScene
-@export var cash:int=1000
-
-#@export var castle_settings:CastleConfig = preload("res://resources/castle_settings.tres")
-var castle_health:int=20
+@export var enemy: PackedScene
+@export var cash: int = 1000
+var castle_health: int = 20
 
 @export var enemy_type_1: PackedScene = preload("res://scenes/enemy_01.tscn")
 @export var enemy_type_2: PackedScene = preload("res://scenes/enemy_02.tscn")
@@ -27,113 +25,137 @@ var selected_tower: Node3D = null
 var selection_instance: Node3D = null
 @export var selection_frame: PackedScene
 
+# Statystyki
+var total_cash_earned: int = 0
+var total_enemies_killed: int = 0
+var time_elapsed: float = 0.0
+
 func _ready():
 	PathGenInstance.reset()
 	_complete_grid()
 	upgrade_panel.visible = false
-	#print("Enemy Type 1: ", enemy_type_1)
-	#print("Enemy Type 2: ", enemy_type_2)
-	#print("Enemy Type 3: ", enemy_type_3)
-	#print("Enemy Type 4: ", enemy_type_4)
-	#print("Boss Type: ", boss_type)
 
-	var time_between_enemies = 2.5  # Odstęp między przeciwnikami w sekundach
-	var time_between_waves = 10.0     # Przerwa między falami w sekundach
+	var time_between_enemies = 2.5
+	var time_between_waves = 10.0
 
 	var waves = [
-		# Fala 1: 5 x enemy_01
 		{"enemy_count": 5, "enemy_types": [enemy_type_1]},
-		# Fala 2: 10 x enemy_01 i enemy_02
 		{"enemy_count": 10, "enemy_types": [enemy_type_1, enemy_type_2]},
-		# Fala 3: 10 x enemy_01 i enemy_02
-		{"enemy_count": 10, "enemy_types": [enemy_type_1, enemy_type_2]},
-		# Fala 4: 15 x enemy_01, enemy_02 i enemy_03
 		{"enemy_count": 15, "enemy_types": [enemy_type_1, enemy_type_2, enemy_type_3]},
-		# Fala 5: 15 x enemy_01, enemy_02, enemy_03 i enemy_04
-		{"enemy_count": 15, "enemy_types": [enemy_type_1, enemy_type_2, enemy_type_3, enemy_type_4]},
-		# Fala 6: 25 x enemy_01, enemy_02, enemy_03 i enemy_04
 		{"enemy_count": 25, "enemy_types": [enemy_type_1, enemy_type_2, enemy_type_3, enemy_type_4]},
-		# Fala 7: 30 x enemy_01, enemy_02, enemy_03, enemy_04 i BOSS
 		{"enemy_count": 30, "enemy_types": [enemy_type_1, enemy_type_2, enemy_type_3, enemy_type_4], "boss": boss_type},
 	]
 
-	# Generowanie fal
 	for wave_index in range(len(waves)):
 		var wave = waves[wave_index]
-		print("Spawning wave ", wave_index + 1)
 		var enemy_count = wave["enemy_count"]
 		var enemy_types = wave["enemy_types"]
 
-		# Tworzenie przeciwników w jednej fali
 		for i in range(enemy_count):
 			await get_tree().create_timer(time_between_enemies).timeout
-			var enemy_instance: Node3D
+			var enemy_instance = enemy_types[randi() % enemy_types.size()].instantiate()
+			add_child(enemy_instance)
+			enemy_instance.add_to_group("enemies")
+			enemy_instance.connect("tree_exited", Callable(self, "_on_enemy_killed"))
 
-			# Losowo wybierz przeciwnika z dostępnych typów
-			if enemy_types.size() > 1:
-				enemy_instance = enemy_types[randi() % enemy_types.size()].instantiate()
-			else:
-				enemy_instance = enemy_types[0].instantiate()
-
-			if enemy_instance == null:
-				print("ERROR: Failed to instantiate enemy!")
-			else:
-				add_child(enemy_instance)
-				enemy_instance.add_to_group("enemies")
-				#print("Enemy instantiated: ", enemy_instance.name)
-
-		# Jeśli fala zawiera BOSS-a
 		if wave.has("boss"):
-			print("Spawning BOSS!")
 			await get_tree().create_timer(time_between_enemies).timeout
 			var boss_instance = wave["boss"].instantiate()
-			if boss_instance == null:
-				print("ERROR: Failed to instantiate BOSS!")
+			add_child(boss_instance)
+			boss_instance.add_to_group("enemies")
+			# Połączenie sygnału "tree_exited" dla bossa
+			boss_instance.connect("tree_exited", Callable(self, "_on_enemy_killed"))
+			# Połączenie sygnału "enemy_finished" dla bossa
+			if boss_instance.has_signal("enemy_finished"):
+				print("Connecting 'enemy_finished' signal to '_on_boss_killed'")
+				boss_instance.connect("enemy_finished", Callable(self, "_on_boss_killed"))
+				print("Connected 'enemy_finished' signal")
 			else:
-				add_child(boss_instance)
-				boss_instance.add_to_group("enemies")
-				#print("BOSS instantiated: ", boss_instance.name)
+				print("Warning: Boss instance does not have 'enemy_finished' signal.")
 
-		# Przerwa między falami (nie dotyczy ostatniej fali)
 		if wave_index < len(waves) - 1:
-			print("Waiting ", time_between_waves, " seconds before the next wave...")
 			await get_tree().create_timer(time_between_waves).timeout
 
-	print("All waves are complete!")
+func _process(delta):
+	time_elapsed += delta
+	$Control/CashLabel.text = "Cash $%d" % cash
 
-func _process(_delta):
-	$Control/CashLabel.text="Cash $%d" % cash
+func _on_enemy_killed():
+	var enemy_value = 100
+	total_cash_earned += enemy_value
+	total_enemies_killed += 1
+	cash += enemy_value
 
-func _input(event):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		# Sprawdź, czy kliknięto panel ulepszeń
-		if upgrade_panel.visible and upgrade_panel.get_global_rect().has_point(event.position):
-			#print("Clicked inside upgrade panel")
-			return  # Kliknięto w panel, nic nie rób
+	# Sprawdź, czy Boss został zabity
+	if get_tree() and get_tree().root:  # Sprawdzenie, czy get_tree() nie jest null
+		if get_tree().get_nodes_in_group("enemies").size() == 0:
+			print("VICTORY! Boss defeated!")
+			print_game_statistics()  # Wyświetl statystyki po zwycięstwie
+	else:
+		print("Warning: get_tree() is null. Cannot verify enemy group.")
 
-		if selected_tower != null:
-			var space_state = get_world_3d().direct_space_state
-			var ray_origin = get_viewport().get_camera_3d().project_ray_origin(get_viewport().get_mouse_position())
-			var ray_end = ray_origin + get_viewport().get_camera_3d().project_ray_normal(get_viewport().get_mouse_position()) * 100
-			var query = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
-			query.collide_with_areas = true
+func print_game_statistics():
+	print("====\tGAME STATISTICS\t====")
+	print("Total Time Played:\t%d seconds" % int(time_elapsed))
+	print("Total Enemies Killed:\t%d" % total_enemies_killed)
+	print("Total Cash Earned:\t$%d" % total_cash_earned)
+	print("=============================")
 
-			var result = space_state.intersect_ray(query)
-			if result.size() > 0:
-				var clicked_node = result["collider"]
+func decrease_castle_health(amount: int):
+	castle_health -= amount
+	if castle_health <= 0:
+		print("GAME OVER!")
+		print_game_statistics()  # Wyświetl statystyki
 
-				# Sprawdź, czy kliknięto wybraną wieżę
-				while clicked_node != null:
-					if clicked_node == selected_tower:
-						return  # Kliknięto obecną wieżę, nic nie rób
-					clicked_node = clicked_node.get_parent()
+		get_tree().paused = false
+		get_tree().current_scene.queue_free()
+		var game_scene = load("res://menu/lose.tscn").instantiate()
+		get_tree().root.add_child(game_scene)
+		get_tree().current_scene = game_scene
 
-			# Jeśli kliknięto poza wieżą i panelem, usuń zaznaczenie
-			#print("Clicked outside tower and panel")
-			selected_tower = null
-			upgrade_panel.visible = false
-			remove_selection_frame()
+func _complete_grid():
+	for x in range(PathGenInstance.path_config.map_length):
+		for y in range(PathGenInstance.path_config.map_height):
+			if not PathGenInstance.get_path_route().has(Vector2i(x, y)):
+				var tile = tile_empty.pick_random().instantiate()
+				add_child(tile)
+				tile.global_position = Vector3(x, 0, y)
+				tile.global_rotation_degrees = Vector3(0, randi_range(0, 3) * 90, 0)
 
+	for i in range(PathGenInstance.get_path_route().size()):
+		var tile_score: int = PathGenInstance.get_tile_score(i)
+
+		var tile: Node3D = tile_empty[0].instantiate()
+		var tile_rotation: Vector3 = Vector3.ZERO
+
+		if tile_score == 2:
+			tile = tile_end.instantiate()
+			tile_rotation = Vector3(0, -90, 0)
+		elif tile_score == 8:
+			tile = tile_start.instantiate()
+			tile_rotation = Vector3(0, 90, 0)
+		elif tile_score == 10:
+			tile = tile_straight.instantiate()
+			tile_rotation = Vector3(0, 90, 0)
+		elif tile_score in [1, 4, 5]:
+			tile = tile_straight.instantiate()
+		elif tile_score == 6:
+			tile = tile_corner.instantiate()
+			tile_rotation = Vector3(0, 180, 0)
+		elif tile_score == 12:
+			tile = tile_corner.instantiate()
+			tile_rotation = Vector3(0, 90, 0)
+		elif tile_score == 9:
+			tile = tile_corner.instantiate()
+		elif tile_score == 3:
+			tile = tile_corner.instantiate()
+			tile_rotation = Vector3(0, 270, 0)
+		elif tile_score == 15:
+			tile = tile_crossroads.instantiate()
+
+		add_child(tile)
+		tile.global_position = Vector3(PathGenInstance.get_path_tile(i).x, 0, PathGenInstance.get_path_tile(i).y)
+		tile.global_rotation_degrees = tile_rotation
 
 func show_upgrade_panel(tower: Node3D):
 	# Usuń ramkę z poprzednio wybranej wieży
@@ -180,33 +202,22 @@ func upgrade_tower():
 	new_tower.global_transform = old_transform
 	######new_tower.visible=false
 
-	#print("Przed tworzeniem nowej wieży: parent = ", parent)
-	#print("Po tworzeniu nowej wieży: new_tower.parent = ", new_tower.get_parent())
-	#print("Stara wieża przed przesunięciem: global_position = ", selected_tower.global_position)
+	# Jeśli chcesz, możesz usunąć dodatkowe komponenty starej wieży tutaj
+	# if selected_tower.has_node("PatrolZone/CollisionShape3D"):
+	#     selected_tower.get_node("PatrolZone/CollisionShape3D").queue_free()
+	# if selected_tower.has_node("ClickToUpgrade/ClickCollisionShape3D"):
+	#     selected_tower.get_node("ClickToUpgrade/ClickCollisionShape3D").queue_free()
+	# if selected_tower.has_node("StateChart"):
+	#     selected_tower.get_node("StateChart").queue_free()
 	
-	
-	
-#	if selected_tower.has_node("PatrolZone/CollisionShape3D"):
-#		selected_tower.get_node("PatrolZone/CollisionShape3D").queue_free()
-#	if selected_tower.has_node("ClickToUpgrade/ClickCollisionShape3D"):
-#		selected_tower.get_node("ClickToUpgrade/ClickCollisionShape3D").queue_free()
-#	if selected_tower.has_node("StateChart"):
-#		selected_tower.get_node("StateChart").queue_free()
 	selected_tower.global_translate(Vector3i(100,0,0))
-	selected_tower.visible=false
-	
-	
-	
-	#print("Stara wieża po przesunięciu: global_position = ", selected_tower.global_position)
-	#print("Stara wieża przed usunięciem: is_inside_tree() = ", selected_tower.is_inside_tree())
+	selected_tower.visible = false
 
 	selected_tower.connect("tree_exited", self._on_old_tower_removed.bind(new_tower))
 	selected_tower.queue_free()
 	selected_tower = null
 
-	#print("Stara wieża po queue_free(): is_inside_tree() = ", selected_tower.is_inside_tree())
 	print("Tower upgraded successfully!")
-
 
 func _on_old_tower_removed(new_tower):
 	print("W _on_old_tower_removed()")
@@ -216,7 +227,6 @@ func _on_old_tower_removed(new_tower):
 	selected_tower = new_tower
 	show_upgrade_panel(new_tower)
 
-
 func _physics_process(_delta):
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		var space_state = get_world_3d().direct_space_state
@@ -225,66 +235,56 @@ func _physics_process(_delta):
 		var end: Vector3 = origin + cam.project_ray_normal(mouse_pos) * RAYCAST_LENGTH
 		var query = PhysicsRayQueryParameters3D.create(origin, end)
 		query.collide_with_areas = true
-		var rayResult: Dictionary = space_state.intersect_ray(query)
-		if rayResult.size() > 0:
-			#print(rayResult)
-			var _co: CollisionObject3D = rayResult.get("collider")
-			#print(co.get_groups())
+		var ray_result: Dictionary = space_state.intersect_ray(query)
 
-func _complete_grid():
-	for x in range(PathGenInstance.path_config.map_length):
-		for y in range(PathGenInstance.path_config.map_height):
-			if not PathGenInstance.get_path_route().has(Vector2i(x, y)):
-				var tile: Node3D = tile_empty.pick_random().instantiate()
-				add_child(tile)
-				tile.global_position = Vector3(x, 0, y)
-				tile.global_rotation_degrees = Vector3(0, randi_range(0, 3) * 90, 0)
+		if ray_result.size() > 0:
+			#print(ray_result)
+			var collider: CollisionObject3D = ray_result.get("collider")
+			if collider != null:
+				print("Mouse hit collider: ", collider.name)
 
-	for i in range(PathGenInstance.get_path_route().size()):
-		var tile_score: int = PathGenInstance.get_tile_score(i)
+func _input(event):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		# Sprawdź, czy kliknięto panel ulepszeń
+		if upgrade_panel.visible and upgrade_panel.get_global_rect().has_point(event.position):
+			#print("Clicked inside upgrade panel")
+			return  # Kliknięto w panel, nic nie rób
 
-		var tile: Node3D = tile_empty[0].instantiate()
-		var tile_rotation: Vector3 = Vector3.ZERO
+		if selected_tower != null:
+			var space_state = get_world_3d().direct_space_state
+			var ray_origin = get_viewport().get_camera_3d().project_ray_origin(get_viewport().get_mouse_position())
+			var ray_end = ray_origin + get_viewport().get_camera_3d().project_ray_normal(get_viewport().get_mouse_position()) * 100
+			var query = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
+			query.collide_with_areas = true
 
-		if tile_score == 2:
-			tile = tile_end.instantiate()
-			tile_rotation = Vector3(0, -90, 0)
-		elif tile_score == 8:
-			tile = tile_start.instantiate()
-			tile_rotation = Vector3(0, 90, 0)
-		elif tile_score == 10:
-			tile = tile_straight.instantiate()
-			tile_rotation = Vector3(0, 90, 0)
-		elif tile_score in [1, 4, 5]:
-			tile = tile_straight.instantiate()
-			tile_rotation = Vector3(0, 0, 0)
-		elif tile_score == 6:
-			tile = tile_corner.instantiate()
-			tile_rotation = Vector3(0, 180, 0)
-		elif tile_score == 12:
-			tile = tile_corner.instantiate()
-			tile_rotation = Vector3(0, 90, 0)
-		elif tile_score == 9:
-			tile = tile_corner.instantiate()
-			tile_rotation = Vector3(0, 0, 0)
-		elif tile_score == 3:
-			tile = tile_corner.instantiate()
-			tile_rotation = Vector3(0, 270, 0)
-		elif tile_score == 15:
-			tile = tile_crossroads.instantiate()
-			tile_rotation = Vector3(0, 0, 0)
+			var result = space_state.intersect_ray(query)
+			if result.size() > 0:
+				var clicked_node = result["collider"]
 
-		add_child(tile)
-		tile.global_position = Vector3(PathGenInstance.get_path_tile(i).x, 0, PathGenInstance.get_path_tile(i).y)
-		tile.global_rotation_degrees = tile_rotation
+				# Sprawdź, czy kliknięto wybraną wieżę
+				while clicked_node != null:
+					if clicked_node == selected_tower:
+						return  # Kliknięto obecną wieżę, nic nie rób
+					clicked_node = clicked_node.get_parent()
 
-func decrease_castle_health(amount:int):
-	castle_health-=amount
-	#print("zycie zamku",castle_health)
-	if(castle_health<=0):
-		get_tree().paused = false
-		get_tree().current_scene.queue_free()
-		var game_scene = load("res://menu/lose.tscn").instantiate()
-		get_tree().current_scene.queue_free() 
-		get_tree().root.add_child(game_scene) 
-		get_tree().current_scene = game_scene 
+			# Jeśli kliknięto poza wieżą i panelem, usuń zaznaczenie
+			#print("Clicked outside tower and panel")
+			selected_tower = null
+			upgrade_panel.visible = false
+			remove_selection_frame()
+
+# Nowa funkcja do obsługi śmierci bossa
+func _on_boss_killed():
+	print("Boss has been killed!")
+	print_game_statistics()
+	# Opcjonalnie możesz również wywołać inne akcje, np. przejście do sceny wygranej
+	# var win_scene = load("res://menu/win.tscn").instantiate()
+	# get_tree().change_scene_to(win_scene)
+	var win_scene_path = "res://menu/win.tscn"
+	if win_scene_path != "":
+		print("Changing scene to win scene:", win_scene_path)
+		var error = get_tree().change_scene_to_file(win_scene_path)
+		if error != OK:
+			print("ERROR: Failed to change to win scene:", win_scene_path)
+	else:
+		print("ERROR: win_scene_path not set.")
