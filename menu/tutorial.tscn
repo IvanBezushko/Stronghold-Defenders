@@ -1,0 +1,91 @@
+[gd_scene load_steps=8 format=3 uid="uid://db1ekqu77r11d"]
+
+[ext_resource type="Texture2D" uid="uid://t85dwdskjvut" path="res://background/mainphoto1152x648_2.png" id="1_dmfwu"]
+[ext_resource type="Script" path="res://menu/tutorial.gd" id="1_ptgoh"]
+[ext_resource type="Theme" uid="uid://dmmwhlddkynf6" path="res://menu/label.tres" id="2_y51br"]
+[ext_resource type="Texture2D" uid="uid://xbtf2gq1au7w" path="res://tutorial/6s.png" id="3_0ng0k"]
+[ext_resource type="Theme" uid="uid://3xb8cwh4hbcs" path="res://menu/tut.tres" id="4_oyttm"]
+[ext_resource type="Texture2D" uid="uid://dsdaq3cqjl26c" path="res://tutorial/2s.png" id="5_s3a74"]
+[ext_resource type="Texture2D" uid="uid://dmlgmw34365sk" path="res://tutorial/strzalka.png" id="7_p7jbj"]
+
+[node name="tutorial" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ptgoh")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("1_dmfwu")
+
+[node name="Label" type="Label" parent="TextureRect"]
+layout_mode = 0
+offset_left = 430.0
+offset_top = 15.0
+offset_right = 715.0
+offset_bottom = 141.0
+theme = ExtResource("2_y51br")
+text = "Tutorial"
+
+[node name="image1" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 95.0
+offset_top = 142.0
+offset_right = 445.0
+offset_bottom = 339.0
+texture = ExtResource("3_0ng0k")
+
+[node name="Label" type="Label" parent="image1"]
+layout_mode = 0
+offset_left = 380.0
+offset_top = 6.0
+offset_right = 941.0
+offset_bottom = 203.0
+theme = ExtResource("4_oyttm")
+text = "The main menu has a vibrant purple background with three options:
+
+    Play: Start the game.
+    Settings: Adjust game preferences.
+    Quit: Exit the game.
+
+The title is displayed at the top, and a small logo appears in the 
+bottom-right corner. Simple and easy to navigate."
+
+[node name="image2" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 703.0
+offset_top = 386.0
+offset_right = 1097.0
+offset_bottom = 608.0
+texture = ExtResource("5_s3a74")
+
+[node name="Label" type="Label" parent="image2"]
+layout_mode = 0
+offset_left = -613.0
+offset_top = 4.0
+offset_right = 135.0
+offset_bottom = 209.0
+theme = ExtResource("4_oyttm")
+text = "This screen showcases the player's progress with four achievement icons:
+
+    A skull (death of enemy).
+    A crown (death of Boss).
+    A dollar sign (cash history).
+    A clock (time you spend in game).
+
+The layout is clean, with a purple background and centered icons under the title \"Achievements\"."
+
+[node name="next" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1015.0
+offset_top = 45.0
+offset_right = 1087.0
+offset_bottom = 117.0
+icon = ExtResource("7_p7jbj")
+
+[connection signal="pressed" from="next" to="." method="_on_next_pressed"]

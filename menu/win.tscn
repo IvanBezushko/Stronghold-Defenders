@@ -1,12 +1,58 @@
-[gd_scene load_steps=2 format=3 uid="uid://dtlgsdw7majr4"]
+[gd_scene load_steps=5 format=3 uid="uid://dtlgsdw7majr4"]
 
-[ext_resource type="Script" path="res://menu/win.gd" id="1_l0ofm"]
+[ext_resource type="Texture2D" uid="uid://t85dwdskjvut" path="res://background/mainphoto1152x648_2.png" id="1_slwkj"]
+[ext_resource type="Theme" uid="uid://dmmwhlddkynf6" path="res://menu/label.tres" id="2_5dn7w"]
+[ext_resource type="Theme" uid="uid://cmam3q2g5nam8" path="res://menu/but.tres" id="3_1gjrg"]
 
-[node name="Win" type="Control"]
+[sub_resource type="GDScript" id="GDScript_k5v1v"]
+script/source = "extends Button
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+
+
+func _on_pressed() -> void:
+	get_tree().change_scene_to_file(\"res://menu/menu.tscn\")
+"
+
+[node name="win" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_l0ofm")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("1_slwkj")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 416.0
+offset_top = 79.0
+offset_right = 737.0
+offset_bottom = 205.0
+theme = ExtResource("2_5dn7w")
+text = "You Win!"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 447.0
+offset_top = 276.0
+offset_right = 707.0
+offset_bottom = 364.0
+theme = ExtResource("3_1gjrg")
+text = "Main Menu"
+script = SubResource("GDScript_k5v1v")
+
+[connection signal="pressed" from="Button" to="Button" method="_on_pressed"]

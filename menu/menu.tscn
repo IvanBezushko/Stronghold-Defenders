@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://dfjkpsgus4wcc"]
+[gd_scene load_steps=9 format=3 uid="uid://dfjkpsgus4wcc"]
 
 [ext_resource type="Script" path="res://menu/menu.gd" id="1_xof8e"]
 [ext_resource type="FontFile" uid="uid://dl7hlrhi5ntxs" path="res://fonts/segoeprb.ttf" id="2_4u2w5"]
 [ext_resource type="Texture2D" uid="uid://t85dwdskjvut" path="res://background/mainphoto1152x648_2.png" id="2_y2wox"]
 [ext_resource type="Theme" uid="uid://cmam3q2g5nam8" path="res://menu/but.tres" id="4_ug6t7"]
+[ext_resource type="Texture2D" uid="uid://l4486rjdl8a5" path="res://icon/stat_icon2.png" id="5_urr4t"]
+[ext_resource type="Texture2D" uid="uid://cd2inny02ooxj" path="res://tutorial/info.png" id="6_oek1i"]
 
 [sub_resource type="Theme" id="Theme_yfq10"]
 
@@ -94,6 +96,24 @@ grow_vertical = 2
 theme = ExtResource("4_ug6t7")
 text = "Settings"
 
+[node name="achievements" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1042.0
+offset_top = 546.0
+offset_right = 1114.0
+offset_bottom = 618.0
+icon = ExtResource("5_urr4t")
+
+[node name="tutorial" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1042.0
+offset_top = 445.0
+offset_right = 1114.0
+offset_bottom = 517.0
+icon = ExtResource("6_oek1i")
+
 [connection signal="pressed" from="Play_but" to="." method="_on_play_but_pressed"]
 [connection signal="pressed" from="Play_but/Quit_but" to="." method="_on_quit_but_pressed"]
 [connection signal="pressed" from="Settings_but" to="." method="_on_settings_but_pressed"]
+[connection signal="pressed" from="achievements" to="." method="_on_achievements_pressed"]
+[connection signal="pressed" from="tutorial" to="." method="_on_tutorial_pressed"]

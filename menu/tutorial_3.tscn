@@ -1,0 +1,76 @@
+[gd_scene load_steps=8 format=3 uid="uid://cgftejussjafi"]
+
+[ext_resource type="Script" path="res://menu/tutorial_3.gd" id="1_017a5"]
+[ext_resource type="Texture2D" uid="uid://t85dwdskjvut" path="res://background/mainphoto1152x648_2.png" id="1_th4lo"]
+[ext_resource type="Theme" uid="uid://dmmwhlddkynf6" path="res://menu/label.tres" id="2_otho0"]
+[ext_resource type="Texture2D" uid="uid://klwnx6yy26oo" path="res://tutorial/4s.png" id="3_ysain"]
+[ext_resource type="Theme" uid="uid://3xb8cwh4hbcs" path="res://menu/tut.tres" id="4_ws8a7"]
+[ext_resource type="Texture2D" uid="uid://bchfl6bpdl4cf" path="res://tutorial/5s.png" id="5_0h51u"]
+[ext_resource type="Texture2D" uid="uid://b8l57mjgccv8y" path="res://tutorial/x.png" id="7_gvhnx"]
+
+[node name="tutorial3" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_017a5")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("1_th4lo")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 430.0
+offset_top = 15.0
+offset_right = 715.0
+offset_bottom = 141.0
+theme = ExtResource("2_otho0")
+text = "Tutorial"
+
+[node name="image5" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 53.0
+offset_top = 141.0
+offset_right = 494.0
+offset_bottom = 389.0
+texture = ExtResource("3_ysain")
+
+[node name="Label" type="Label" parent="image5"]
+layout_mode = 0
+offset_left = 467.0
+offset_top = 48.0
+offset_right = 1111.0
+offset_bottom = 141.0
+theme = ExtResource("4_ws8a7")
+text = "The game includes wave-based enemy attacks with progressively increasing difficulty. 
+Players can build and upgrade towers to defend the path. There is also a continuation of gameplay
+ with multiple waves and an epic Boss battle at the end, providing a challenging finale 
+for players to overcome."
+
+[node name="image6" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 521.0
+offset_top = 325.0
+offset_right = 1017.0
+offset_bottom = 604.0
+texture = ExtResource("5_0h51u")
+
+[node name="Label" type="Label" parent="image6"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="exit" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1015.0
+offset_top = 35.0
+offset_right = 1087.0
+offset_bottom = 107.0
+icon = ExtResource("7_gvhnx")
+
+[connection signal="pressed" from="exit" to="." method="_on_exit_pressed"]

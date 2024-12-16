@@ -1,0 +1,77 @@
+[gd_scene load_steps=8 format=3 uid="uid://c5ovqlsiddue1"]
+
+[ext_resource type="Texture2D" uid="uid://t85dwdskjvut" path="res://background/mainphoto1152x648_2.png" id="1_cnbyn"]
+[ext_resource type="Script" path="res://menu/tutorial_2.gd" id="1_y1dm4"]
+[ext_resource type="Theme" uid="uid://dmmwhlddkynf6" path="res://menu/label.tres" id="2_7wprv"]
+[ext_resource type="Texture2D" uid="uid://d11n5e6octc3o" path="res://tutorial/1s.png" id="3_l73m6"]
+[ext_resource type="Theme" uid="uid://3xb8cwh4hbcs" path="res://menu/tut.tres" id="4_ecfdr"]
+[ext_resource type="Texture2D" uid="uid://b5fpda4y3nupk" path="res://tutorial/3s.png" id="5_2cwf3"]
+[ext_resource type="Texture2D" uid="uid://dmlgmw34365sk" path="res://tutorial/strzalka.png" id="7_ng8we"]
+
+[node name="tutorial2" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y1dm4")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_cnbyn")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 430.0
+offset_top = 15.0
+offset_right = 720.0
+offset_bottom = 141.0
+theme = ExtResource("2_7wprv")
+text = "Tutorial"
+
+[node name="image3" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 55.0
+offset_top = 146.0
+offset_right = 509.0
+offset_bottom = 393.0
+texture = ExtResource("3_l73m6")
+
+[node name="Label" type="Label" parent="image3"]
+layout_mode = 0
+offset_left = 493.0
+offset_top = 26.0
+offset_right = 1065.0
+offset_bottom = 153.0
+theme = ExtResource("4_ecfdr")
+text = "The game features wave-based enemy attacks where players must 
+defend the path by building and upgrading towers. Each wave becomes progressively harder, 
+requiring strategic placement and upgrades of towers to improve 
+their damage, range, and firing speed. 
+Managing resources efficiently is key to stopping enemies from reaching their destination."
+
+[node name="image4" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 549.0
+offset_top = 331.0
+offset_right = 1032.0
+offset_bottom = 603.0
+texture = ExtResource("5_2cwf3")
+
+[node name="Label" type="Label" parent="image4"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="next" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1015.0
+offset_top = 35.0
+offset_right = 1087.0
+offset_bottom = 107.0
+icon = ExtResource("7_ng8we")
+
+[connection signal="pressed" from="next" to="." method="_on_next_pressed"]

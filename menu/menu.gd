@@ -19,3 +19,11 @@ func _on_settings_but_pressed() -> void:
 
 func _on_quit_but_pressed() -> void:
 	get_tree().quit()
+
+
+func _on_achievements_pressed() -> void:
+	get_tree().change_scene_to_file("res://menu/achiev.tscn")
+
+
+func _on_tutorial_pressed() -> void:
+	get_tree().change_scene_to_file("res://menu/tutorial.tscn")

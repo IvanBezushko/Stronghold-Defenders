@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://3xb8cwh4hbcs"]
+
+[ext_resource type="FontFile" uid="uid://dfda4qgp4d6ws" path="res://fonts/segoepr.ttf" id="1_12kfm"]
+
+[resource]
+default_font = ExtResource("1_12kfm")
+default_font_size = 12
