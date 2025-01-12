@@ -79,6 +79,7 @@ func _ready():
 func _process(delta):
 	time_elapsed += delta
 	$Control/CashLabel.text = "Cash $%d" % cash
+	$Control/HealthLabel.text="❤️ "+str(castle_health)+" "
 
 func _on_enemy_killed():
 	var enemy_value = 100
@@ -112,6 +113,27 @@ func decrease_castle_health(amount: int):
 		var game_scene = load("res://menu/lose.tscn").instantiate()
 		get_tree().root.add_child(game_scene)
 		get_tree().current_scene = game_scene
+
+func add_castle_health(amount: int):
+	castle_health += amount
+	print("Castle health increased! Current health:", castle_health)
+
+func slow_down_enemies(factor: float, duration: float) -> void:
+	print("Slowing down enemies by factor:", factor, "for", duration, "seconds")
+	
+	# Apply slowdown to all enemies
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if enemy.has_method("set_speed"):
+			enemy.call("set_speed", enemy.enemy_speed * factor)
+	
+	# Wait for the duration
+	await get_tree().create_timer(duration).timeout
+	
+	# Restore speed to all enemies
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if enemy.has_method("set_speed"):
+			enemy.call("set_speed", enemy.enemy_speed)
+
 
 func _complete_grid():
 	for x in range(PathGenInstance.path_config.map_length):

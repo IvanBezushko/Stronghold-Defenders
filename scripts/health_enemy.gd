@@ -4,7 +4,8 @@ class_name Health_Enemy
 @export var enemy_settings: EnemySettings
 
 var enemy_health: int 
-var enemy_speed: float 
+@export var enemy_speed: float =1
+var current_speed: float = enemy_speed
 
 var path3d: Path3D = null
 var path_follow_3d: PathFollow3D = null
@@ -69,6 +70,10 @@ func _ready():
 	else:
 		print("ERROR: Cannot set progress on a null PathFollow3D!")
 
+func set_speed(new_speed: float):
+	current_speed = new_speed
+
+
 func _on_spawning_state_entered():
 	print("State: Spawning entered")
 	attackable = false
@@ -82,7 +87,7 @@ func _on_travelling_state_entered():
 
 func _on_travelling_state_processing(delta):
 	if enemy_settings != null:
-		distance_travelled += (delta * enemy_speed)
+		distance_travelled += (delta * current_speed)
 		#print("Travelling: Distance travelled: ", distance_travelled)
 
 		var path_size = PathGenInstance.get_path_route().size()

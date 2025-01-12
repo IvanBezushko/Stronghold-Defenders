@@ -5,7 +5,8 @@ class_name Sp_Hth_Enemy
 
 var enemy_health: int 
 var enemy_damage:int 
-var enemy_speed: float  
+@export var enemy_speed: float = 1.8
+var current_speed: float = enemy_speed
 
 signal enemy_finished
 
@@ -65,6 +66,9 @@ func _ready():
 		path_follow_3d = null
 		enemy_model = null
 
+func set_speed(new_speed: float):
+	current_speed = new_speed
+
 func _on_spawning_state_entered():
 	print("Stan: Spawning wejście")
 	attackable = false
@@ -78,7 +82,7 @@ func _on_travelling_state_entered():
 
 func _on_travelling_state_processing(delta):
 	if enemy_settings != null:
-		distance_travelled += (delta * enemy_settings.speed)
+		distance_travelled += (delta * current_speed)
 		var path_size = PathGenInstance.get_path_route().size()
 		var distance_travelled_on_screen: float = clamp(distance_travelled, 0, path_size - 1)
 		

@@ -5,7 +5,8 @@ class_name Speed_Enemy
 
 var enemy_health: int 
 var enemy_damage:int 
-var enemy_speed: float
+@export var enemy_speed: float = 2.0
+var current_speed: float = enemy_speed
 
 var enemy_model: Node = null  # Dodana zmienna
 
@@ -63,6 +64,9 @@ func _ready():
 		path_follow_3d = null
 		enemy_model = null
 
+func set_speed(new_speed: float):
+	current_speed = new_speed
+
 func _on_spawning_state_entered():
 	#print("State: Spawning entered")
 	attackable = false
@@ -76,7 +80,7 @@ func _on_travelling_state_entered():
 
 func _on_travelling_state_processing(delta):
 	if enemy_settings != null:
-		distance_travelled += (delta * enemy_speed)
+		distance_travelled += (delta * current_speed)
 		#print("Travelling: Distance travelled: ", distance_travelled)
 
 		var path_size = PathGenInstance.get_path_route().size()
