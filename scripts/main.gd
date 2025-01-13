@@ -35,6 +35,8 @@ var selected_tower: Node3D = null
 @onready var upgrade_panel = $Control/UIContainer/TowerUpgradePanel
 var selection_instance: Node3D = null
 @export var selection_frame: PackedScene
+@onready var timer_label = $Control/TimerLabel
+
 
 # Statystyki
 var total_cash_earned: int = 0
@@ -63,6 +65,8 @@ func _ready():
 	PathGenInstance.reset()
 	_complete_grid()
 	upgrade_panel.visible = false
+	timer_label.visible=false
+
 
 	var saved_stats = load_statistics_from_file("user://stat/stat.json")
 	if saved_stats.size() > 0:
@@ -101,16 +105,23 @@ func _handle_wave(wave):
 			boss_instance.add_to_group("enemies")
 			boss_instance.connect("tree_exited", Callable(self, "_on_enemy_killed"))
 
-	await get_tree().create_timer(25.0).timeout
-
-
-
+	await show_wave_timer(25)
 
 
 func _process(delta):
 	time_elapsed += delta
 	$Control/CashLabel.text = "Cash $%d" % cash
+	$Control/HealthLabel.text="❤️ "+str(castle_health)+" "
 
+func show_wave_timer(duration: float):
+	timer_label.visible = true
+	var remaining_time = duration
+	timer_label.text = "Next wave in %d" % ceil(remaining_time)
+
+	while remaining_time > 0:
+		await get_tree().create_timer(1.0).timeout
+		remaining_time -= 1
+		timer_label.text = "Next wave in %d" % ceil(remaining_time)
 
 func _on_enemy_killed():
 	if not is_inside_tree():
@@ -298,6 +309,25 @@ func decrease_castle_health(amount: int):
 		print_game_statistics()
 		go_to_lose_scene()
 
+func add_castle_health(amount: int):
+	castle_health += amount
+	print("Castle health increased! Current health:", castle_health)
+
+func slow_down_enemies(factor: float, duration: float) -> void:
+	print("Slowing down enemies by factor:", factor, "for", duration, "seconds")
+	
+	# Apply slowdown to all enemies
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if enemy.has_method("set_speed"):
+			enemy.call("set_speed", enemy.enemy_speed * factor)
+	
+	# Wait for the duration
+	await get_tree().create_timer(duration).timeout
+	
+	# Restore speed to all enemies
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if enemy.has_method("set_speed"):
+			enemy.call("set_speed", enemy.enemy_speed)
 
 func _complete_grid():
 	var is_hard: bool = (Global.difficulty == "hard")

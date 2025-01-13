@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dvgxxsbk64mp8"
-path="res://.godot/imported/snow-tile-spawn.glb-6b98fc77c74e31a4ae47a1135b2d5e62.scn"
+path="res://.godot/imported/snow-tile-spawn.glb-a2228a7e4c468d552fa3d5a6adbd0c12.scn"
 
 [deps]
 
-source_file="res://assets/snow-tile-spawn.glb"
-dest_files=["res://.godot/imported/snow-tile-spawn.glb-6b98fc77c74e31a4ae47a1135b2d5e62.scn"]
+source_file="res://snow-tile-spawn.glb"
+dest_files=["res://.godot/imported/snow-tile-spawn.glb-a2228a7e4c468d552fa3d5a6adbd0c12.scn"]
 
 [params]
 

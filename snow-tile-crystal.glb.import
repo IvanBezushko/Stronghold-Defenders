@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://h62d4fqg3sht"
-path="res://.godot/imported/snow-tile-crystal.glb-9a76baee6c66a3b714fca601ae102404.scn"
+path="res://.godot/imported/snow-tile-crystal.glb-81d771ed13382d960dd9272619550d51.scn"
 
 [deps]
 
-source_file="res://assets/snow-tile-crystal.glb"
-dest_files=["res://.godot/imported/snow-tile-crystal.glb-9a76baee6c66a3b714fca601ae102404.scn"]
+source_file="res://snow-tile-crystal.glb"
+dest_files=["res://.godot/imported/snow-tile-crystal.glb-81d771ed13382d960dd9272619550d51.scn"]
 
 [params]
 

@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://b576i7tru62f1"
-path="res://.godot/imported/snow-tile-end-round.glb-498b59f5fc91835f4bddf5d66abb2295.scn"
+path="res://.godot/imported/snow-tile-end-round.glb-2a4f1d277849f2cb540da745157dc8d1.scn"
 
 [deps]
 
-source_file="res://assets/snow-tile-end-round.glb"
-dest_files=["res://.godot/imported/snow-tile-end-round.glb-498b59f5fc91835f4bddf5d66abb2295.scn"]
+source_file="res://snow-tile-end-round.glb"
+dest_files=["res://.godot/imported/snow-tile-end-round.glb-2a4f1d277849f2cb540da745157dc8d1.scn"]
 
 [params]
 
