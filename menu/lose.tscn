@@ -33,15 +33,60 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -423.5
-offset_top = -201.0
+offset_top = -287.0
 offset_right = 423.5
-offset_bottom = -91.0
+offset_bottom = -147.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_sayyf")
 text = "You lose"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="time" type="Label" parent="TextureRect"]
+offset_left = 391.0
+offset_top = 177.0
+offset_right = 520.0
+offset_bottom = 257.0
+theme = ExtResource("4_kufyd")
+text = "Time:"
+
+[node name="cash" type="Label" parent="TextureRect"]
+offset_left = 396.0
+offset_top = 237.0
+offset_right = 513.0
+offset_bottom = 317.0
+theme = ExtResource("4_kufyd")
+text = "Cash:"
+
+[node name="kill" type="Label" parent="TextureRect"]
+offset_left = 209.0
+offset_top = 298.0
+offset_right = 513.0
+offset_bottom = 378.0
+theme = ExtResource("4_kufyd")
+text = "Killed enemy:"
+
+[node name="time_stat" type="Label" parent="."]
+offset_left = 576.0
+offset_top = 184.0
+offset_right = 738.0
+offset_bottom = 264.0
+theme = ExtResource("4_kufyd")
+
+[node name="cash_stat" type="Label" parent="."]
+offset_left = 576.0
+offset_top = 248.0
+offset_right = 740.0
+offset_bottom = 328.0
+theme = ExtResource("4_kufyd")
+
+[node name="kill_stat" type="Label" parent="."]
+offset_left = 562.0
+offset_top = 306.0
+offset_right = 737.0
+offset_bottom = 386.0
+theme = ExtResource("4_kufyd")
 
 [node name="Exit_bt" type="Button" parent="."]
 process_mode = 3
@@ -52,9 +97,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -94.0
-offset_top = -2.0
+offset_top = 79.0
 offset_right = 94.0
-offset_bottom = 86.0
+offset_bottom = 167.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("4_kufyd")

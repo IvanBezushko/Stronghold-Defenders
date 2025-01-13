@@ -1,0 +1,36 @@
+[gd_scene load_steps=4 format=3 uid="uid://j5efht2m26uk"]
+
+[ext_resource type="VideoStream" path="res://intro/intro.ogv" id="1_noho7"]
+[ext_resource type="Script" path="res://menu/intro.gd" id="2_ceerj"]
+
+[sub_resource type="GDScript" id="GDScript_x5xbo"]
+script/source = "extends Control
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[node name="intro" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_x5xbo")
+
+[node name="intro" type="VideoStreamPlayer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+stream = ExtResource("1_noho7")
+script = ExtResource("2_ceerj")
+
+[connection signal="finished" from="intro" to="intro" method="_on_finished"]

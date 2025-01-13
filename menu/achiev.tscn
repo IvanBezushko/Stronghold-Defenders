@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dfa2kqb8fngw2"]
+[gd_scene load_steps=13 format=3 uid="uid://dfa2kqb8fngw2"]
 
 [ext_resource type="Texture2D" uid="uid://t85dwdskjvut" path="res://background/mainphoto1152x648_2.png" id="1_achyv"]
 [ext_resource type="Script" path="res://menu/achiev.gd" id="1_e3urd"]
@@ -8,6 +8,32 @@
 [ext_resource type="Texture2D" uid="uid://cx6eosaodx4v1" path="res://icon/100px_time1.png" id="5_lu8ef"]
 [ext_resource type="Theme" uid="uid://dmmwhlddkynf6" path="res://menu/label.tres" id="6_ydmjj"]
 [ext_resource type="Theme" uid="uid://cmam3q2g5nam8" path="res://menu/but.tres" id="7_kwuqd"]
+[ext_resource type="FontFile" uid="uid://dl7hlrhi5ntxs" path="res://fonts/segoeprb.ttf" id="7_rxivc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6uxb5"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.529412)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="Theme" id="Theme_c2fdn"]
+default_font = ExtResource("7_rxivc")
+default_font_size = 10
+PopupPanel/styles/panel = SubResource("StyleBoxFlat_6uxb5")
+
+[sub_resource type="Theme" id="Theme_nm84v"]
+default_font = ExtResource("7_rxivc")
+default_font_size = 18
 
 [node name="achievements" type="Control"]
 layout_mode = 3
@@ -42,10 +68,11 @@ texture = ExtResource("2_gkea7")
 
 [node name="enemy_death_label" type="Label" parent="ColorRect/enemy_death"]
 layout_mode = 0
-offset_left = 29.0
-offset_top = 111.0
-offset_right = 69.0
-offset_bottom = 134.0
+offset_left = -2.0
+offset_top = 110.0
+offset_right = 98.0
+offset_bottom = 133.0
+text = "Enemy Killed"
 
 [node name="boss_death" type="TextureRect" parent="ColorRect"]
 layout_mode = 0
@@ -58,9 +85,10 @@ texture = ExtResource("3_70jlw")
 [node name="boss_death_label" type="Label" parent="ColorRect/boss_death"]
 layout_mode = 0
 offset_left = 27.0
-offset_top = 102.0
-offset_right = 67.0
-offset_bottom = 125.0
+offset_top = 110.0
+offset_right = 68.0
+offset_bottom = 133.0
+text = "BOSS"
 
 [node name="money" type="TextureRect" parent="ColorRect"]
 layout_mode = 0
@@ -72,10 +100,12 @@ texture = ExtResource("4_fv1dg")
 
 [node name="money_label" type="Label" parent="ColorRect/money"]
 layout_mode = 0
-offset_left = 34.0
-offset_top = 106.0
-offset_right = 74.0
-offset_bottom = 129.0
+offset_left = -7.0
+offset_top = 110.0
+offset_right = 105.0
+offset_bottom = 133.0
+text = "Money Earned
+"
 
 [node name="time" type="TextureRect" parent="ColorRect"]
 layout_mode = 0
@@ -87,10 +117,24 @@ texture = ExtResource("5_lu8ef")
 
 [node name="time_label" type="Label" parent="ColorRect/time"]
 layout_mode = 0
-offset_left = 33.0
-offset_top = 103.0
-offset_right = 73.0
-offset_bottom = 126.0
+offset_left = 15.0
+offset_top = 110.0
+offset_right = 90.0
+offset_bottom = 133.0
+text = "Play Time"
+
+[node name="Info" type="PopupPanel" parent="ColorRect"]
+position = Vector2i(128, 476)
+size = Vector2i(200, 100)
+visible = true
+theme = SubResource("Theme_c2fdn")
+
+[node name="info_label" type="Label" parent="ColorRect/Info"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 196.0
+offset_bottom = 96.0
+theme = SubResource("Theme_nm84v")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0

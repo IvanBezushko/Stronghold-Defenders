@@ -1,0 +1,52 @@
+[gd_scene load_steps=5 format=3 uid="uid://b2iq6phm0vkxb"]
+
+[ext_resource type="Script" path="res://menu/select.gd" id="1_ip2s0"]
+[ext_resource type="Texture2D" uid="uid://t85dwdskjvut" path="res://background/mainphoto1152x648_2.png" id="1_j2aj7"]
+[ext_resource type="Theme" uid="uid://dmmwhlddkynf6" path="res://menu/label.tres" id="2_gqkly"]
+[ext_resource type="Theme" uid="uid://cmam3q2g5nam8" path="res://menu/but.tres" id="3_xo0x1"]
+
+[node name="Select" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ip2s0")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("1_j2aj7")
+
+[node name="Choose" type="Label" parent="."]
+layout_mode = 0
+offset_left = 279.0
+offset_top = 90.0
+offset_right = 899.0
+offset_bottom = 216.0
+theme = ExtResource("2_gqkly")
+text = "Choose your level"
+
+[node name="easy" type="Button" parent="."]
+layout_mode = 0
+offset_left = 280.0
+offset_top = 307.0
+offset_right = 522.0
+offset_bottom = 395.0
+theme = ExtResource("3_xo0x1")
+text = "Easy "
+
+[node name="hard" type="Button" parent="."]
+layout_mode = 0
+offset_left = 648.0
+offset_top = 307.0
+offset_right = 848.0
+offset_bottom = 395.0
+theme = ExtResource("3_xo0x1")
+text = "Hard 
+"
+
+[connection signal="pressed" from="easy" to="." method="_on_easy_pressed"]
+[connection signal="pressed" from="hard" to="." method="_on_hard_pressed"]
