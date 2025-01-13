@@ -46,12 +46,15 @@ func is_mouse_over() -> bool:
 	var result = space_state.intersect_ray(query)
 	if result.size() > 0:
 		var collider = result["collider"]
+		#print("colider ",collider)
 		# Sprawdź, czy collider to ta wieża lub jest jej dzieckiem
 		var current_node = collider
 		while current_node != null:
 			if current_node == self:
+			#	print("current node ",current_node)
 				return true
 			current_node = current_node.get_parent()
+			#print("current node parent ",current_node)
 	return false
 
 # Obsługa kliknięcia wieży
@@ -60,17 +63,8 @@ func _on_tower_clicked():
 	main.show_upgrade_panel(self)
 
 func upgrade_to_scene() -> PackedScene:
-	# Sprawdź, jaki poziom ma aktualna wieża i zwróć odpowiednią scenę
 	var new_scene: PackedScene = null
 	new_scene = preload("res://scenes/turret_1_lvl2.tscn")
-	# Przykładowe mechanizmy: 
-	# (Możesz dostosować w zależności od specyfiki swojej gry i dostępnych scen)
-	#if current_level == 1:
-		#new_scene = preload("res://scenes/Tower_Level_2.tscn")  # Scena nowej wersji wieży
-	#elif current_level == 2:
-		#new_scene = preload("res://scenes/Tower_Level_3.tscn")
-	# Dodatkowe poziomy ulepszeń, jeżeli są dostępne
-	# ...
 
 	return new_scene
 

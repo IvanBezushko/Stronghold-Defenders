@@ -24,6 +24,8 @@ var selected_tower: Node3D = null
 @onready var upgrade_panel = $Control/UIContainer/TowerUpgradePanel
 var selection_instance: Node3D = null
 @export var selection_frame: PackedScene
+@onready var timer_label = $Control/TimerLabel
+
 
 # Statystyki
 var total_cash_earned: int = 0
@@ -34,6 +36,7 @@ func _ready():
 	PathGenInstance.reset()
 	_complete_grid()
 	upgrade_panel.visible = false
+	timer_label.visible=false
 
 	var time_between_enemies = 2.5
 	var time_between_waves = 10.0
@@ -74,12 +77,26 @@ func _ready():
 				print("Warning: Boss instance does not have 'enemy_finished' signal.")
 
 		if wave_index < len(waves) - 1:
-			await get_tree().create_timer(time_between_waves).timeout
+			#await get_tree().create_timer(time_between_waves).timeout
+			await show_wave_timer(time_between_waves)
+
 
 func _process(delta):
 	time_elapsed += delta
 	$Control/CashLabel.text = "Cash $%d" % cash
 	$Control/HealthLabel.text="❤️ "+str(castle_health)+" "
+
+func show_wave_timer(duration: float):
+	timer_label.visible = true
+	var remaining_time = duration
+	timer_label.text = "Next wave in %d" % ceil(remaining_time)
+
+	while remaining_time > 0:
+		await get_tree().create_timer(1.0).timeout
+		remaining_time -= 1
+		timer_label.text = "Next wave in %d" % ceil(remaining_time)
+
+	timer_label.visible = false
 
 func _on_enemy_killed():
 	var enemy_value = 100
@@ -210,6 +227,10 @@ func upgrade_tower():
 	if selected_tower == null:
 		print("No tower selected for upgrade!")
 		return
+	
+	print("selected tower ",selected_tower)
+	print("selected tower get parent ",selected_tower.get_parent_node_3d())
+	selected_tower as Node3D
 
 	var new_tower_scene = selected_tower.call("upgrade_to_scene")
 	if new_tower_scene == null:
@@ -241,6 +262,8 @@ func upgrade_tower():
 
 	print("Tower upgraded successfully!")
 
+
+
 func _on_old_tower_removed(new_tower):
 	print("W _on_old_tower_removed()")
 	print("new_tower = ", new_tower)
@@ -262,8 +285,8 @@ func _physics_process(_delta):
 		if ray_result.size() > 0:
 			#print(ray_result)
 			var collider: CollisionObject3D = ray_result.get("collider")
-			if collider != null:
-				print("Mouse hit collider: ", collider.name)
+			#if collider != null:
+			#	print("Mouse hit collider: ", collider.name)
 
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
