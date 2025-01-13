@@ -117,7 +117,18 @@ func _on_enemy_killed():
 		print("Warning: Node is not inside the scene tree!")
 		return
 
-	var enemy_value = 100
+	var enemy_value = 0
+	if get_node_or_null("../enemy_01"):
+		enemy_value = 5
+	elif get_node_or_null("../enemy_02"):
+		enemy_value = 4
+	elif get_node_or_null("../enemy_03"):
+		enemy_value = 8
+	elif get_node_or_null("../enemy_04"):
+		enemy_value = 9
+	elif get_node_or_null("../enemy_BOSS"):
+		enemy_value = 500
+
 	total_cash_earned += enemy_value
 	total_enemies_killed += 1
 	cash += enemy_value
