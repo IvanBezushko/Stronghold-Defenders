@@ -12,13 +12,13 @@ func set_tower_level(tower_level: int):
 	match tower_level:
 		1:
 			speed = 2
-			damage = 25
+			damage = 15
 		2:
 			speed = 2
-			damage = 30
+			damage = 25
 		3:
 			speed = 2.5
-			damage = 35
+			damage = 40
 
 func _ready():
 	global_position = starting_position

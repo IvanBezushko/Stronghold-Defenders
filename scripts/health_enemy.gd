@@ -4,8 +4,7 @@ class_name Health_Enemy
 @export var enemy_settings: EnemySettings
 
 var enemy_health: int 
-@export var enemy_speed: float =1
-var current_speed: float = enemy_speed
+var enemy_speed: float 
 
 var path3d: Path3D = null
 var path_follow_3d: PathFollow3D = null
@@ -17,7 +16,7 @@ var attackable: bool = false
 var distance_travelled: float = 0
 
 func _ready():
-	print("Health_Enemy: _ready() called")
+	#print("Health_Enemy: _ready() called")
 
 	# Sprawdź enemy_settings
 	if enemy_settings == null:
@@ -30,8 +29,8 @@ func _ready():
 		enemy_health = enemy_settings.health
 		
 		enemy_speed = enemy_settings.speed
-		print("Enemy health set to: ", enemy_health)
-		print("Enemy speed set to: ", enemy_speed)
+		#print("Enemy health set to: ", enemy_health)
+		#print("Enemy speed set to: ", enemy_speed)
 	else:
 		print("ERROR: Could not load enemy_settings, setting defaults.")
 		enemy_health = 500
@@ -40,23 +39,18 @@ func _ready():
 	# Sprawdź Path3D
 	if has_node("Path3D"):
 		path3d = $Path3D
-		print("Path3D found")
+		#print("Path3D found")
 
 		# Sprawdź PathFollow3D
 		if path3d.has_node("PathFollow3D"):
 			path_follow_3d = path3d.get_node("PathFollow3D")
-			print("PathFollow3D found")
+			#print("PathFollow3D found")
 
 			# Sprawdź enemy_model jako dziecko PathFollow3D
 			if path_follow_3d.get_child_count() > 0:
 				enemy_model = path_follow_3d.get_child(0)
-				print("Enemy model found: ", enemy_model)
-			else:
-				print("ERROR: PathFollow3D has no children (enemy_model missing)!")
-		else:
-			print("ERROR: PathFollow3D not found!")
-	else:
-		print("ERROR: Path3D not found!")
+				#print("Enemy model found: ", enemy_model)
+			
 
 	# Ustawienie krzywej Path3D
 	if path3d:
@@ -69,10 +63,6 @@ func _ready():
 		path_follow_3d.progress = 0
 	else:
 		print("ERROR: Cannot set progress on a null PathFollow3D!")
-
-func set_speed(new_speed: float):
-	current_speed = new_speed
-
 
 func _on_spawning_state_entered():
 	print("State: Spawning entered")
@@ -87,7 +77,7 @@ func _on_travelling_state_entered():
 
 func _on_travelling_state_processing(delta):
 	if enemy_settings != null:
-		distance_travelled += (delta * current_speed)
+		distance_travelled += (delta * enemy_speed)
 		#print("Travelling: Distance travelled: ", distance_travelled)
 
 		var path_size = PathGenInstance.get_path_route().size()

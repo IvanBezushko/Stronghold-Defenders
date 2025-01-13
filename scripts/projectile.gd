@@ -16,7 +16,7 @@ func set_tower_level(tower_level: int):
 			damage = 25
 		3:
 			speed = 3
-			damage = 30
+			damage = 35
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

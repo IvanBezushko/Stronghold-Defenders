@@ -19,6 +19,7 @@ size = Vector3(0.9, 1.3, 0.9)
 [node name="Turret2" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 script = ExtResource("1_egaxd")
+fire_rate_ms = 200
 projectile_type = ExtResource("2_ojmpy")
 selection_frame = ExtResource("3_iufvm")
 

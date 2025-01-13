@@ -1,6 +1,6 @@
-[gd_scene load_steps=31 format=3 uid="uid://72lu3y2bauhu"]
+[gd_scene load_steps=35 format=3 uid="uid://72lu3y2bauhu"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_v46vx"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_clvda"]
 [ext_resource type="PackedScene" uid="uid://vlsi147u6buw" path="res://scenes/tile_start.tscn" id="2_nmu5y"]
 [ext_resource type="PackedScene" uid="uid://basheias548gy" path="res://scenes/tile_end.tscn" id="2_oygd5"]
 [ext_resource type="PackedScene" uid="uid://dr5rvo0odv126" path="res://scenes/tile_corner.tscn" id="4_bj13s"]
@@ -13,20 +13,25 @@
 [ext_resource type="PackedScene" uid="uid://dv78q8jboyll4" path="res://scenes/tile_empty.tscn" id="10_62ous"]
 [ext_resource type="PackedScene" uid="uid://0byoh4kut8u0" path="res://menu/pause.tscn" id="12_4aerd"]
 [ext_resource type="PackedScene" uid="uid://ssbyc8gyhxna" path="res://assets/selection-a.glb" id="12_68adc"]
+[ext_resource type="PackedScene" uid="uid://dd7uor33q52ia" path="res://assets/snow-tile.glb" id="12_efwmt"]
 [ext_resource type="PackedScene" uid="uid://bvwuudxo2j1hc" path="res://scenes/activity_button.tscn" id="12_sdtmw"]
+[ext_resource type="PackedScene" uid="uid://dax8iiyth48hr" path="res://assets/snow-tile-rock.glb" id="13_odbqr"]
+[ext_resource type="PackedScene" uid="uid://pl132v03q6th" path="res://assets/snow-tile-tree.glb" id="14_rtrie"]
 [ext_resource type="Texture2D" uid="uid://1g1cups1blj1" path="res://images/wieza_icon3.png" id="14_u8sv5"]
 [ext_resource type="PackedScene" uid="uid://demjkhdd30p0v" path="res://scenes/turret_1.tscn" id="15_qv0eq"]
+[ext_resource type="PackedScene" uid="uid://h62d4fqg3sht" path="res://assets/snow-tile-crystal.glb" id="15_qy77u"]
 [ext_resource type="PackedScene" uid="uid://d2acbm8ekgqrv" path="res://scenes/activity_button_2.tscn" id="16_c0vmb"]
+[ext_resource type="PackedScene" uid="uid://b576i7tru62f1" path="res://assets/snow-tile-end-round.glb" id="16_kasxc"]
+[ext_resource type="PackedScene" uid="uid://fd2ntrpntsqf" path="res://assets/snow-tile-spawn-end-round.glb" id="17_bhv25"]
 [ext_resource type="Texture2D" uid="uid://cot8jv2hjk1ck" path="res://images/wieza_icon2.png" id="17_wves3"]
+[ext_resource type="PackedScene" uid="uid://cxfcbwy8y0tsq" path="res://assets/snow-tile-straight.glb" id="18_3j3vf"]
 [ext_resource type="PackedScene" uid="uid://b6abc2wbnlo4w" path="res://scenes/turret_2.tscn" id="18_dphgl"]
+[ext_resource type="PackedScene" path="res://scenes/snow_corner.tscn" id="19_ej2cd"]
 [ext_resource type="PackedScene" uid="uid://y7w5g8r2synv" path="res://scenes/activity_button_3.tscn" id="19_orlpo"]
+[ext_resource type="PackedScene" uid="uid://dmrvqvgjku7pv" path="res://assets/snow-tile-crossing.glb" id="20_15us3"]
 [ext_resource type="Texture2D" uid="uid://bcgj7wtmhkjl8" path="res://images/wieza_icon1.png" id="21_w7114"]
 [ext_resource type="PackedScene" uid="uid://y7okr71cbfc2" path="res://scenes/turret_3.tscn" id="22_wmkvp"]
 [ext_resource type="Script" path="res://scripts/tower_upgrade_panel.gd" id="22_wtke4"]
-[ext_resource type="Script" path="res://scripts/powerup1.gd" id="24_g7hii"]
-[ext_resource type="Texture2D" uid="uid://cs4afoax6ndsp" path="res://images/castle.png" id="25_gs2vq"]
-[ext_resource type="Script" path="res://scripts/powerup2.gd" id="26_ubo0v"]
-[ext_resource type="Texture2D" uid="uid://bwkit65a4ojh0" path="res://images/slow.png" id="27_0pcb5"]
 
 [sub_resource type="Environment" id="Environment_wmip2"]
 background_mode = 1
@@ -39,10 +44,8 @@ glow_strength = 1.5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_eni0m"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vf1gx"]
-
 [node name="main" type="Node3D"]
-script = ExtResource("1_v46vx")
+script = ExtResource("1_clvda")
 tile_start = ExtResource("2_oygd5")
 tile_end = ExtResource("2_nmu5y")
 tile_straight = ExtResource("4_h5toj")
@@ -50,6 +53,17 @@ tile_corner = ExtResource("4_bj13s")
 tile_crossroads = ExtResource("5_dkgpe")
 tile_enemy = ExtResource("6_5cncu")
 tile_empty = Array[PackedScene]([ExtResource("7_8twgt"), ExtResource("8_2w5eb"), ExtResource("9_1og6f"), ExtResource("10_62ous"), ExtResource("10_62ous"), ExtResource("10_62ous"), ExtResource("10_62ous")])
+snow_tile = ExtResource("12_efwmt")
+tile_empty_easy = ExtResource("10_62ous")
+tile_empty_hard = ExtResource("12_efwmt")
+tile_rock_snow = ExtResource("13_odbqr")
+tile_tree_snow = ExtResource("14_rtrie")
+tile_crystal_snow = ExtResource("15_qy77u")
+tile_start_snow = ExtResource("16_kasxc")
+tile_end_snow = ExtResource("17_bhv25")
+tile_straight_snow = ExtResource("18_3j3vf")
+tile_corner_snow = ExtResource("19_ej2cd")
+tile_crossroads_snow = ExtResource("20_15us3")
 selection_frame = ExtResource("12_68adc")
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -171,7 +185,6 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 23.0
 grow_horizontal = 2
-theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 32
 text = "Cash $0"
 horizontal_alignment = 1
@@ -228,83 +241,4 @@ offset_bottom = 46.0
 theme_override_font_sizes/font_size = 30
 text = "name"
 
-[node name="PowerUp1" type="Button" parent="Control"]
-custom_minimum_size = Vector2(120, 120)
-layout_mode = 0
-offset_left = 1019.0
-offset_top = 518.0
-offset_right = 1139.0
-offset_bottom = 638.0
-theme_override_styles/focus = SubResource("StyleBoxEmpty_vf1gx")
-script = ExtResource("24_g7hii")
-powerup_button_icon = ExtResource("25_gs2vq")
-
-[node name="Label" type="Label" parent="Control/PowerUp1"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -23.0
-offset_right = 20.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="PowerUp2" type="Button" parent="Control"]
-custom_minimum_size = Vector2(120, 120)
-layout_mode = 0
-offset_left = 886.0
-offset_top = 518.0
-offset_right = 1006.0
-offset_bottom = 638.0
-theme_override_styles/focus = SubResource("StyleBoxEmpty_vf1gx")
-script = ExtResource("26_ubo0v")
-powerup_button_icon = ExtResource("27_0pcb5")
-
-[node name="Label" type="Label" parent="Control/PowerUp2"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -23.0
-offset_right = 20.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="HealthLabel" type="Label" parent="Control"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 45.0
-grow_horizontal = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 32
-text = "Health 20"
-horizontal_alignment = 2
-
-[node name="TimerLabel" type="Label" parent="Control"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -144.0
-offset_right = 20.0
-offset_bottom = -121.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 32
-text = "Next wave in 10"
-
 [connection signal="pressed" from="Control/UIContainer/TowerUpgradePanel/UpgradeButton" to="Control/UIContainer/TowerUpgradePanel" method="_on_Upgrade_pressed"]
-[connection signal="pressed" from="Control/PowerUp1" to="Control/PowerUp1" method="_on_pressed"]
-[connection signal="pressed" from="Control/PowerUp2" to="Control/PowerUp2" method="_on_pressed"]

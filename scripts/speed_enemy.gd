@@ -5,8 +5,7 @@ class_name Speed_Enemy
 
 var enemy_health: int 
 var enemy_damage:int 
-@export var enemy_speed: float = 2.0
-var current_speed: float = enemy_speed
+var enemy_speed: float
 
 var enemy_model: Node = null  # Dodana zmienna
 
@@ -22,7 +21,7 @@ func _ready():
 	#print("Speed_Enemy: _ready() called")
 	
 	if enemy_settings == null:
-		#print("ERROR: enemy_settings is null! Ustawiam domyślne wartości.")
+		print("ERROR: enemy_settings is null! Ustawiam domyślne wartości.")
 		enemy_settings = load("res://resources/speed_enemy.tres")  # Użyj unikalnego zasobu
 	
 	if enemy_settings != null:
@@ -34,7 +33,7 @@ func _ready():
 		#print("Enemy health set to: ", enemy_health)
 		#print("Enemy speed set to: ", enemy_speed)
 	else:
-		#print("ERROR: enemy_settings nadal jest null po próbie ustawienia!")
+		print("ERROR: enemy_settings nadal jest null po próbie ustawienia!")
 		enemy_health = 100  # Ustaw domyślną wartość zdrowia
 		enemy_speed = 2.0 
 	# Sprawdzenie i przypisanie węzła Path3D
@@ -57,15 +56,12 @@ func _ready():
 			enemy_model = path_follow_3d.get_child(0)
 			#print("Enemy model found: ", enemy_model)
 		else:
-			#print("ERROR: PathFollow3D has no children!")
+			print("ERROR: PathFollow3D has no children!")
 			enemy_model = null
 	else:
 		#print("ERROR: PathFollow3D not found!")
 		path_follow_3d = null
 		enemy_model = null
-
-func set_speed(new_speed: float):
-	current_speed = new_speed
 
 func _on_spawning_state_entered():
 	#print("State: Spawning entered")
@@ -80,7 +76,7 @@ func _on_travelling_state_entered():
 
 func _on_travelling_state_processing(delta):
 	if enemy_settings != null:
-		distance_travelled += (delta * current_speed)
+		distance_travelled += (delta * enemy_speed)
 		#print("Travelling: Distance travelled: ", distance_travelled)
 
 		var path_size = PathGenInstance.get_path_route().size()
@@ -89,14 +85,14 @@ func _on_travelling_state_processing(delta):
 		if path_follow_3d != null:
 			path_follow_3d.progress = distance_travelled_on_screen
 			#print("Travelling: Progress on path: ", path_follow_3d.progress)
-		#else:
-			#print("ERROR: path_follow_3d is null!")
+		else:
+			print("ERROR: path_follow_3d is null!")
 
 		if distance_travelled > path_size - 1:
 			#print("Travelling: Reached end of path")
 			$EnemyStateChart.send_event("to_damaging_state")
-	#else:
-		#print("ERROR: enemy_settings is null during travelling state!")
+	else:
+		print("ERROR: enemy_settings is null during travelling state!")
 
 func _on_despawning_state_entered():
 	#print("State: Despawning entered")
@@ -125,8 +121,8 @@ func _on_dying_state_entered():
 
 	if enemy_model != null:
 		enemy_model.visible = false
-	#else:
-		#print("ERROR: enemy_model is null!")
+	else:
+		print("ERROR: enemy_model is null!")
 
 	await $ExplosionAudio.finished
 	$EnemyStateChart.send_event("to_remove_enemy_state")
@@ -137,7 +133,7 @@ func path_route_to_curve_3d() -> Curve3D:
 	
 	var path_route = PathGenInstance.get_path_route()
 	if path_route == null:
-		#print("ERROR: PathGenInstance.get_path_route() returned null!")
+		print("ERROR: PathGenInstance.get_path_route() returned null!")
 		return c3d
 
 	for element in path_route:

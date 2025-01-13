@@ -19,7 +19,9 @@ height = 1.3
 [node name="Turret1" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 script = ExtResource("1_dwasc")
+fire_rate_ms = 1800
 projectile_type = ExtResource("2_trywc")
+upgrade_cost = 150
 selection_frame = ExtResource("3_0y4tb")
 
 [node name="Cannon" parent="." instance=ExtResource("4_k4fkd")]

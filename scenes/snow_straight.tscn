@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://dai0miayhi6fp"]
+
+[ext_resource type="PackedScene" uid="uid://dl4setiakacbf" path="res://assets/snow-tile-straight.glb" id="1_2egpk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ostwt"]
+
+[node name="Area3D" type="Area3D" groups=["snow_straight"]]
+
+[node name="snow-tile-straight2" parent="." instance=ExtResource("1_2egpk")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_ostwt")

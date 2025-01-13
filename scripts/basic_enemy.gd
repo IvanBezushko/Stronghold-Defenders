@@ -5,8 +5,7 @@ class_name Enemy
 
 var enemy_health: int = 100
 var enemy_damage:int = 5
-@export var enemy_speed: float = 1.0  # Dodana zmienna
-var current_speed: float = enemy_speed
+var enemy_speed: float = 1.0  # Dodana zmienna
 
 signal enemy_finished
 
@@ -63,9 +62,6 @@ func _ready():
 		path_follow_3d = null
 		enemy_model = null
 
-func set_speed(new_speed: float):
-	current_speed = new_speed
-
 func _on_spawning_state_entered():
 	attackable = false
 	$AnimationPlayer.play("spawn")
@@ -76,7 +72,7 @@ func _on_travelling_state_entered():
 	attackable = true
 
 func _on_travelling_state_processing(delta):
-	distance_travelled += (delta * current_speed) 
+	distance_travelled += (delta * enemy_speed)  # Użycie enemy_speed
 	var max_distance = PathGenInstance.get_path_route().size() - 1
 	var distance_travelled_on_screen: float = clamp(distance_travelled, 0, max_distance)
 	

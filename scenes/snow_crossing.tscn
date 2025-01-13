@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://caott4spmd3h8"]
+
+[ext_resource type="PackedScene" uid="uid://devqya6t82vek" path="res://assets/snow-tile-crossing.glb" id="1_cy00r"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7cnfb"]
+
+[node name="Area3D" type="Area3D" groups=["snow_crossing"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_7cnfb")
+
+[node name="snow-tile-crossing2" parent="." instance=ExtResource("1_cy00r")]

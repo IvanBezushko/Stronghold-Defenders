@@ -17,7 +17,9 @@ size = Vector3(1, 1.3, 1)
 
 [node name="Turret3" type="Node3D"]
 script = ExtResource("1_tgj2c")
+fire_rate_ms = 3000
 projectile_type = ExtResource("2_yt8rn")
+upgrade_cost = 120
 
 [node name="Turret" parent="." instance=ExtResource("2_a345x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)

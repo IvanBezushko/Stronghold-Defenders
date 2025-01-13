@@ -1,0 +1,14 @@
+[
+	{
+		"boss_killed": 1,
+		"time_played": 26,
+		"total_cash_earned": 400,
+		"total_enemies_killed": 4
+	},
+	{
+		"boss_killed": 2,
+		"time_played": 55,
+		"total_cash_earned": 800,
+		"total_enemies_killed": 8
+	}
+]

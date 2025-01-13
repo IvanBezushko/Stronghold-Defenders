@@ -5,8 +5,7 @@ class_name Sp_Hth_Enemy
 
 var enemy_health: int 
 var enemy_damage:int 
-@export var enemy_speed: float = 1.8
-var current_speed: float = enemy_speed
+var enemy_speed: float  
 
 signal enemy_finished
 
@@ -19,7 +18,7 @@ var path3d: Path3D = null
 var path_follow_3d: PathFollow3D = null
 
 func _ready():
-	print("Sp_Hth_Enemy: _ready() called")
+	#print("Sp_Hth_Enemy: _ready() called")
 	
 	# Inicjalizacja enemy_settings
 	if enemy_settings == null:
@@ -32,8 +31,8 @@ func _ready():
 		enemy_health = enemy_settings.health
 		enemy_damage = enemy_settings.damage
 		enemy_speed = enemy_settings.speed
-		print("Enemy health set to: ", enemy_health)
-		print("Enemy speed set to: ", enemy_speed)
+		#print("Enemy health set to: ", enemy_health)
+		#print("Enemy speed set to: ", enemy_speed)
 	else:
 		print("ERROR: enemy_settings nadal jest null po próbie ustawienia!")
 		enemy_health = 480  # Ustaw domyślną wartość zdrowia
@@ -45,7 +44,7 @@ func _ready():
 		print("Path3D istnieje")
 		path3d.curve = path_route_to_curve_3d()
 	else:
-		print("ERROR: Path3D nie został znaleziony!")
+		#print("ERROR: Path3D nie został znaleziony!")
 		path3d = null
 	
 	# Sprawdzenie i przypisanie węzła PathFollow3D
@@ -57,7 +56,7 @@ func _ready():
 		# Znajdź model przeciwnika
 		if path_follow_3d.get_child_count() > 0:
 			enemy_model = path_follow_3d.get_child(0)
-			print("Model przeciwnika znaleziony: ", enemy_model.name)
+			#print("Model przeciwnika znaleziony: ", enemy_model.name)
 		else:
 			print("ERROR: PathFollow3D nie ma dzieci!")
 			enemy_model = null
@@ -65,9 +64,6 @@ func _ready():
 		print("ERROR: PathFollow3D nie został znaleziony!")
 		path_follow_3d = null
 		enemy_model = null
-
-func set_speed(new_speed: float):
-	current_speed = new_speed
 
 func _on_spawning_state_entered():
 	print("Stan: Spawning wejście")
@@ -77,12 +73,12 @@ func _on_spawning_state_entered():
 	$EnemyStateChart.send_event("to_travelling_state")
 
 func _on_travelling_state_entered():
-	print("Stan: Travelling wejście")
+	#print("Stan: Travelling wejście")
 	attackable = true
 
 func _on_travelling_state_processing(delta):
 	if enemy_settings != null:
-		distance_travelled += (delta * current_speed)
+		distance_travelled += (delta * enemy_settings.speed)
 		var path_size = PathGenInstance.get_path_route().size()
 		var distance_travelled_on_screen: float = clamp(distance_travelled, 0, path_size - 1)
 		
@@ -131,7 +127,7 @@ func _on_dying_state_entered():
 	$EnemyStateChart.send_event("to_remove_enemy_state")
 
 func path_route_to_curve_3d() -> Curve3D:
-	print("Generowanie Curve3D z trasy")
+	#print("Generowanie Curve3D z trasy")
 	var c3d: Curve3D = Curve3D.new()
 	
 	var path_route = PathGenInstance.get_path_route()
@@ -141,16 +137,16 @@ func path_route_to_curve_3d() -> Curve3D:
 
 	for element in path_route:
 		c3d.add_point(Vector3(element.x, 0.25, element.y))
-	print("Curve3D wygenerowany z punktami: ", c3d.get_point_count())
+	#print("Curve3D wygenerowany z punktami: ", c3d.get_point_count())
 	return c3d
 
 func _on_area_3d_area_entered(area):
-	print("Wykryto kolizję z obszarem: ", area.name)
+	#print("Wykryto kolizję z obszarem: ", area.name)
 	if area is Projectile or area is Projectile_2 or area is Projectile_3:
-		print("Został trafiony przez pocisk, obrażenia: ", area.damage)
+		#print("Został trafiony przez pocisk, obrażenia: ", area.damage)
 		enemy_health -= area.damage
-		print("Pozostało zdrowia: ", enemy_health)
+		#print("Pozostało zdrowia: ", enemy_health)
 
 		if enemy_health <= 0:
-			print("Zdrowie przeciwnika jest 0 lub mniej, umieranie")
+			#print("Zdrowie przeciwnika jest 0 lub mniej, umieranie")
 			$EnemyStateChart.send_event("to_dying_state")

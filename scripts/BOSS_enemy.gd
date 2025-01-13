@@ -5,8 +5,7 @@ class_name Boss_Enemy
 
 var enemy_health: int
 var enemy_damage: int
-@export var enemy_speed: float=0.6
-var current_speed: float = enemy_speed
+var enemy_speed: float  # Dodana zmienna dla prędkości
 
 signal enemy_finished  # Definicja sygnału
 
@@ -33,8 +32,8 @@ func _ready():
 		enemy_health = enemy_settings.health
 		enemy_damage = enemy_settings.damage
 		enemy_speed = enemy_settings.speed
-		print("Enemy health set to: ", enemy_health)
-		print("Enemy speed set to: ", enemy_speed)
+		#print("Enemy health set to: ", enemy_health)
+		#print("Enemy speed set to: ", enemy_speed)
 	else:
 		print("ERROR: enemy_settings nadal jest null po próbie ustawienia!")
 		enemy_health = 100  # Domyślne zdrowie
@@ -67,9 +66,6 @@ func _ready():
 		path_follow_3d = null
 		enemy_model = null
 
-func set_speed(new_speed: float):
-	current_speed = new_speed
-
 func _on_spawning_state_entered():
 	#print("Stan: Spawning wejście")
 	attackable = false
@@ -82,7 +78,7 @@ func _on_travelling_state_entered():
 	attackable = true
 
 func _on_travelling_state_processing(delta):
-	distance_travelled += (delta * current_speed)
+	distance_travelled += (delta * enemy_speed)  # Poruszanie bossa
 	var path_size = PathGenInstance.get_path_route().size()
 	var distance_travelled_on_screen: float = clamp(distance_travelled, 0, path_size - 1)
 	
@@ -111,22 +107,39 @@ func _on_despawning_state_entered():
 	$EnemyStateChart.send_event("to_remove_enemy_state")
 
 func _on_remove_enemy_state_entered():
-	print("Stan: Remove wejście")
-	queue_free()
+	#print("Stan: Remove wejście")
+	call_deferred("queue_free")  # Użyj call_deferred, aby uniknąć problemów z fizyką
+
 
 func _on_dying_state_entered():
+	# Sprawdź, czy węzeł jest w drzewie
+	if not is_inside_tree():
+		print("ERROR: Node is not inside the scene tree!")
+		return
+
 	#print("Stan: Dying wejście")
 	get_parent().cash += enemy_settings.destroy_value
-	print("Emitting 'enemy_finished' signal")
+	#print("Emitting 'enemy_finished' signal")
 	enemy_finished.emit()  # Emitowanie sygnału przed zmianą sceny
-	$ExplosionAudio.play()
-	
+
+	# Sprawdź i odtwórz dźwięk
+	if $ExplosionAudio.is_inside_tree():
+		$ExplosionAudio.play()
+	else:
+		print("ERROR: ExplosionAudio is not inside the tree!")
+
+	# Ukrycie modelu przeciwnika
 	if enemy_model != null:
 		enemy_model.visible = false
 	else:
 		print("ERROR: enemy_model jest null!")
-	
+
+	# Odczekanie na zakończenie dźwięku
 	await $ExplosionAudio.finished
+	call_deferred("queue_free")  # Odłóż usuwanie na później
+
+
+
 
 	# Usuń zmianę sceny tutaj, aby `main.gd` mogło obsłużyć sygnał
 	# if win_scene_path != "":
@@ -156,15 +169,15 @@ func path_route_to_curve_3d() -> Curve3D:
 
 	for element in path_route:
 		c3d.add_point(Vector3(element.x, 0.25, element.y))
-	print("Curve3D wygenerowany z punktami: ", c3d.get_point_count())
+	#print("Curve3D wygenerowany z punktami: ", c3d.get_point_count())
 	return c3d
 
 func _on_area_3d_area_entered(area):
-	print("Wykryto kolizję z obszarem: ", area.name)
+	#print("Wykryto kolizję z obszarem: ", area.name)
 	if area is Projectile or area is Projectile_2 or area is Projectile_3:
-		print("Został trafiony przez pocisk, obrażenia: ", area.damage)
+		#print("Został trafiony przez pocisk, obrażenia: ", area.damage)
 		enemy_health -= area.damage
-		print("Pozostało zdrowia: ", enemy_health)
+		#print("Pozostało zdrowia: ", enemy_health)
 
 		if enemy_health <= 0:
 			print("Zdrowie BOSS-a jest 0 lub mniej, umieranie")

@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://dlfn677vbdw1r"]
+
+[ext_resource type="PackedScene" uid="uid://b0jwgfb26u3xk" path="res://assets/snow-tile-tree.glb" id="1_1vrsc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kcbns"]
+
+[node name="Area3D" type="Area3D" groups=["snow_tree"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_kcbns")
+
+[node name="snow-tile-tree2" parent="." instance=ExtResource("1_1vrsc")]

@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://ckifyo24k1vpu"]
+
+[ext_resource type="PackedScene" uid="uid://b34hdrlu4cn6b" path="res://assets/snow-tile-dirt.glb" id="1_2l44b"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lfn6a"]
+
+[node name="Area3D" type="Area3D" groups=["snow_dirt"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_lfn6a")
+
+[node name="snow-tile-dirt2" parent="." instance=ExtResource("1_2l44b")]

@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://chakr7sg5qyv1"]
+
+[ext_resource type="PackedScene" uid="uid://dxb6r1pi52lu2" path="res://assets/snow-tile-crystal.glb" id="1_c72to"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l4taj"]
+
+[node name="Area3D" type="Area3D" groups=["snow_crystal"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_l4taj")
+
+[node name="snow-tile-crystal2" parent="." instance=ExtResource("1_c72to")]
