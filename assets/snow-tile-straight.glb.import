@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://jsvis42uhbw6"
-path="res://.godot/imported/snow-tile-spawn-round.glb-8595c0fc7b1ec48a9ff73e1f5664bacf.scn"
+uid="uid://cxfcbwy8y0tsq"
+path="res://.godot/imported/snow-tile-straight.glb-89f898093a18332754a72ef2286a650e.scn"
 
 [deps]
 
-source_file="res://snow-tile-spawn-round.glb"
-dest_files=["res://.godot/imported/snow-tile-spawn-round.glb-8595c0fc7b1ec48a9ff73e1f5664bacf.scn"]
+source_file="res://assets/snow-tile-straight.glb"
+dest_files=["res://.godot/imported/snow-tile-straight.glb-89f898093a18332754a72ef2286a650e.scn"]
 
 [params]
 

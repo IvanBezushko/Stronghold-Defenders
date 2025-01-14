@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://fd2ntrpntsqf"
-path="res://.godot/imported/snow-tile-spawn-end-round.glb-1e88d60015737643e392050cf6a4c88c.scn"
+uid="uid://dax8iiyth48hr"
+path="res://.godot/imported/snow-tile-rock.glb-4b63a7c891b4634d04995d144cc2a6c3.scn"
 
 [deps]
 
-source_file="res://snow-tile-spawn-end-round.glb"
-dest_files=["res://.godot/imported/snow-tile-spawn-end-round.glb-1e88d60015737643e392050cf6a4c88c.scn"]
+source_file="res://assets/snow-tile-rock.glb"
+dest_files=["res://.godot/imported/snow-tile-rock.glb-4b63a7c891b4634d04995d144cc2a6c3.scn"]
 
 [params]
 

@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dd7uor33q52ia"
-path="res://.godot/imported/snow-tile.glb-729db52a0998bee72f7e266503778f85.scn"
+uid="uid://d116dek2luy8h"
+path="res://.godot/imported/snow-tile-corner-round.glb-3aabe5049c12d2c2d9587fd57ba9400a.scn"
 
 [deps]
 
-source_file="res://snow-tile.glb"
-dest_files=["res://.godot/imported/snow-tile.glb-729db52a0998bee72f7e266503778f85.scn"]
+source_file="res://assets/snow-tile-corner-round.glb"
+dest_files=["res://.godot/imported/snow-tile-corner-round.glb-3aabe5049c12d2c2d9587fd57ba9400a.scn"]
 
 [params]
 

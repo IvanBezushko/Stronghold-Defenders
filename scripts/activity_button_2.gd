@@ -54,6 +54,8 @@ func _on_button_down():
 	_draggable.set_patrolling(false)
 	add_child(_draggable)
 	_draggable.visible = false
+	_is_valid_location=false
+
 
 func _on_button_up():
 	#print("Button Up")

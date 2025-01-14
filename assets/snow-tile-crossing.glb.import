@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dvgxxsbk64mp8"
-path="res://.godot/imported/snow-tile-spawn.glb-a2228a7e4c468d552fa3d5a6adbd0c12.scn"
+uid="uid://dmrvqvgjku7pv"
+path="res://.godot/imported/snow-tile-crossing.glb-a44c464fa32079853aae5085bd890217.scn"
 
 [deps]
 
-source_file="res://snow-tile-spawn.glb"
-dest_files=["res://.godot/imported/snow-tile-spawn.glb-a2228a7e4c468d552fa3d5a6adbd0c12.scn"]
+source_file="res://assets/snow-tile-crossing.glb"
+dest_files=["res://.godot/imported/snow-tile-crossing.glb-a44c464fa32079853aae5085bd890217.scn"]
 
 [params]
 

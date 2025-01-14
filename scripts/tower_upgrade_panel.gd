@@ -29,21 +29,21 @@ func get_stats(_tower):
 		elif _tower.level==2:
 			return "Damage: " + "25" + "\nRange: " + str(radius) + "\nSpeed: " + "2.5 m/s"
 		elif _tower.level==3:
-			return "Damage: " + "30" + "\nRange: " + str(radius) + "\nSpeed: " + "3 m/s"
+			return "Damage: " + "35" + "\nRange: " + str(radius) + "\nSpeed: " + "3 m/s"
 	elif _tower.type==2:
 		if _tower.level==1:
-			return "Damage: " + "15" + "\nRange: " + str(radius) + "\nSpeed: " + "3 m/s"
+			return "Damage: " + "5" + "\nRange: " + str(radius) + "\nSpeed: " + "3 m/s"
 		elif _tower.level==2:
-			return "Damage: " + "20" + "\nRange: " + str(radius) + "\nSpeed: " + "3.5 m/s"
+			return "Damage: " + "8" + "\nRange: " + str(radius) + "\nSpeed: " + "3.5 m/s"
 		elif _tower.level==3:
-			return "Damage: " + "25" + "\nRange: " + str(radius) + "\nSpeed: " + "3.5 m/s"
+			return "Damage: " + "12" + "\nRange: " + str(radius) + "\nSpeed: " + "3.5 m/s"
 	if _tower.type==3:
 		if _tower.level==1:
-			return "Damage: " + "25" + "\nRange: " + str(radius) + "\nSpeed: " + "2 m/s"
+			return "Damage: " + "15" + "\nRange: " + str(radius) + "\nSpeed: " + "2 m/s"
 		elif _tower.level==2:
-			return "Damage: " + "30" + "\nRange: " + str(radius) + "\nSpeed: " + "2 m/s"
+			return "Damage: " + "25" + "\nRange: " + str(radius) + "\nSpeed: " + "2 m/s"
 		elif _tower.level==3:
-			return "Damage: " + "35" + "\nRange: " + str(radius) + "\nSpeed: " + "2.5 m/s"
+			return "Damage: " + "40" + "\nRange: " + str(radius) + "\nSpeed: " + "2.5 m/s"
 	
 
 	
@@ -56,17 +56,17 @@ func get_upgraded_stats(_tower):
 		if _tower.level==1:
 			return "Damage: " + "25" + "\nRange: " + str(radius) + "\nSpeed: " + "2.5 m/s"
 		elif _tower.level==2:
-			return "Damage: " + "30" + "\nRange: " + str(radius) + "\nSpeed: " + "3 m/s"
+			return "Damage: " + "35" + "\nRange: " + str(radius) + "\nSpeed: " + "3 m/s"
 	elif _tower.type==2:
 		if _tower.level==1:
-			return "Damage: " + "20" + "\nRange: " + str(radius) + "\nSpeed: " + "3.5 m/s"
+			return "Damage: " + "8" + "\nRange: " + str(radius) + "\nSpeed: " + "3.5 m/s"
 		elif _tower.level==2:
-			return "Damage: " + "25" + "\nRange: " + str(radius) + "\nSpeed: " + "3.5 m/s"
+			return "Damage: " + "12" + "\nRange: " + str(radius) + "\nSpeed: " + "3.5 m/s"
 	elif _tower.type==3:
 		if _tower.level==1:
-			return "Damage: " + "30" + "\nRange: " + str(radius) + "\nSpeed: " + "2 m/s"
+			return "Damage: " + "25" + "\nRange: " + str(radius) + "\nSpeed: " + "2 m/s"
 		elif _tower.level==2:
-			return "Damage: " + "35" + "\nRange: " + str(radius) + "\nSpeed: " + "2.5 m/s"
+			return "Damage: " + "40" + "\nRange: " + str(radius) + "\nSpeed: " + "2.5 m/s"
 
 
 # Funkcja obsługi przycisku ulepszania

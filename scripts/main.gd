@@ -122,6 +122,7 @@ func show_wave_timer(duration: float):
 		await get_tree().create_timer(1.0).timeout
 		remaining_time -= 1
 		timer_label.text = "Next wave in %d" % ceil(remaining_time)
+	timer_label.visible = false
 
 func _on_enemy_killed():
 	if not is_inside_tree():

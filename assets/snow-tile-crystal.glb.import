@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://pl132v03q6th"
-path="res://.godot/imported/snow-tile-tree.glb-b6093e291379c5e1123c03ac4fc3395f.scn"
+uid="uid://h62d4fqg3sht"
+path="res://.godot/imported/snow-tile-crystal.glb-9a76baee6c66a3b714fca601ae102404.scn"
 
 [deps]
 
-source_file="res://snow-tile-tree.glb"
-dest_files=["res://.godot/imported/snow-tile-tree.glb-b6093e291379c5e1123c03ac4fc3395f.scn"]
+source_file="res://assets/snow-tile-crystal.glb"
+dest_files=["res://.godot/imported/snow-tile-crystal.glb-9a76baee6c66a3b714fca601ae102404.scn"]
 
 [params]
 
