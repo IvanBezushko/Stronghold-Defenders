@@ -25,6 +25,10 @@ PathGenInstance="*res://scripts/path_generator.gd"
 AudioStreamPlayer2d="*res://menu/audio_stream_player_2d.tscn"
 Global="*res://menu/Global.gd"
 
+[display]
+
+window/stretch/mode="canvas_items"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/godot_state_charts/plugin.cfg")
