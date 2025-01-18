@@ -20,8 +20,8 @@
 [ext_resource type="Texture2D" uid="uid://1g1cups1blj1" path="res://images/wieza_icon3.png" id="14_u8sv5"]
 [ext_resource type="PackedScene" uid="uid://demjkhdd30p0v" path="res://scenes/turret_1.tscn" id="15_qv0eq"]
 [ext_resource type="PackedScene" uid="uid://h62d4fqg3sht" path="res://assets/snow-tile-crystal.glb" id="15_qy77u"]
+[ext_resource type="PackedScene" uid="uid://dbqgts4r853ef" path="res://scenes/snow_tile_end_round.tscn" id="16_ae18w"]
 [ext_resource type="PackedScene" uid="uid://d2acbm8ekgqrv" path="res://scenes/activity_button_2.tscn" id="16_c0vmb"]
-[ext_resource type="PackedScene" uid="uid://b576i7tru62f1" path="res://assets/snow-tile-end-round.glb" id="16_kasxc"]
 [ext_resource type="PackedScene" uid="uid://fd2ntrpntsqf" path="res://assets/snow-tile-spawn-end-round.glb" id="17_bhv25"]
 [ext_resource type="Texture2D" uid="uid://cot8jv2hjk1ck" path="res://images/wieza_icon2.png" id="17_wves3"]
 [ext_resource type="PackedScene" uid="uid://cxfcbwy8y0tsq" path="res://assets/snow-tile-straight.glb" id="18_3j3vf"]
@@ -63,7 +63,7 @@ tile_empty_hard = ExtResource("12_efwmt")
 tile_rock_snow = ExtResource("13_odbqr")
 tile_tree_snow = ExtResource("14_rtrie")
 tile_crystal_snow = ExtResource("15_qy77u")
-tile_start_snow = ExtResource("16_kasxc")
+tile_start_snow = ExtResource("16_ae18w")
 tile_end_snow = ExtResource("17_bhv25")
 tile_straight_snow = ExtResource("18_3j3vf")
 tile_corner_snow = ExtResource("19_ej2cd")
@@ -214,7 +214,7 @@ script = ExtResource("22_wtke4")
 [node name="Label" type="Label" parent="Control/UIContainer/TowerUpgradePanel"]
 layout_mode = 0
 offset_left = 7.0
-offset_top = 56.0
+offset_top = 37.0
 offset_right = 139.0
 offset_bottom = 146.0
 theme_override_font_sizes/font_size = 14
@@ -223,7 +223,7 @@ text = "before"
 [node name="Label2" type="Label" parent="Control/UIContainer/TowerUpgradePanel"]
 layout_mode = 0
 offset_left = 160.0
-offset_top = 56.0
+offset_top = 37.0
 offset_right = 267.0
 offset_bottom = 146.0
 theme_override_font_sizes/font_size = 14
@@ -239,10 +239,10 @@ text = "$"
 
 [node name="LabelName" type="Label" parent="Control/UIContainer/TowerUpgradePanel"]
 layout_mode = 0
-offset_left = 11.0
-offset_top = 6.0
-offset_right = 160.0
-offset_bottom = 46.0
+offset_left = 6.0
+offset_top = -3.00003
+offset_right = 155.0
+offset_bottom = 39.0
 theme_override_font_sizes/font_size = 30
 text = "name"
 
