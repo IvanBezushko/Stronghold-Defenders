@@ -20,8 +20,8 @@ extends Node3D
 @export var tile_crossroads_snow: PackedScene
 
 @export var enemy: PackedScene
-@export var cash: int = 150
-var castle_health: int = 20
+@export var cash: int = 1500
+var castle_health: int = 40
 
 @export var enemy_type_1: PackedScene = preload("res://scenes/enemy_01.tscn")
 @export var enemy_type_2: PackedScene = preload("res://scenes/enemy_02.tscn")
@@ -36,6 +36,7 @@ var selected_tower: Node3D = null
 var selection_instance: Node3D = null
 @export var selection_frame: PackedScene
 @onready var timer_label = $Control/TimerLabel
+
 
 
 # Statystyki
@@ -60,25 +61,31 @@ var wave_config = [
 	{"wave": 49, "enemy_type_1": 10, "enemy_type_2": 10, "enemy_type_3": 5, "enemy_type_4": 10, "boss_type": 1, "reward": 800},
 	{"wave": 50, "enemy_type_1": 10, "enemy_type_2": 10, "enemy_type_3": 5, "enemy_type_4": 10, "boss_type": 1, "reward": 1000}
 ]
+var game_ended = false
 
 func _ready():
+	clear_active_waves()
 	PathGenInstance.reset()
 	_complete_grid()
 	upgrade_panel.visible = false
-	timer_label.visible=false
-
-
-	var saved_stats = load_statistics_from_file("user://stat/stat.json")
-	if saved_stats.size() > 0:
-		print("Loaded statistics from user://:\n", format_json(saved_stats))
-	else:
-		print("No saved statistics found (user://).")
+	timer_label.visible = false
 
 	for wave in wave_config:
+		# Jeśli gra została zakończona (go_to_lose_scene / go_to_win_scene) ustawi game_ended=true
+		if game_ended:
+			return  # przerywamy pętlę
 		await _handle_wave(wave)
 
+var active_waves: Array = []  # Tablica przechowująca aktywne fale
+
 func _handle_wave(wave):
+	print("Rozpoczęcie fali:", wave["wave"])
+	active_waves.append(wave)
+
+	# Dodaj przeciwników
 	for type_name in ["enemy_type_1", "enemy_type_2", "enemy_type_3", "enemy_type_4"]:
+		# Zamiast 'match' można użyć if/elif – obie wersje działają w Godot 4.
+		# Tutaj jednak przykładowo używamy if/elif, by uniknąć błędów wcięć.
 		var enemy_scene = null
 		if type_name == "enemy_type_1":
 			enemy_scene = enemy_type_1
@@ -91,29 +98,101 @@ func _handle_wave(wave):
 
 		if enemy_scene:
 			for i in range(wave[type_name]):
-				await get_tree().create_timer(2.5).timeout
+				# Sprawdzenie, czy scena istnieje i fala jest nadal aktywna
+				if not is_inside_tree() or wave not in active_waves:
+					return
+
+				await get_tree().create_timer(2.0).timeout
+
+				if not is_inside_tree() or wave not in active_waves:
+					return
+
 				var enemy_instance = enemy_scene.instantiate()
 				add_child(enemy_instance)
 				enemy_instance.add_to_group("enemies")
-				enemy_instance.connect("tree_exited", Callable(self, "_on_enemy_killed"))
 
+				# Podłącz do sygnału enemy_escaped:
+				enemy_instance.connect("enemy_escaped", Callable(self, "_on_enemy_escaped"))
+				enemy_instance.connect("enemy_killed",  Callable(self, "_on_enemy_killed"))
+
+
+
+	# Dodaj bossa, jeśli występuje
 	if wave["boss_type"] > 0:
 		for i in range(wave["boss_type"]):
-			await get_tree().create_timer(2.5).timeout
+			if not is_inside_tree() or wave not in active_waves:
+				return
+
+			await get_tree().create_timer(3.0).timeout
+
+			if not is_inside_tree() or wave not in active_waves:
+				return
+
 			var boss_instance = boss_type.instantiate()
 			add_child(boss_instance)
 			boss_instance.add_to_group("enemies")
 			boss_instance.connect("tree_exited", Callable(self, "_on_enemy_killed"))
 
+	# Po dodaniu wszystkich wrogów czekamy np. 25 s do następnej fali
+	if not is_inside_tree() or wave not in active_waves:
+		return
+
 	await show_wave_timer(25)
 
+	# Jeśli w trakcie czekania fala została wyczyszczona, przerwij
+	if not is_inside_tree() or wave not in active_waves:
+		return
 
+	# Usuwamy falę z listy aktywnych
+	active_waves.erase(wave)
+	print("Fala zakończona:", wave["wave"])
+
+
+
+
+func _on_enemy_escaped():
+	print("Enemy reached the castle – no kill added!")
+	# Nie dodawaj do 'killed'
+	# Tylko ewentualnie Castle Health - X
+
+
+
+
+
+func clear_active_waves():
+	print("Przerywanie aktywnych fal...")
+	active_waves.clear()
+	# Nie trzeba tu nic więcej, bo w _handle_wave() sprawdzamy wave not in active_waves
+
+
+func set_patrolling(patrolling: bool):
+	# Przykładowa logika
+	print("Patrolling set to:", patrolling)
+
+	
+	
 func _process(delta):
 	time_elapsed += delta
 	$Control/CashLabel.text = "Cash $%d" % cash
 	$Control/HealthLabel.text="❤️ "+str(castle_health)+" "
+	
+var is_timer_running: bool = false  # Flaga do monitorowania aktywności timera
+
+func reset_wave_timer():
+	print("Ręczne resetowanie timera.")
+	timer_label.visible = false
+	timer_label.text = ""
+	is_timer_running = false
 
 func show_wave_timer(duration: float):
+	# Jeśli timer już działa, zresetuj jego UI i przerwij działający proces
+	if is_timer_running:
+		print("Resetuję aktywny timer UI.")
+		timer_label.visible = false
+		is_timer_running = false
+		return
+
+	is_timer_running = true
 	timer_label.visible = true
 	var remaining_time = duration
 	timer_label.text = "Next wave in %d" % ceil(remaining_time)
@@ -122,36 +201,41 @@ func show_wave_timer(duration: float):
 		await get_tree().create_timer(1.0).timeout
 		remaining_time -= 1
 		timer_label.text = "Next wave in %d" % ceil(remaining_time)
-	timer_label.visible = false
 
-func _on_enemy_killed():
+	# Resetuj UI po zakończeniu timera
+	timer_label.visible = false
+	timer_label.text = ""  # Zresetuj tekst dla bezpieczeństwa
+	is_timer_running = false
+
+
+var is_dead: bool = false
+
+func die():
+	is_dead = true
+	if is_in_group("enemies"):
+		remove_from_group("enemies")
+	queue_free()
+
+
+func _on_enemy_killed(is_killed: bool, reward: int):
 	if not is_inside_tree():
-		print("Warning: Node is not inside the scene tree!")
 		return
 
-	var enemy_value = 0
-	if get_node_or_null("../enemy_01"):
-		enemy_value = 5
-	elif get_node_or_null("../enemy_02"):
-		enemy_value = 4
-	elif get_node_or_null("../enemy_03"):
-		enemy_value = 8
-	elif get_node_or_null("../enemy_04"):
-		enemy_value = 9
-	elif get_node_or_null("../enemy_BOSS"):
-		enemy_value = 500
+	if is_killed:
+		total_enemies_killed += 1
+		total_cash_earned += reward
+		cash += reward
 
-	total_cash_earned += enemy_value
-	total_enemies_killed += 1
-	cash += enemy_value
-
-	if get_tree().has_group("enemies"):
-		var enemy_count = get_tree().get_nodes_in_group("enemies").size()
-		if enemy_count == 0:
-			print("VICTORY! Boss defeated!")
-			print_game_statistics()
+		if get_tree().has_group("enemies"):
+			var enemy_count = get_tree().get_nodes_in_group("enemies").size()
+			if enemy_count == 0:
+				print("VICTORY! Boss defeated!")
+				print_game_statistics()
 	else:
-		print("Warning: Group 'enemies' does not exist in the tree!")
+		_on_enemy_escaped()
+
+
+
 
 
 func print_game_statistics():
@@ -219,7 +303,7 @@ func load_statistics_from_file(file_path: String) -> Array:
 	var json_data = file.get_as_text()
 	file.close()
 
-	print("Raw JSON data:\n%s" % json_data)
+	#print("Raw JSON data:\n%s" % json_data)
 
 	var json = JSON.new()
 	var parse_error: Error = json.parse(json_data)
@@ -235,7 +319,7 @@ func load_statistics_from_file(file_path: String) -> Array:
 		print("Unexpected JSON format. Expected an array, got: %s" % typeof(result))
 		return []
 
-	print("Successfully loaded statistics:\n%s" % JSON.stringify(result))
+	#print("Successfully loaded statistics:\n%s" % JSON.stringify(result))
 	return result
 
 
@@ -287,9 +371,98 @@ func show_saved_statistics():
 		print("Boss Killed:\t\t%d" % boss)
 		print("---------------------------------------------")
 
+func pause_game():
+	if get_tree().paused:
+		return  # Już jest zapauzowane
+	get_tree().paused = true
+	print("Game paused!")
+
+
+func reset_ui():
+	$Control/HealthLabel.text = "❤️ " + str(castle_health)
+	$Control/CashLabel.text = "Cash $" + str(cash)
+
+
+func clear_scene():
+	print("Czyszczenie sceny...")
+
+	# Przerwij wszystkie aktywne fale
+	clear_active_waves()
+
+	# Zatrzymaj i zresetuj timer fal
+	if is_timer_running:
+		reset_wave_timer()
+
+	# Usuń wrogów
+	if get_tree().has_group("enemies"):
+		for enemy in get_tree().get_nodes_in_group("enemies"):
+			if enemy.is_inside_tree():
+				enemy.queue_free()
+
+	# Usuń wieże (jeśli w grupie towers)
+	if get_tree().has_group("towers"):
+		for tower in get_tree().get_nodes_in_group("towers"):
+			if tower.is_inside_tree():
+				tower.queue_free()
+
+
+	# Usuń wszystkie dzieci węzła poza kamerą i interfejsem
+	for child in get_children():
+		if not (child is Camera3D or child.name == "Control"):
+			child.queue_free()
+
+	reset_ui()
+	print("Scena wyczyszczona.")
+
+
+func reset_towers():
+	# 1. Usuń wszystkie wieże z grupy "towers".
+	if get_tree().has_group("towers"):
+		for tower in get_tree().get_nodes_in_group("towers"):
+			if tower.is_inside_tree():
+				tower.queue_free()
+
+	# 2. (Opcjonalnie) Stwórz tu na nowo wieże początkowe, jeśli chcesz:
+	# example:
+	# var initial_tower_positions = [Vector3(2, 0, 2), Vector3(4, 0, 4)]
+	# var tower_scene = preload("res://scenes/TowerExample.tscn")
+	#
+	# for pos in initial_tower_positions:
+	#     var tower_instance = tower_scene.instantiate()
+	#     tower_instance.add_to_group("towers")
+	#     tower_instance.global_position = pos
+	#     add_child(tower_instance)
+
+	print("reset_towers() completed!")
+
+
+
+
+func reset_game_values():
+	print("Resetowanie statystyk i wartości gry...")
+	castle_health = 40
+	cash = 150
+	boss_killed = false
+	print("Wartości gry zresetowane.")
+
+
+
 
 func go_to_win_scene():
+	game_ended = true  # żeby pętla w _ready() przerwała się natychmiast
 	save_statistics_to_file()
+	clear_scene()  # Usuń wszystkie elementy sceny
+	clear_active_waves()
+	pause_game()
+	reset_game_values()
+	PathGenInstance.reset()  # Reset generatora ścieżek
+	
+	clear_scene()
+	save_statistics_to_file()
+	get_tree().paused = true
+	reset_game_values()
+	PathGenInstance.reset()
+	
 	var win_scene = load("res://menu/win.tscn").instantiate()
 	get_tree().root.add_child(win_scene)
 	get_tree().current_scene = win_scene
@@ -297,11 +470,22 @@ func go_to_win_scene():
 
 
 func go_to_lose_scene():
+	
+	game_ended = true  # żeby pętla w _ready() przerwała się natychmiast
 	save_statistics_to_file()
+	get_tree().paused = true
+	clear_scene()  # Usuń wszystkie elementy sceny
+	clear_active_waves()
+	pause_game()
+	reset_game_values()
+	PathGenInstance.reset()  # Reset generatora ścieżek
+	
+	
 	var lose_scene = load("res://menu/lose.tscn").instantiate()
 	get_tree().root.add_child(lose_scene)
 	get_tree().current_scene = lose_scene
 	lose_scene.call("update_stats", int(time_elapsed), total_cash_earned, total_enemies_killed)
+
 
 func decrease_castle_health(amount: int):
 	castle_health -= amount
@@ -331,6 +515,7 @@ func slow_down_enemies(factor: float, duration: float) -> void:
 			enemy.call("set_speed", enemy.enemy_speed)
 
 func _complete_grid():
+	
 	var is_hard: bool = (Global.difficulty == "hard")
 
 	# ------------------- PUSTE KAFELKI (poza ścieżką) -------------------
@@ -496,40 +681,20 @@ func remove_selection_frame():
 		selection_instance = null
 
 
-func upgrade_tower():
-	if selected_tower == null:
-		print("No tower selected for upgrade!")
-		return
-
-	var new_tower_scene = selected_tower.call("upgrade_to_scene")
-	if new_tower_scene == null:
-		print("No upgrade scene defined for selected tower!")
-		return
-
-	var old_transform = selected_tower.global_transform
-	var parent = selected_tower.get_parent()
-
-	var new_tower = new_tower_scene.instantiate()
-	parent.add_child(new_tower)
-	new_tower.global_transform = old_transform
-
-	selected_tower.global_translate(Vector3i(100,0,0))
-	selected_tower.visible = false
-
-	selected_tower.connect("tree_exited", self._on_old_tower_removed.bind(new_tower))
-	selected_tower.queue_free()
-	selected_tower = null
-
-	print("Tower upgraded successfully!")
+var is_upgrading: bool = false  # Flaga zapobiegająca istnieniu dwóch wież w jednej klatce
 
 
-func _on_old_tower_removed(new_tower):
-	print("W _on_old_tower_removed()")
-	print("new_tower = ", new_tower)
-	if new_tower.has_method("_ready"):
-		new_tower._ready()
-	selected_tower = new_tower
-	show_upgrade_panel(new_tower)
+
+
+
+
+
+
+
+
+
+
+
 
 
 func _physics_process(_delta):

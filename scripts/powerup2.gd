@@ -2,7 +2,7 @@ extends Button
 
 @onready var main = $"../.."
 @export var powerup_button_icon:Texture2D
-var slowdown_cost = 50
+var slowdown_cost = 150
 var slowdown_amount = 10
 
 func _ready() -> void:

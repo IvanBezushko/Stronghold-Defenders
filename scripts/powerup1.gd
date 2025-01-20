@@ -2,7 +2,7 @@ extends Button
 
 @onready var main = $"../.."
 @export var powerup_button_icon:Texture2D
-var health_cost = 50
+var health_cost = 250
 var health_amount = 10
 
 func _ready() -> void:

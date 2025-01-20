@@ -83,7 +83,7 @@ func _on_Upgrade_pressed() -> void:
 	
 	if main.cash >= selected_tower.upgrade_cost:
 		main.cash -= selected_tower.upgrade_cost
-		main.upgrade_tower()
+		selected_tower.upgrade_to_scene()
 		hide()  # Ukryj panel po ulepszeniu
 		main.selected_tower = null
 	else:

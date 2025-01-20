@@ -59,20 +59,54 @@ func _on_tower_clicked():
 	#print("Tower clicked!")
 	main.show_upgrade_panel(self)
 
-func upgrade_to_scene() -> PackedScene:
-	# Sprawdź, jaki poziom ma aktualna wieża i zwróć odpowiednią scenę
-	var new_scene: PackedScene = null
-	new_scene = preload("res://scenes/turret_1_lvl3.tscn")
-	# Przykładowe mechanizmy: 
-	# (Możesz dostosować w zależności od specyfiki swojej gry i dostępnych scen)
-	#if current_level == 1:
-		#new_scene = preload("res://scenes/Tower_Level_2.tscn")  # Scena nowej wersji wieży
-	#elif current_level == 2:
-		#new_scene = preload("res://scenes/Tower_Level_3.tscn")
-	# Dodatkowe poziomy ulepszeń, jeżeli są dostępne
-	# ...
+func upgrade_to_scene():
+	
 
-	return new_scene
+	var new_scene: PackedScene = preload("res://scenes/turret_1_lvl3.tscn")
+	if new_scene == null:
+		print("[BŁĄD] Nie udało się załadować sceny ulepszenia!")
+		return null
+	
+
+	# Zapamiętaj rodzica i aktualny transform starej wieży
+	var parent_node = get_parent()
+	if parent_node == null:
+		print("[BŁĄD] Wieża nie ma rodzica! Nie można przeprowadzić ulepszenia.")
+		return null
+	
+
+	var old_transform = global_transform
+	
+
+	# Stwórz nową wieżę i ustaw w tym samym miejscu
+	var new_turret = new_scene.instantiate()
+	if new_turret == null:
+		print("[BŁĄD] Nie udało się utworzyć nowej wieży!")
+		return null
+	
+
+	new_turret.global_transform = old_transform
+	
+
+	parent_node.add_child(new_turret)
+	
+
+	# --- Zamiast usuwać starą wieżę, teleportuj ją daleko ---
+	global_transform.origin = Vector3(9999, 9999, 9999)
+	
+
+	# (opcjonalnie) wyłącz logikę, żeby stara wieża nie strzelała, nie była targetowana itp.
+	remove_from_group("towers")
+	
+
+	if has_node("PatrolZone"):
+		$PatrolZone.monitoring = false
+		print("Monitoring w PatrolZone został wyłączony.")
+
+	set_process(false)
+	
+
+	set_physics_process(false)
 
 
 func _on_patrol_zone_area_entered(area):
@@ -82,6 +116,12 @@ func _on_patrol_zone_area_entered(area):
 		enemies_in_range.append(area)
 
 func _on_patrol_zone_area_exited(area):
+	if enemies_in_range.has(area):
+		enemies_in_range.erase(area)
+	if area == current_enemy:
+		_remove_current_enemy()
+
+func _on_enemy_removed(area):
 	if enemies_in_range.has(area):
 		enemies_in_range.erase(area)
 	if area == current_enemy:
@@ -111,23 +151,22 @@ func _find_enemy_parent(n: Node):
 		return null
 
 func _on_patrolling_state_state_processing(_delta):
-	if enemies_in_range.size() > 0:
-		current_enemy = enemies_in_range[0]
-		current_enemy_class = _find_enemy_parent(current_enemy)
+	for enemy in enemies_in_range:
+		if enemy != null and enemy.is_inside_tree():
+			current_enemy = enemy
+			current_enemy_class = _find_enemy_parent(current_enemy)
 
-		if current_enemy_class == null:
-			print("ERROR: Could not find enemy class for: ", current_enemy)
+			if current_enemy_class == null:
+				print("ERROR: Could not find enemy class for: ", current_enemy)
+				return
+
+			_disconnect_current_enemy_signals()
+			current_enemy_class.enemy_finished.connect(_remove_current_enemy)
+
+			$StateChart.send_event("to_acquiring_state")
 			return
-
-		_disconnect_current_enemy_signals()  # Odłącz poprzednie sygnały, jeśli istnieją
-
-		# Podłączenie nowego sygnału
-		current_enemy_class.enemy_finished.connect(_remove_current_enemy)
-
-		$StateChart.send_event("to_acquiring_state")
-	else:
-		current_enemy = null
-		current_enemy_class = null
+	current_enemy = null
+	current_enemy_class = null
 
 func _disconnect_current_enemy_signals():
 	if current_enemy_class != null:
@@ -136,9 +175,9 @@ func _disconnect_current_enemy_signals():
 
 func _remove_current_enemy():
 	if current_enemy != null:
-		_disconnect_current_enemy_signals()  # Odłącz sygnały
+		_disconnect_current_enemy_signals()
 		if enemies_in_range.has(current_enemy):
-			enemies_in_range.erase(current_enemy)  # Usuń z listy
+			enemies_in_range.erase(current_enemy)
 	current_enemy = null
 	current_enemy_class = null
 	acquire_slerp_progress = 0
@@ -146,7 +185,7 @@ func _remove_current_enemy():
 
 func _on_acquiring_state_state_entered():
 	current_enemy_targetted = false
-	acquire_slerp_progress = 0  # Resetowanie `acquire_slerp_progress`
+	acquire_slerp_progress = 0
 
 func _on_acquiring_state_state_physics_processing(delta):
 	if current_enemy != null and enemies_in_range.has(current_enemy):
@@ -156,16 +195,16 @@ func _on_acquiring_state_state_physics_processing(delta):
 
 func _on_attacking_state_state_physics_processing(_delta):
 	if current_enemy != null and enemies_in_range.has(current_enemy):
-		rotate_towards_target(current_enemy, _delta)  # Kontynuowanie obrotu wieży
+		rotate_towards_target(current_enemy, _delta)
 		_maybe_fire()
 	else:
 		_remove_current_enemy()
 
-# Funkcja kontrolująca strzelanie
 func _maybe_fire():
-	if current_enemy == null or not enemies_in_range.has(current_enemy):
+	if current_enemy == null or not enemies_in_range.has(current_enemy) or not current_enemy.is_inside_tree():
 		_remove_current_enemy()
 		return
+	
 	if Time.get_ticks_msec() > (last_fire_time + fire_rate_ms):
 		var projectile: Projectile = projectile_type.instantiate()
 		projectile.starting_position = $Cannon/projectile_spawn.global_position

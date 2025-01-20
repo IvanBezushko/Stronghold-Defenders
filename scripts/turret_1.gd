@@ -2,39 +2,38 @@ extends Node3D
 
 var enemies_in_range: Array[Node3D] = []
 var current_enemy: Node3D = null
-var current_enemy_class = null  # Usunięto deklarację typu
+var current_enemy_class = null
 var current_enemy_targetted: bool = false
 var acquire_slerp_progress: float = 0
 var selection_instance: Node3D = null
 var turretname: String = "Cannon Turret lvl 1"
-var level: int =1
-var type: int =1
+var level: int = 1
+var type: int = 1
 
-# NOWE ZMIENNE
 var last_fire_time: int
 @export var fire_rate_ms: int = 1000
 @export var projectile_type: PackedScene
-#@export var upgrade_to_scene: PackedScene = null
 @onready var main = get_node("/root/main")
 @export var upgrade_cost: int = 100
 @export var selection_frame: PackedScene
 @onready var collision_shape = $PatrolZone/CollisionShape3D
 var radius: float
 
+# Flaga blokująca operację
+
 
 func _ready():
-	# Ustaw, aby wieża mogła odbierać wejście myszką
 	set_process_input(true)
-	radius=(collision_shape.shape as CylinderShape3D).radius
+	
+	radius = (collision_shape.shape as CylinderShape3D).radius
 
-# Funkcja obsługująca wejścia
+
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			if is_mouse_over():  # Sprawdzamy, czy kliknięto na wieżę
+			if is_mouse_over():
 				_on_tower_clicked()
 
-# Sprawdzenie, czy mysz jest nad wieżą
 func is_mouse_over() -> bool:
 	var space_state = get_world_3d().direct_space_state
 	var ray_origin = get_viewport().get_camera_3d().project_ray_origin(get_viewport().get_mouse_position())
@@ -46,7 +45,6 @@ func is_mouse_over() -> bool:
 	var result = space_state.intersect_ray(query)
 	if result.size() > 0:
 		var collider = result["collider"]
-		# Sprawdź, czy collider to ta wieża lub jest jej dzieckiem
 		var current_node = collider
 		while current_node != null:
 			if current_node == self:
@@ -54,34 +52,91 @@ func is_mouse_over() -> bool:
 			current_node = current_node.get_parent()
 	return false
 
-# Obsługa kliknięcia wieży
 func _on_tower_clicked():
-	#print("Tower clicked!")
 	main.show_upgrade_panel(self)
 
-func upgrade_to_scene() -> PackedScene:
-	# Sprawdź, jaki poziom ma aktualna wieża i zwróć odpowiednią scenę
-	var new_scene: PackedScene = null
-	new_scene = preload("res://scenes/turret_1_lvl2.tscn")
-	# Przykładowe mechanizmy: 
-	# (Możesz dostosować w zależności od specyfiki swojej gry i dostępnych scen)
-	#if current_level == 1:
-		#new_scene = preload("res://scenes/Tower_Level_2.tscn")  # Scena nowej wersji wieży
-	#elif current_level == 2:
-		#new_scene = preload("res://scenes/Tower_Level_3.tscn")
-	# Dodatkowe poziomy ulepszeń, jeżeli są dostępne
-	# ...
+func upgrade_to_scene():
+	
 
-	return new_scene
+	var new_scene: PackedScene = preload("res://scenes/turret_1_lvl2.tscn")
+	if new_scene == null:
+		print("[BŁĄD] Nie udało się załadować sceny ulepszenia!")
+		return null
+	
+
+	# Zapamiętaj rodzica i aktualny transform starej wieży
+	var parent_node = get_parent()
+	if parent_node == null:
+		print("[BŁĄD] Wieża nie ma rodzica! Nie można przeprowadzić ulepszenia.")
+		return null
+	
+
+	var old_transform = global_transform
+	
+
+	# Stwórz nową wieżę i ustaw w tym samym miejscu
+	var new_turret = new_scene.instantiate()
+	if new_turret == null:
+		print("[BŁĄD] Nie udało się utworzyć nowej wieży!")
+		return null
+	
+
+	new_turret.global_transform = old_transform
+	
+
+	parent_node.add_child(new_turret)
+	
+
+	# --- Zamiast usuwać starą wieżę, teleportuj ją daleko ---
+	global_transform.origin = Vector3(9999, 9999, 9999)
+	
+
+	# (opcjonalnie) wyłącz logikę, żeby stara wieża nie strzelała, nie była targetowana itp.
+	remove_from_group("towers")
+	
+
+	if has_node("PatrolZone"):
+		$PatrolZone.monitoring = false
+		print("Monitoring w PatrolZone został wyłączony.")
+
+	set_process(false)
+	
+
+	set_physics_process(false)
+	
+
+	# Możesz też wyzerować collision_layer i collision_mask albo wyłączyć collider.
+	return new_turret
+
+
+
+
 
 
 func _on_patrol_zone_area_entered(area):
+	# Sprawdź, czy area nie jest już celem innej wieży
+	for tower in get_tree().get_nodes_in_group("towers"):
+		if tower.current_enemy == area:
+			print("Enemy already targeted by another tower!")
+			return
+
+	# Jeśli wieża nie ma aktualnego wroga, ustaw go jako current_enemy
 	if current_enemy == null:
 		current_enemy = area
+
+	# Dodaj wroga do listy wrogów w zasięgu
 	if not enemies_in_range.has(area):
 		enemies_in_range.append(area)
 
+
 func _on_patrol_zone_area_exited(area):
+	if enemies_in_range.has(area):
+		enemies_in_range.erase(area)
+	if area == current_enemy:
+		_remove_current_enemy()
+
+
+func _on_enemy_removed(area):
 	if enemies_in_range.has(area):
 		enemies_in_range.erase(area)
 	if area == current_enemy:
@@ -111,23 +166,22 @@ func _find_enemy_parent(n: Node):
 		return null
 
 func _on_patrolling_state_state_processing(_delta):
-	if enemies_in_range.size() > 0:
-		current_enemy = enemies_in_range[0]
-		current_enemy_class = _find_enemy_parent(current_enemy)
+	for enemy in enemies_in_range:
+		if enemy != null and enemy.is_inside_tree():
+			current_enemy = enemy
+			current_enemy_class = _find_enemy_parent(current_enemy)
 
-		if current_enemy_class == null:
-			print("ERROR: Could not find enemy class for: ", current_enemy)
+			if current_enemy_class == null:
+				print("ERROR: Could not find enemy class for: ", current_enemy)
+				return
+
+			_disconnect_current_enemy_signals()
+			current_enemy_class.enemy_finished.connect(_remove_current_enemy)
+
+			$StateChart.send_event("to_acquiring_state")
 			return
-
-		_disconnect_current_enemy_signals()  # Odłącz poprzednie sygnały, jeśli istnieją
-
-		# Podłączenie nowego sygnału
-		current_enemy_class.enemy_finished.connect(_remove_current_enemy)
-
-		$StateChart.send_event("to_acquiring_state")
-	else:
-		current_enemy = null
-		current_enemy_class = null
+	current_enemy = null
+	current_enemy_class = null
 
 func _disconnect_current_enemy_signals():
 	if current_enemy_class != null:
@@ -136,17 +190,18 @@ func _disconnect_current_enemy_signals():
 
 func _remove_current_enemy():
 	if current_enemy != null:
-		_disconnect_current_enemy_signals()  # Odłącz sygnały
+		_disconnect_current_enemy_signals()
 		if enemies_in_range.has(current_enemy):
-			enemies_in_range.erase(current_enemy)  # Usuń z listy
+			enemies_in_range.erase(current_enemy)
 	current_enemy = null
 	current_enemy_class = null
 	acquire_slerp_progress = 0
 	$StateChart.send_event("to_patrolling_state")
 
+
 func _on_acquiring_state_state_entered():
 	current_enemy_targetted = false
-	acquire_slerp_progress = 0  # Resetowanie `acquire_slerp_progress`
+	acquire_slerp_progress = 0
 
 func _on_acquiring_state_state_physics_processing(delta):
 	if current_enemy != null and enemies_in_range.has(current_enemy):
@@ -156,23 +211,32 @@ func _on_acquiring_state_state_physics_processing(delta):
 
 func _on_attacking_state_state_physics_processing(_delta):
 	if current_enemy != null and enemies_in_range.has(current_enemy):
-		rotate_towards_target(current_enemy, _delta)  # Kontynuowanie obrotu wieży
+		rotate_towards_target(current_enemy, _delta)
 		_maybe_fire()
 	else:
 		_remove_current_enemy()
 
-# Funkcja kontrolująca strzelanie
 func _maybe_fire():
-	if current_enemy == null or not enemies_in_range.has(current_enemy):
+	# Sprawdź, czy current_enemy jest nadal w grze i na liście wrogów w zasięgu
+	if current_enemy == null or not enemies_in_range.has(current_enemy) or not current_enemy.is_inside_tree():
 		_remove_current_enemy()
 		return
-	if Time.get_ticks_msec() > (last_fire_time + fire_rate_ms):
+
+	# Sprawdź czas od ostatniego strzału
+	var now = Time.get_ticks_msec()
+	if now > (last_fire_time + fire_rate_ms):
+		# Stwórz nowy pocisk i ustaw jego cel
 		var projectile: Projectile = projectile_type.instantiate()
 		projectile.starting_position = $Cannon/projectile_spawn.global_position
 		projectile.target = current_enemy
 		projectile.set_tower_level(level)
+
+		# Dodaj pocisk do sceny
 		add_child(projectile)
-		last_fire_time = Time.get_ticks_msec()
+
+		# Zaktualizuj czas ostatniego strzału
+		last_fire_time = now
+
 
 func _on_attacking_state_state_entered():
 	last_fire_time = 0
