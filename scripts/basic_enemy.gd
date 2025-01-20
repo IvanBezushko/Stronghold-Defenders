@@ -113,9 +113,13 @@ func _on_dying_state_entered():
 	# Wróg faktycznie został zabity (HP <= 0)
 	get_parent_node_3d().cash += enemy_settings.destroy_value
 	
-	# Tu dopiszemy nową linię:
+	var collision_shape = $Path3D/PathFollow3D/Area3D/CollisionShape3D
+	if collision_shape != null:
+		collision_shape.queue_free()
+	else:
+		print("ERROR: CollisionShape3D is null!")
 	
-	var reward = enemy_settings.destroy_value  # np. 5, 8, 9, 500 itp.
+	var reward = enemy_settings.destroy_value 
 	emit_signal("enemy_killed", true, reward)
 	$ExplosionAudio.play()
 

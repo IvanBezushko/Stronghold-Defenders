@@ -122,6 +122,11 @@ func _on_dying_state_entered():
 	get_parent_node_3d().cash+=enemy_settings.destroy_value
 	enemy_finished.emit()
 	$ExplosionAudio.play()
+	var collision_shape = $Path3D/PathFollow3D/Area3D/CollisionShape3D
+	if collision_shape != null:
+		collision_shape.queue_free()
+	else:
+		print("ERROR: CollisionShape3D is null!")
 
 	if enemy_model != null:
 		enemy_model.visible = false

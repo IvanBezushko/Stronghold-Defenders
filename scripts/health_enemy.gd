@@ -120,7 +120,11 @@ func _on_dying_state_entered():
 	#print("State: Dying entered")
 	enemy_finished.emit()
 	$ExplosionAudio.play()
-
+	var collision_shape = $Path3D/PathFollow3D/Area3D/CollisionShape3D
+	if collision_shape != null:
+		collision_shape.queue_free()
+	else:
+		print("ERROR: CollisionShape3D is null!")
 	# Ukryj model przeciwnika
 	if enemy_model:
 		#print("Hiding enemy_model")

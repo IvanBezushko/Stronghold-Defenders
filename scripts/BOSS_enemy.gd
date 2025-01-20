@@ -121,7 +121,11 @@ func _on_dying_state_entered():
 	if not is_inside_tree():
 		print("ERROR: Node is not inside the scene tree!")
 		return
-
+	var collision_shape = $Path3D/PathFollow3D/Area3D/CollisionShape3D
+	if collision_shape != null:
+		collision_shape.queue_free()
+	else:
+		print("ERROR: CollisionShape3D is null!")
 	#print("Stan: Dying wejście")
 	get_parent().cash += enemy_settings.destroy_value
 	#print("Emitting 'enemy_finished' signal")

@@ -26,7 +26,7 @@
 [ext_resource type="Texture2D" uid="uid://cot8jv2hjk1ck" path="res://images/wieza_icon2.png" id="17_wves3"]
 [ext_resource type="PackedScene" uid="uid://cxfcbwy8y0tsq" path="res://assets/snow-tile-straight.glb" id="18_3j3vf"]
 [ext_resource type="PackedScene" uid="uid://b6abc2wbnlo4w" path="res://scenes/turret_2.tscn" id="18_dphgl"]
-[ext_resource type="PackedScene" uid="uid://bwlxqov4l04bb" path="res://scenes/snow_corner.tscn" id="19_ej2cd"]
+[ext_resource type="PackedScene" path="res://scenes/snow_corner.tscn" id="19_ej2cd"]
 [ext_resource type="PackedScene" uid="uid://y7w5g8r2synv" path="res://scenes/activity_button_3.tscn" id="19_orlpo"]
 [ext_resource type="PackedScene" uid="uid://dmrvqvgjku7pv" path="res://assets/snow-tile-crossing.glb" id="20_15us3"]
 [ext_resource type="Texture2D" uid="uid://bcgj7wtmhkjl8" path="res://images/wieza_icon1.png" id="21_w7114"]
