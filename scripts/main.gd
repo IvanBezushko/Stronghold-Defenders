@@ -20,7 +20,7 @@ extends Node3D
 @export var tile_crossroads_snow: PackedScene
 
 @export var enemy: PackedScene
-@export var cash: int = 1500
+@export var cash: int = 150
 var castle_health: int = 40
 
 @export var enemy_type_1: PackedScene = preload("res://scenes/enemy_01.tscn")
